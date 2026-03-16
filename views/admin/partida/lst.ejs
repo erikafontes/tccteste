@@ -1,0 +1,113 @@
+<%- include('../cabecalho.ejs') %>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partidas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script>
+        function confirmarExclusao(id) {
+            if (confirm("Tem certeza que deseja excluir esta partida?")) {
+                window.location.href = "/admin/partida/del/" + id;
+            }
+        }
+    </script>
+
+    <style>
+        /* Botões de ações */
+/* Botões de ações */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    font-size: 14px;
+    text-decoration: none;
+    border-radius: 8px;
+    width: 120px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+/* Botão Editar */
+.edit {
+    background-color: #FFD700;
+    color: #0D0D0D;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
+}
+
+.edit:hover {
+    background-color: #e6c200;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 215, 0, 0.3);
+}
+
+/* Botão Deletar */
+.delete-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    width: 120px;
+    text-align: center;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(220, 53, 69, 0.3);
+}
+
+/* Ajuste na coluna de ações */
+td:last-child {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+}
+
+    </style>
+</head>
+
+<body>
+    <h1><i class="fas fa-futbol"></i> Partidas</h1>
+    <div class="container">
+        <div class="add-button">
+            <a href="/admin/partida/add"><i class="fas fa-user-plus icon"></i> Adicionar Partida</a>
+        </div>
+    
+        <table>
+            <tr>
+                <th><i class="fas fa-tshirt"></i> Time da Casa</th>
+                <th><i class="fas fa-trophy"></i> Resultado</th>
+                <th><i class="fas fa-landmark"></i> Time de Fora</th>
+                <th><i class="fas fa-calendar-alt"></i> Data da Partida</th>
+                <th><i class="fas fa-tools"></i> Ações</th>
+            </tr>
+            <%Partidas.forEach(function(partida) { %>
+            <tr>
+                <td><%= partida.timedecasa.nome%></td>
+                <td><%= partida.golcasa %> x <%= partida.golfora %></td>
+                <td><%= partida.timedefora.nome%></td>
+                <td><%= partida.datapartida%></td>
+                <td>
+                    <a href="/admin/partida/edt/<%= partida.id %>" class="btn edit"><i class="fas fa-edit"></i> Editar</a>
+                    <button class="delete-button" onclick="confirmarExclusao('<%= partida.id %>')"><i class="fas fa-trash-alt"></i> Excluir</button>
+                </td>
+            </tr>
+            <% }) %>
+        </table>
+    </div>
+</body>
+
+</html>

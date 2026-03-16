@@ -1,0 +1,193 @@
+<%- include('../cabecalho.ejs') %>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogadores</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+/* Top bar (adicionar + barra de busca) */
+/* Top Bar */
+.top-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+/* Botões principais (Adicionar e Buscar) */
+.add-button a, .search-bar button {
+    background-color: #00A86B;
+    color: #FFFFFF;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 168, 107, 0.3);
+}
+
+.add-button a:hover, .search-bar button:hover {
+    background-color: #FFFFFF;
+    color: #00A86B;
+    border: 1px solid #00A86B;
+    transform: translateY(-2px);
+}
+
+/* Barra de pesquisa */
+.search-bar {
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #00A86B;
+    background-color: #FFFFFF;
+}
+
+.search-bar input {
+    border: none;
+    outline: none;
+    padding: 10px 14px;
+    background-color: transparent;
+    color: #0D0D0D;
+    font-size: 16px;
+}
+
+.search-bar input::placeholder {
+    color: #A0A0A0;
+}
+
+/* Botões de ações na tabela */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    width: 100px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Editar */
+.edit {
+    background-color: #00A86B;
+    color: white;
+    border: none;
+}
+
+.edit:hover {
+    background-color: white;
+    color: #00A86B;
+    border: 1px solid #00A86B;
+    transform: translateY(-2px);
+}
+
+/* Excluir */
+.delete-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    width: 100px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
+
+/* Coluna de ações */
+td:last-child {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+}
+
+
+    </style>
+
+    <script>
+        function pesquisarJogadorOuTime() {
+            let input = document.getElementById("search-input").value.toLowerCase();
+            let rows = document.querySelectorAll("table tr");
+
+            rows.forEach((row, index) => {
+                if (index === 0) return;
+                let nome = row.children[0].textContent.toLowerCase();
+                let time = row.children[2].textContent.toLowerCase();
+                row.style.display = nome.includes(input) || time.includes(input) ? "" : "none";
+            });
+        }
+
+        function confirmarExclusao(id) {
+            if (confirm("Tem certeza que deseja excluir este jogador?")) {
+                window.location.href = "/admin/jogador/delete/" + id;
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <h1><i class="fas fa-futbol"></i> Jogadores</h1>
+
+    <div class="container">
+        <div class="top-bar">
+            <div class="add-button">
+                <a href="/admin/jogador/add"><i class="fas fa-user-plus icon"></i> Aumentar Elenco</a>
+            </div>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Time ou Jogador..." onkeyup="pesquisarJogadorOuTime()">
+                <button onclick="pesquisarJogadorOuTime()"><i class="fas fa-search"></i>Pesquisar</button>
+            </div>
+        </div>
+
+        <table>
+            <tr>
+                <th><i class="fas fa-user"></i> Nome</th>
+                <th><i class="fas fa-ruler-vertical"></i> Camisa</th>
+                <th><i class="fas fa-weight"></i> Time</th>
+                <th><i class="fas fa-map-marker-alt"></i> Posição</th>
+                <th><i class="fas fa-image"></i> Foto</th>
+                <th><i class="fas fa-tools"></i> Ações</th>
+            </tr>
+<% jogadores.forEach(function(jogador) { %>
+<tr>
+    <td><%= jogador.nome %></td>
+    <td><%= jogador.camisa %></td>
+    <td><%= jogador.time ? jogador.time.nome : 'Sem time' %></td>
+    <td><%= jogador.posicao %></td>
+    <td>
+        <% if (jogador.foto) { %>
+            <img src="/imagem/<%= jogador.foto %>" width="50">
+        <% } else { %>
+            Sem foto
+        <% } %>
+    </td>
+    <td>
+        <a href="/admin/jogador/edt/<%= jogador._id %>">Editar</a>
+        <a href="/admin/jogador/del/<%= jogador._id %>">Excluir</a>
+    </td>
+</tr>
+<% }) %>
+
+        </table>
+    </div>
+</body>
+</html>

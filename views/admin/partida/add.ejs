@@ -1,0 +1,40 @@
+<%- include('../cabecalho.ejs') %>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sdiciona partidas concluidas</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <form action="" method="post">
+    <h1><i class="fas fa-users"></i> Mais partidas</h1>
+    <label for="timecasa"><i class="fas fa-tshirt"></i> Time da Casa</label>
+    <select id="timedecasa" name="timedecasa" required>
+      <option value="">selecione</option>
+      <%Times.forEach(function(time){%>
+        <option value='<%=time.id%>'> <%=time.nome%> </option>
+      <%})%>
+    </select>
+    
+    <select id="timedefora" name="timedefora" required>
+      <option value="">selecione</option>
+      <%Times.forEach(function(time){%>
+        <option value='<%=time.id%>'> <%=time.nome%> </option>
+      <%})%>
+    </select>
+    <label for="golcasa"><i class="fas fa-landmark"></i> Gol Casa</label>
+    <input min="0" max ="99" type="number" id="golcasa" name="golcasa" placeholder="Digite o Gol Casa">
+
+    <label for="golfora"><i class="fas fa-landmark"></i> Gol Fora</label>
+    <input min="0" max ="99" type="number" id="golfora" name="golfora" placeholder="Digite o Gol Fora">
+
+    <label for="datapartida"><i class="fas fa-landmark"></i> Data de Partida</label>
+    <input type="text" id="datapartida" name="datapartida" placeholder="Digite a data de partida">
+    
+    
+    
+    <button type="submit"><i class="fas fa-plus icon"></i> Aumentar concorrencia!</button>
+  </form>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Reset básico */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        main {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 80px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            text-align: left;
+        }
+
+        input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="tel"]:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 8px rgba(40, 167, 69, 0.2);
+        }
+
+        button {
+            background-color: #28a745;
+            color: #fff;
+            padding: 14px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        p {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        a {
+            color: #28a745;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        a:hover {
+            color: #218838;
+        }
+
+        /* Mensagem de sucesso */
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+            display: none; /* Inicialmente invisível */
+            text-align: center;
+        }
+
+        /* Estilo da imagem no topo */
+        .logo {
+            width: 80px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 600px) {
+            main {
+                padding: 30px;
+            }
+
+            input[type="text"], input[type="email"], input[type="password"], input[type="tel"], input[type="file"] {
+                font-size: 1rem;
+            }
+
+            button {
+                font-size: 1rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <main>
+        <img src="../shell.jpeg" alt="Logo da shell" style=" height:70px; margin-right: 30px;">
+        <h1>Cadastro</h1>
+        <form id="registration-form" method="post" enctype="multipart/form-data">
+            <div>
+                <label for="nome">Nome</label>
+                <input type="text" name="nome" id="nome" required placeholder="Digite seu nome completo">
+            </div>
+            <div>
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" required placeholder="Digite seu email">
+            </div>
+            <div>
+                <label for="cpf">CPF</label>
+                <input type="text" name="cpf" id="cpf" required pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" title="Formato de CPF: 000.000.000-00" placeholder="000.000.000-00">
+            </div>
+            <div>
+                <label for="telefone">Telefone</label>
+                <input type="tel" name="telefone" id="telefone" required placeholder="(99) 99999-9999">
+            </div>
+            <div>
+                <label for="endereco">Endereço</label>
+                <input type="text" name="endereco" id="endereco" required placeholder="Digite seu endereço completo">
+            </div>
+            <div>
+                <label for="foto">Foto</label>
+                <input type="file" name="foto" id="foto" accept="image/*">
+            </div>
+            <div>
+                <label for="senha">Senha</label>
+                <input type="password" name="senha" id="senha" required placeholder="Digite sua senha">
+            </div>
+            <div>
+                <input type="checkbox" name="admin" id="admin">
+                <label for="admin">Admin?</label>
+            </div>
+            <div>
+                <button type="submit">Cadastrar</button>
+            </div>
+            <p>Já é cadastrado? <a href="/login">Clique aqui!</a></p>
+        </form>
+
+        <!-- Mensagem de sucesso que será mostrada após cadastro -->
+        <div id="success-message" class="success-message">
+            Cadastro realizado com sucesso!
+        </div>
+    </main>
+
+    <script>
+document.getElementById('registration-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Impede o envio do formulário para fins de demonstração
+
+    // Exibe a mensagem de sucesso
+    document.getElementById('success-message').style.display = 'block';
+
+    // Redireciona para a página de login após 2 segundos
+    setTimeout(function() {
+        window.location.href = '/login'; // Substitua '/login' pelo caminho real da sua página de login
+    }, 2000); // O redirecionamento ocorre após 2 segundos (ajuste o tempo conforme necessário)
+
+    // Opcional: limpe o formulário (se necessário)
+    document.getElementById('registration-form').reset();
+});
+
+    </script>
+</body>
+</html>

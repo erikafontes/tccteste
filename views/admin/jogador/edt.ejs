@@ -1,0 +1,64 @@
+<%- include('../cabecalho.ejs') %>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Jogador</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .foto-preview {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1><i class="fas fa-edit"></i> Edição de Jogadores</h1>
+    <div class="container">
+        <form method="POST" enctype="multipart/form-data">
+            
+            <label for="nome"><i class="fas fa-tshirt"></i> Nome:</label>
+            <input type="text" id="nome" name="nome" value="<%= Jogador.nome %>" required placeholder="Digite o nome">
+
+            <label for="camisa"><i class="fas fa-hashtag"></i> Camisa:</label>
+            <input type="number" id="camisa" name="camisa" value="<%= Jogador.camisa %>" min="1" max="99" required placeholder="Número da camisa">
+
+            <label for="time"><i class="fas fa-landmark"></i> Time:</label>
+            <select id="time" name="time" class="form-control" required>
+                <% Times.forEach(function(time) { %>
+                    <option value="<%= time.id %>" <%= Jogador.time && Jogador.time._id.toString() === time.id.toString() ? "selected" : "" %>>
+                        <%= time.nome %>
+                    </option>
+                <% }) %>
+            </select>
+
+            <label><i class="fas fa-image"></i> Foto Atual:</label><br>
+            <% if (Jogador.foto) { %>
+                <img src="/imagem/<%= Jogador.foto %>" alt="Foto do jogador" class="foto-preview">
+            <% } else { %>
+                <p>Sem foto cadastrada.</p>
+            <% } %>
+
+            <label for="foto"><i class="fas fa-upload"></i> Alterar Foto:</label>
+            <input type="file" id="foto" name="foto">
+
+            <label for="posicao"><i class="fas fa-map-marker-alt"></i> Posição:</label>
+            <select id="posicao" name="posicao" required>
+                <option value="">Selecione a posição</option>
+                <option value="Atacante" <%= Jogador.posicao === "Atacante" ? "selected" : "" %>>Atacante</option>
+                <option value="Meio-Campo" <%= Jogador.posicao === "Meio-Campo" ? "selected" : "" %>>Meio-Campo</option>
+                <option value="Defensor" <%= Jogador.posicao === "Defensor" ? "selected" : "" %>>Defensor</option>
+                <option value="Goleiro" <%= Jogador.posicao === "Goleiro" ? "selected" : "" %>>Goleiro</option>
+            </select>
+
+            <button type="submit" class="btn"><i class="fas fa-save"></i> Salvar Edição</button>
+        </form>
+    </div>
+</body>
+</html>

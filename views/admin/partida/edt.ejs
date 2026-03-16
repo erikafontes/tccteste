@@ -1,0 +1,30 @@
+<%- include('../cabecalho.ejs') %>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Editar Jogador</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="/css/style.css">
+
+    </head>
+
+    <body>
+        <h1><i class="fas fa-edit"></i> Edição das partidas</h1>
+        <div class="container">
+            <form action="" method="post">
+                <label for="golcasa"><i class="fas fa-landmark"></i> Gol Casa</label>
+                <input min="0" max ="99" type="number" id="golcasa" name="golcasa" placeholder="Digite o Gol Casa">
+
+                <label for="golfora"><i class="fas fa-landmark"></i> Gol Fora</label>
+                <input min="0" max ="99" type="number" id="golfora" name="golfora" placeholder="Digite o Gol Fora">
+
+                <label for="datapartida"><i class="fas fa-landmark"></i> Data da Partida</label>
+                <input type="text" id="datapartida" name="datapartida" placeholder="Digite a data de partida">
+
+                <button type="submit"><i class="fas fa-save"></i> Efetuar Edição</button>
+            </form>
+        </div>
+    </body>
+
+    </html>
