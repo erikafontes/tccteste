@@ -21,13 +21,13 @@ import {
     home,
 
     // Time
-    abreaddtime,
-    addtime,
-    listartime,
-    filtrartime,
-    deletatime,
-    abreedttime,
-    edttime,
+    abreadddenuncia,
+    adddenuncia,
+    listardenuncia,
+    filtrardenuncia,
+    deletardenuncia,
+    abreedtdenuncia,
+    edtdenuncia,
 
     // Jogador
     abreaddjogador,
@@ -55,17 +55,17 @@ import {
 // Página inicial
 router.get('/', home);
 
-// ----- TIME -----
-router.get('/admin/time/add', abreaddtime);
-router.post('/admin/time/add', upload.single('escudo'), addtime);
+// ----- Denuncia -----
+router.get('/admin/denuncia/add', abreadddenuncia);
+router.post('/admin/denuncia/add', upload.single('foto'), adddenuncia);
 
-router.get('/admin/time/lst', listartime);
-router.post('/admin/time/lst', filtrartime);
+router.get('/admin/denuncia/lst', listardenuncia);
+router.post('/admin/denuncia/lst', filtrardenuncia);
 
-router.get('/admin/time/del/:id', deletatime);
+router.get('/admin/denuncia/del/:id', deletardenuncia);
 
-router.get('/admin/time/edt/:id', abreedttime);
-router.post('/admin/time/edt/:id', upload.single('escudo'), edttime);
+router.get('/admin/denuncia/edt/:id', abreedtdenuncia);
+router.post('/admin/denuncia/edt/:id', upload.single('foto'), edtdenuncia);
 
 // ----- JOGADOR -----
 router.get('/admin/jogador/add', abreaddjogador);

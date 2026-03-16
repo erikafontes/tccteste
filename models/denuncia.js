@@ -1,0 +1,26 @@
+import conexao from '../config/conexao.js'
+
+const Denuncia = conexao.Schema({
+    ndenuncia : {type:Number, required:true},
+    fonte: {type:String, required:true},
+    data : {type:Date, required:true},
+    hora : {type: String, required:true},
+
+    //2. dados da denuncia
+    endereco:{type:String},
+    especie:{type:String},
+    quantidade:{type:Number},
+    situacao:{type:String, required:true},
+     foto: { type: String, required: false },
+
+    //3,dados do proprietário
+    nome:{type:String},
+    cpf:{type:String},
+    telefone:{type:String}, 
+    enderecoProprietario:{type:String},
+
+    //4. providencias tomadas
+    providencia:{type:String}
+});
+
+export default conexao.model('Denuncia',Denuncia)

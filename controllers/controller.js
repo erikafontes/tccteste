@@ -1,130 +1,119 @@
-import Time from '../models/time.js';
+import Denuncia from '../models/denuncia.js';
 import Jogador from '../models/jogador.js';
 import Partida from '../models/partida.js';
 
 export const home = async (req, res) => {
-    const times = await Time.find();
-    const partidas = await Partida.find()
-      .populate("timedecasa")
-      .populate("timedefora");
+    // const times = await Time.find();
+    // const partidas = await Partida.find()
+    //   .populate("timedecasa")
+    //   .populate("timedefora");
   
-    const classificacao = times.map(time => {
-      let pontos = 0,
-          vitorias = 0,
-          empates = 0,
-          derrotas = 0,
-          golsPro = 0,
-          golsContra = 0;
+    // const classificacao = times.map(time => {
+    //   let pontos = 0,
+    //       vitorias = 0,
+    //       empates = 0,
+    //       derrotas = 0,
+    //       golsPro = 0,
+    //       golsContra = 0;
   
-      partidas.forEach(partida => {
-        const isCasa = partida.timedecasa._id.equals(time._id);
-        const isFora = partida.timedefora._id.equals(time._id);
+    //   partidas.forEach(partida => {
+    //     const isCasa = partida.timedecasa._id.equals(time._id);
+    //     const isFora = partida.timedefora._id.equals(time._id);
   
-        if (isCasa || isFora) {
-          const golsFeitos = isCasa ? partida.golcasa : partida.golfora;
-          const golsSofridos = isCasa ? partida.golfora : partida.golcasa;
+    //     if (isCasa || isFora) {
+    //       const golsFeitos = isCasa ? partida.golcasa : partida.golfora;
+    //       const golsSofridos = isCasa ? partida.golfora : partida.golcasa;
   
-          golsPro += golsFeitos;
-          golsContra += golsSofridos;
+    //       golsPro += golsFeitos;
+    //       golsContra += golsSofridos;
   
-          if (golsFeitos > golsSofridos) {
-            vitorias++;
-            pontos += 3;
-          } else if (golsFeitos === golsSofridos) {
-            empates++;
-            pontos += 1;
-          } else {
-            derrotas++;
-          }
-        }
-      });
+    //       if (golsFeitos > golsSofridos) {
+    //         vitorias++;
+    //         pontos += 3;
+    //       } else if (golsFeitos === golsSofridos) {
+    //         empates++;
+    //         pontos += 1;
+    //       } else {
+    //         derrotas++;
+    //       }
+    //     }
+    //   });
   
-      return {
-        nome: time.nome,
-        pontos,
-        vitorias,
-        empates,
-        derrotas,
-        golsPro,
-        golsContra,
-        saldo: golsPro - golsContra
-      };
-    });
+    //   return {
+    //     nome: time.nome,
+    //     pontos,
+    //     vitorias,
+    //     empates,
+    //     derrotas,
+    //     golsPro,
+    //     golsContra,
+    //     saldo: golsPro - golsContra
+    //   };
+    // });
   
-    classificacao.sort((a, b) => b.pontos - a.pontos || b.saldo - a.saldo);
+//     classificacao.sort((a, b) => b.pontos - a.pontos || b.saldo - a.saldo);
   
-    res.render("admin/index", {
-      classificacao,
-      times,
-      partidas
-    });
+//     res.render("admin/index", {
+//       classificacao,
+//       times,
+//       partidas
+//     });
   };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export async function abreaddtime(req, res) {
-    res.render('admin/time/add')
+export async function abreadddenuncia(req, res) {
+    res.render('admin/denuncia/add')
 }
-export async function addtime(req, res) {
-    var escudoupload=null
+export async function adddenuncia(req, res) {
+    var fotoupload=null
     if(req.file!=null)
 {
-    escudoupload=req.file.filename
+    fotoupload=req.file.filename
 }
 else
 {
-    escudoupload=null
+    fotoupload=null
 }
-    await Time.create({
+    await Denuncia.create({
+        ndenuncia:req.body.ndenuncia,
+        fonte:req.body.fonte,
+        data:req.body.data,
+        hora:req.body.hora,
+        endereco:req.body.endereco,
+        espécie:req.body.espécie,
+        quantidade:req.body.quantidade,
+        situacao:req.body.situacao,
+         foto:fotoupload,    
+
+         
         nome:req.body.nome,
-        estadio:req.body.estadio,
-        classificacao:req.body.classificacao,
-        datafundacao:req.body.datafundacao,
-        pontos: 0,
-        escudo:escudoupload
+        cpf:req.body.cpf,
+        telefone:req.body.telefone,
+        enderecoProprietario:req.body.enderecoProprietario,
+        providencia:req.body.providencia
     })
-    res.redirect('/admin/time/add')
+    res.redirect('/admin/denuncia/add')
 }
-export async function listartime(req, res) {
-    const resultado = await Time.find({}).catch(function(err){console.log(err)});
-    res.render('admin/time/lst',{Times: resultado});
+export async function listardenuncia(req, res) {
+    const resultado = await Denuncia.find({}).catch(function(err){console.log(err)});
+    res.render('admin/denuncia/lst',{Denuncias: resultado});
 }
-export async function filtrartime(req, res) {
-    const resposta = await Time.find({nome: new RegExp(req.body.pesquisar,"i")})
-    res.render('admin/time/lst',{Times: resposta});
+export async function filtrardenuncia(req, res) {
+    const resposta = await Denuncia.find({nome: new RegExp(req.body.pesquisar,"i")})
+    res.render('admin/denuncia/lst',{Denuncias: resposta});
 }
 
-export async function deletatime(req, res) {
-    await Time.findByIdAndDelete(req.params.id)
-    res.redirect('/admin/time/lst')
+export async function deletardenuncia(req, res) {
+    await Denuncia.findByIdAndDelete(req.params.id)
+    res.redirect('/admin/denuncia/lst')
 }
-export async function abreedttime(req, res){
-    const resultado = await Time.findById(req.params.id)
-    res.render('admin/time/edt',{Time: resultado})
+export async function abreedtdenuncia(req, res){
+    const resultado = await Denuncia.findById(req.params.id)
+    res.render('admin/denuncia/edt',{Denuncia: resultado})
 }
-export async function edttime(req, res) {
+export async function edtdenuncia(req, res) {
   try {
     const updateData = {
-      nome: req.body.nome,
-      estadio: req.body.estadio,
+      providencia: req.body.providencia
     };
 
     if (req.file) {
