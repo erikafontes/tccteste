@@ -1,7 +1,7 @@
 import express from 'express'
 const app = express();
 
-app.use('/imagem', express.static('public/imagem'));
+
 app.use(express.urlencoded({extended:true}))
 app.set('view engine', 'ejs')
 
@@ -21,6 +21,6 @@ app.use(express.static(__dirname + '/public'));
 import routes from "./routes/route.js"
 app.use(routes)
 
-app.listen(3002)
+app.listen(3010)
 
 

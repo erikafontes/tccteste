@@ -30,12 +30,12 @@
         </tr>
       </thead>
       <tbody>
-        <% classificacao.forEach((time, i) => { %>
+        <% classificacao.forEach((denuncia, i) => { %>
           <tr>
             <td><%= i + 1 %>º</td>
-            <td><%= time.nome %></td>
-            <td><%= time.saldo %></td>
-            <td><%= time.pontos %></td>
+            <td><%= denuncia.situacao %></td>
+            <td><%= denuncia.providencias %></td>
+            <td><%= denuncia.endereco %></td>
           </tr>
         <% }) %>
       </tbody>

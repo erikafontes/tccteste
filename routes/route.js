@@ -19,7 +19,6 @@ const upload = multer({ storage });
 // Importando os controllers
 import {
     home,
-
     // Time
     abreadddenuncia,
     adddenuncia,
@@ -29,23 +28,23 @@ import {
     abreedtdenuncia,
     edtdenuncia,
 
-    // Jogador
-    abreaddjogador,
-    addjogador,
-    listarjogador,
-    filtrarjogador,
-    deletajogador,
-    abreedtjogador,
-    edtjogador,
+    // // Jogador
+    // abreaddjogador,
+    // addjogador,
+    // listarjogador,
+    // filtrarjogador,
+    // deletajogador,
+    // abreedtjogador,
+    // edtjogador,
 
     // Partida
-    abreaddpartida,
-    addpartida,
-    listarpartida,
-    filtrarpartida,
-    deletapartida,
-    abreedtpartida,
-    edtpartida
+    // abreaddpartida,
+    // addpartida,
+    // listarpartida,
+    // filtrarpartida,
+    // deletapartida,
+    // abreedtpartida,
+    // edtpartida
 
 } from '../controllers/controller.js';
 
@@ -67,29 +66,29 @@ router.get('/admin/denuncia/del/:id', deletardenuncia);
 router.get('/admin/denuncia/edt/:id', abreedtdenuncia);
 router.post('/admin/denuncia/edt/:id', upload.single('foto'), edtdenuncia);
 
-// ----- JOGADOR -----
-router.get('/admin/jogador/add', abreaddjogador);
-router.post('/admin/jogador/add', upload.single('foto'), addjogador);
+// // ----- JOGADOR -----
+// router.get('/admin/jogador/add', abreaddjogador);
+// router.post('/admin/jogador/add', upload.single('foto'), addjogador);
 
-router.get('/admin/jogador/lst', listarjogador);
-router.post('/admin/jogador/lst', filtrarjogador);
+// router.get('/admin/jogador/lst', listarjogador);
+// router.post('/admin/jogador/lst', filtrarjogador);
 
-router.get('/admin/jogador/del/:id', deletajogador);
+// router.get('/admin/jogador/del/:id', deletajogador);
 
-router.get('/admin/jogador/edt/:id', abreedtjogador);
-router.post('/admin/jogador/edt/:id', upload.single('foto'), edtjogador);
+// router.get('/admin/jogador/edt/:id', abreedtjogador);
+// router.post('/admin/jogador/edt/:id', upload.single('foto'), edtjogador);
 
-// ----- PARTIDA -----
-router.get('/admin/partida/add', abreaddpartida);
-router.post('/admin/partida/add', addpartida);
+// // ----- PARTIDA -----
+// router.get('/admin/partida/add', abreaddpartida);
+// router.post('/admin/partida/add', addpartida);
 
-router.get('/admin/partida/lst', listarpartida);
-router.post('/admin/partida/lst', filtrarpartida);
+// router.get('/admin/partida/lst', listarpartida);
+// router.post('/admin/partida/lst', filtrarpartida);
 
-router.get('/admin/partida/del/:id', deletapartida);
+// router.get('/admin/partida/del/:id', deletapartida);
 
-router.get('/admin/partida/edt/:id', abreedtpartida);
-router.post('/admin/partida/edt/:id', edtpartida);
+// router.get('/admin/partida/edt/:id', abreedtpartida);
+// router.post('/admin/partida/edt/:id', edtpartida);
 
 
 // Exportando

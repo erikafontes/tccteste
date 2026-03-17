@@ -20,8 +20,8 @@
             }
 
             function confirmarExclusao(id) {
-                if (confirm("Tem certeza que deseja excluir este time?")) {
-                    window.location.href = "/admin/time/del/" + id;
+                if (confirm("Tem certeza que deseja excluir esta denúncia?")) {
+                    window.location.href = "/admin/denuncia/del/" + id;
                 }
             }
         </script>
@@ -135,49 +135,64 @@
     </head>
 
     <body>
-        <h1><i class="fas fa-futbol"></i> Times selecionados</h1>
+        <h1><i class="fas fa-futbol"></i> Lista de Denúncias</h1>
 
         <div class="container">
             <div class="top-bar">
                 <div class="add-button">
-                    <a href="/admin/time/add"><i class="fas fa-user-plus icon"></i> Aumentar Elenco</a>
+                    <a href="/admin/denuncia/add"><i class="fas fa-user-plus icon"></i> Aumentar Elenco</a>
                 </div>
                 <div class="search-bar">
-                    <input type="text" id="search-input" placeholder="Pesquisar Clube" onkeyup="pesquisarClube()">
-                    <button onclick="pesquisarClube()"><i class="fas fa-search"></i>Pesquisar</button>
+                    <input type="text" id="search-input" placeholder="Pesquisar Denúncia" onkeyup="pesquisarDenuncia()">
+                    <button onclick="pesquisarDenuncia()"><i class="fas fa-search"></i>Pesquisar</button>
                 </div>
             </div>
 
             <table>
                 <tr>
-                    <th><i class="fas fa-tshirt"></i> Clube</th>
-                    <th><i class="fas fa-landmark"></i> Estádio</th>
-                    <th><i class="fas fa-calendar-alt"></i> Data fundação</th>
-                    <th><i class="fas fa-calendar-alt"></i> Escudo</th>
-                    <th><i class="fas fa-tools"></i> Ações</th>
+                    <th> N° Denúncia</th>
+                    <th> Endereço</th>
+                    <th> Fonte</th>
+                    <th> Data</th>
+                    <th> Hora</th>
+                    <th> Espécie</th>
+                       <th> Foto</th>
                 </tr>
-                <%Times.forEach(function(time){ %>
+                <%Denuncias.forEach(function(denuncia){ %>
                     <tr>
                         <td>
-                            <%=time.nome %>
+                            <%=denuncia.ndenuncia %>
                         </td>
+
+                         <td>
+                            <%=denuncia.endereco %>
+                        </td>
+                        
                         <td>
-                            <%=time.estadio %>
+                            <%=denuncia.fonte %>
                         </td>
 
                         <td>
-                            <%=time.datafundacao %>
+                           <%= denuncia.data.toLocaleDateString('pt-BR') %>
+                        </td> 
+                         <td>
+                            <%=denuncia.hora %>
+                        </td> 
+                          
+                         <td>
+                            <%=denuncia.especie %>
+                         </td>
+                         <td>
+                            <img class="foto" src="/imagem/<%=denuncia.foto %>" />
                         </td>
 
-                        <td>
-                            <img class="foto" src="/imagem/<%=time.escudo %>" />
-                        </td>
-                        <td>
-                            <a href="/admin/time/edt/<%= time.id %>" class="btn edit"><i class="fas fa-edit icon"></i>
+                       
+                        <!-- <td>
+                            <a href="/admin/denuncia/edt/<%= denuncia.id %>" class="btn edit"><i class="fas fa-edit icon"></i>
                                 Editar</a>
-                            <button class="delete-button" onclick="confirmarExclusao('<%= time.id %>')"><i
+                            <button class="delete-button" onclick="confirmarExclusao('<%= denuncia.id %>')"><i
                                     class="fas fa-trash-alt icon"></i> Excluir</button>
-                        </td>
+                        </td> -->
                     </tr>
                     <% }) %>
             </table>

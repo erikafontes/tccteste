@@ -5,12 +5,25 @@
     box-sizing: border-box;
 }
 
+/* Estilos para o formulário de denúncia */
+.linha {
+  display: flex;
+  gap: 20px; /* espaço entre os campos */
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* faz os dois ocuparem o mesmo tamanho */
+}
+
 /* Fonte principal */
 body {
     background-color: #F0F8FF; /* Azul muito claro */
-    color: #0D0D0D;
+    color: #000000;
     font-family: 'Poppins', sans-serif;
     line-height: 1.6;
+    
 }
 
 /* Cabeçalho */
@@ -69,31 +82,29 @@ nav a:hover {
 /* Títulos */
 h1 {
     text-align: center;
-    color: #00a2ffc5;
-    margin-bottom: 20px;
+    color: #000000c5;
+    margin-bottom: 10px;
+    font-size: medium;
+    
 }
 
 /* Formulário */
 form {
-    background-color: #FFFFFF;
-    padding: 32px;
-    border-radius: 16px;
-    box-shadow: 0 8px 30px rgba(0, 123, 255, 0.07);
-    width: 100%;
-    max-width: 600px;
-    border: 1px solid #D0D0D0;
-    transition: transform 0.3s ease;
+  max-width: 800px;   /* largura do formulário */
+  margin: 0 auto;     /* centraliza */
+  padding: 20px;
 }
 
-form:hover {
+/* form:hover {
     transform: scale(1.02);
     box-shadow: 0 8px 40px rgba(0, 123, 255, 0.1);
-}
+} */
 
+/* cores dos titulos do formulario */
 label {
     display: block;
     margin-bottom: 8px;
-    color: #00a2ffc5;
+    color: #000000c5;
     font-weight: 600;
 }
 
@@ -109,7 +120,7 @@ input, select {
 }
 
 input:focus, select:focus {
-    border-color: #00a2ffc5;
+    border-color: #000000c5;
     background-color: #FFFFFF;
     outline: none;
 }
@@ -117,7 +128,7 @@ input:focus, select:focus {
 /* Botões */
 button, .add-button a {
     width: 100%;
-    background-color: #00a2ffc5;
+    background-color: #000000c5;
     color: #FFFFFF;
     padding: 14px 20px;
     border: none;
@@ -129,11 +140,11 @@ button, .add-button a {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 button:hover, .add-button a:hover {
-    background-color: #005FCC;
+    background-color: #000000;
     transform: translateY(-2px);
 }
 
@@ -154,15 +165,15 @@ table {
 th, td {
     padding: 16px;
     text-align: left;
-    border-bottom: 1px solid #E0E0E0;
+    border-bottom: 1px solid #000000;
 }
 
 th {
-    background-color: #F0F8FF;
-    color: #00a2ffc5;
+    background-color: #eeeeee;
+    color: #000000c5;
     font-weight: 700;
     text-transform: uppercase;
-    font-size: 0.9rem;
+    font-size: 0.7rem;
 }
 
 tr:hover {
@@ -170,7 +181,7 @@ tr:hover {
 }
 
 td a {
-    background-color: #00a2ffc5;
+    background-color: #000000c5;
     padding: 8px 16px;
     border-radius: 8px;
     color: #FFFFFF;
@@ -180,31 +191,32 @@ td a {
 }
 
 td a:hover {
-    background-color: #005FCC;
+    background-color: #000000;
 }
 
 /* Foto no formulário */
 .foto {
     display: block;
-    width: 120px;
-    height: auto;
-    margin: 10px 0;
+    width: 100px;
+    height: 120px;
+    margin: 5px 0;
+    /* margin-top: 100%; */
     border-radius: 10px;
     object-fit: cover;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease;
-    border: 1px solid #00a2ffc5;
+    border: 1px solid #000000c5;
 }
 
 .foto:hover {
     transform: scale(1.05);
 }
-
+/* formulario */
 /* Input file */
 input[type="file"] {
     background-color: #F8FAFF;
-    color: #00a2ffc5;
-    border: 1px solid #00a2ffc5;
+    color: #000000c5;
+    border: 1px solid #000000c5;
     cursor: pointer;
 }
 

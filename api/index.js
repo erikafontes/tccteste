@@ -19,6 +19,6 @@ app.set('views', join(__dirname, '../views'));
 
 // Rotas
 app.use(routes)
-app.listen(3002)
+app.listen(3010)
 // Exporta o handler compatível com Vercel
 export default app;
