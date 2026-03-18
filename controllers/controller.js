@@ -3,61 +3,9 @@ import Jogador from '../models/jogador.js';
 import Partida from '../models/partida.js';
 
 export const home = async (req, res) => {
-    // const times = await Time.find();
-    // const partidas = await Partida.find()
-    //   .populate("timedecasa")
-    //   .populate("timedefora");
+   
   
-    // const classificacao = times.map(time => {
-    //   let pontos = 0,
-    //       vitorias = 0,
-    //       empates = 0,
-    //       derrotas = 0,
-    //       golsPro = 0,
-    //       golsContra = 0;
-  
-    //   partidas.forEach(partida => {
-    //     const isCasa = partida.timedecasa._id.equals(time._id);
-    //     const isFora = partida.timedefora._id.equals(time._id);
-  
-    //     if (isCasa || isFora) {
-    //       const golsFeitos = isCasa ? partida.golcasa : partida.golfora;
-    //       const golsSofridos = isCasa ? partida.golfora : partida.golcasa;
-  
-    //       golsPro += golsFeitos;
-    //       golsContra += golsSofridos;
-  
-    //       if (golsFeitos > golsSofridos) {
-    //         vitorias++;
-    //         pontos += 3;
-    //       } else if (golsFeitos === golsSofridos) {
-    //         empates++;
-    //         pontos += 1;
-    //       } else {
-    //         derrotas++;
-    //       }
-    //     }
-    //   });
-  
-    //   return {
-    //     nome: time.nome,
-    //     pontos,
-    //     vitorias,
-    //     empates,
-    //     derrotas,
-    //     golsPro,
-    //     golsContra,
-    //     saldo: golsPro - golsContra
-    //   };
-    // });
-  
-//     classificacao.sort((a, b) => b.pontos - a.pontos || b.saldo - a.saldo);
-  
-//     res.render("admin/index", {
-//       classificacao,
-//       times,
-//       partidas
-//     });
+    res.render("admin/index");
   };
 
 export async function abreadddenuncia(req, res) {

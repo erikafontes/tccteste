@@ -1,0 +1,202 @@
+<%- include('../cabecalho.ejs') %>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Times</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="/css/style.css">
+
+        <script>
+            function pesquisarClube() {
+                let input = document.getElementById("search-input").value.toLowerCase();
+                let rows = document.querySelectorAll("table tr");
+
+                rows.forEach((row, index) => {
+                    if (index === 0) return; // Pula o cabeçalho
+                    let nome = row.children[0].textContent.toLowerCase();
+                    row.style.display = nome.includes(input) ? "" : "none";
+                });
+            }
+
+            function confirmarExclusao(id) {
+                if (confirm("Tem certeza que deseja excluir esta denúncia?")) {
+                    window.location.href = "/admin/denuncia/del/" + id;
+                }
+            }
+        </script>
+
+        <style>
+            .top-bar {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                justify-content: space-between;
+                margin-bottom: 20px;
+            }
+
+            .add-button a,
+            .search-bar button {
+                background-color: #00A86B;
+                color: #FFFFFF;
+                padding: 10px 18px;
+                border-radius: 8px;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                border: none;
+                cursor: pointer;
+                font-weight: 600;
+                transition: background-color 0.3s ease, transform 0.2s ease;
+                box-shadow: 0 4px 12px rgba(0, 168, 107, 0.2);
+            }
+
+            .add-button a:hover,
+            .search-bar button:hover {
+                background-color: #008F5A;
+                transform: translateY(-2px);
+            }
+
+            .search-bar {
+                display: flex;
+                align-items: center;
+                border-radius: 8px;
+                overflow: hidden;
+                border: 1px solid #00A86B;
+                background-color: #FFFFFF;
+            }
+
+            .search-bar input {
+                border: none;
+                outline: none;
+                padding: 10px 14px;
+                background-color: transparent;
+                color: #0D0D0D;
+                font-size: 16px;
+            }
+
+            .search-bar input::placeholder {
+                color: #A0A0A0;
+            }
+
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 10px 15px;
+                font-size: 14px;
+                border-radius: 8px;
+                text-decoration: none;
+                width: 100px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background-color 0.3s ease, transform 0.2s ease;
+            }
+
+            /* Editar */
+            .edit {
+                background-color: #FFFFFF;
+                color: #00A86B;
+                border: 1px solid #00A86B;
+            }
+
+            .edit:hover {
+                background-color: #00A86B;
+                color: #FFFFFF;
+                transform: translateY(-2px);
+            }
+
+            /* Excluir */
+            .delete-button {
+                background-color: #dc3545;
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                border-radius: 8px;
+                width: 100px;
+                font-weight: 600;
+                transition: background-color 0.3s ease, transform 0.2s ease;
+            }
+
+            .delete-button:hover {
+                background-color: #c82333;
+                transform: translateY(-2px);
+            }
+
+            /* Coluna de ações */
+            td:last-child {
+                display: flex;
+                gap: 12px;
+                justify-content: center;
+                align-items: center;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1><i class="fas fa-futbol"></i> Lista de Denúncias</h1>
+
+        <div class="container">
+            <div class="top-bar">
+                <div class="add-button">
+                    <a href="/admin/denuncia/add"><i class="fas fa-user-plus icon"></i> Aumentar Elenco</a>
+                </div>
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="Pesquisar Denúncia" onkeyup="pesquisarDenuncia()">
+                    <button onclick="pesquisarDenuncia()"><i class="fas fa-search"></i>Pesquisar</button>
+                </div>
+            </div>
+
+            <table>
+                <tr>
+                    <th> N° Denúncia</th>
+                    <th> Endereço</th>
+                    <th> Fonte</th>
+                    <th> Data</th>
+                    <th> Hora</th>
+                    <th> Espécie</th>
+                       <th> Foto</th>
+                </tr>
+                <%Denuncias.forEach(function(denuncia){ %>
+                    <tr>
+                        <td>
+                            <%=denuncia.ndenuncia %>
+                        </td>
+
+                         <td>
+                            <%=denuncia.endereco %>
+                        </td>
+                        
+                        <td>
+                            <%=denuncia.fonte %>
+                        </td>
+
+                        <td>
+                           <%= denuncia.data.toLocaleDateString('pt-BR') %>
+                        </td> 
+                         <td>
+                            <%=denuncia.hora %>
+                        </td> 
+                          
+                         <td>
+                            <%=denuncia.especie %>
+                         </td>
+                         <td>
+                            <img class="foto" src="/imagem/<%=denuncia.foto %>" />
+                        </td>
+
+                       
+                        <!-- <td>
+                            <a href="/admin/denuncia/edt/<%= denuncia.id %>" class="btn edit"><i class="fas fa-edit icon"></i>
+                                Editar</a>
+                            <button class="delete-button" onclick="confirmarExclusao('<%= denuncia.id %>')"><i
+                                    class="fas fa-trash-alt icon"></i> Excluir</button>
+                        </td> -->
+                    </tr>
+                    <% }) %>
+            </table>
+        </div>
+    </body>
+
+    </html>

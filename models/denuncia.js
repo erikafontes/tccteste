@@ -2,6 +2,8 @@ import conexao from '../config/conexao.js'
 
 const Denuncia = conexao.Schema({
     ndenuncia : {type:Number, required:true},
+    nomedenunciante:{type:String, required:true},
+    email:{type:String, required:true},
     fonte: {type:String, required:true},
     data : {type:Date, required:true},
     hora : {type: String, required:true},
