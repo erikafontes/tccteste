@@ -54,9 +54,11 @@ import {
 // Página inicial
 router.get('/', home);
 
-// ----- Denuncia -----
-router.get('/admin/denuncia/add', abreadddenuncia);
-router.post('/admin/denuncia/add', upload.single('foto'), adddenuncia);
+// // ----- Denuncia -----
+// router.get('/admin/denuncia/add', abreadddenuncia);
+// router.post('/admin/denuncia/add', upload.single('foto'), adddenuncia);
+router.get('/admin/denuncia/add2', abreadddenuncia);
+router.post('/admin/denuncia/add2', upload.single('foto'), adddenuncia);
 
 router.get('/admin/denuncia/lst', listardenuncia);
 router.post('/admin/denuncia/lst', filtrardenuncia);

@@ -1,0 +1,160 @@
+<%- include('../cabecalho2.ejs') %>
+<div id="formPage" class="page active">
+    <div class="page-header">
+        <button class="btn-back" type="button" onclick="window.location.href='/admin/denuncia/lst'">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </button>
+        <h2>Nova Denuncia</h2>
+    </div>
+
+    <form class="form" action="/admin/denuncia/add2" method="POST" enctype="multipart/form-data" id="denunciaFormServer">
+        <div class="card">
+            <div class="card-header">
+                <h3>Informacoes da Denuncia</h3>
+                <p class="card-description">Dados basicos da denuncia registrada</p>
+            </div>
+            <div class="card-content">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="ndenuncia">Numero da Denuncia</label>
+                        <input type="number" id="ndenuncia" name="ndenuncia" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fonte">Fonte</label>
+                        <select id="fonte" name="fonte" required>
+                            <option value="WhatsApp">WhatsApp</option>
+                            <option value="Telefonema">Telefonema</option>
+                            <option value="Email">Email</option>
+                            <option value="Presencial">Presencial</option>
+                            <option value="Site">Site</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="data">Data</label>
+                    <input type="date" name="data" value="<%= new Date().toISOString().split('T')[0] %>">
+                    </div>
+                    <div class="form-group">
+                        <label for="hora">Hora</label>
+                        <input type="time" id="hora" name="hora" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Dados do Denunciante</h3>
+                <p class="card-description">Informacoes da pessoa que registrou a denuncia</p>
+            </div>
+            <div class="card-content">
+                <div class="form-group">
+                    <label for="nomeDenunciante">Nome Completo</label>
+                    <input type="text" id="nomeDenunciante" name="nomeDenunciante" required>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="cpf">CPF</label>
+                        <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefone">Telefone</label>
+                        <input type="text" id="telefone" name="telefone" placeholder="(00) 00000-0000">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="endereco">Endereco do Local</label>
+                    <input type="text" id="endereco" name="endereco" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Detalhes da Ocorrencia</h3>
+                <p class="card-description">Informacoes especificas sobre a denuncia</p>
+            </div>
+            <div class="card-content">
+                <div class="form-grid-3">
+                    <div class="form-group">
+                        <label for="especie">Especie</label>
+                        <select id="especie" name="especie" required>
+                            <option value="Animais">Animais</option>
+                            <option value="Ambiental">Ambiental</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantidade">Quantidade</label>
+                        <input type="number" id="quantidade" name="quantidade" min="1" value="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="situacao">Situacao</label>
+                        <select id="situacao" name="situacao" required>
+                            <option value="Pendente">Pendente</option>
+                            <option value="Em Análise">Em Análise</option>
+                            <option value="Em Andamento">Em Andamento</option>
+                            <option value="Resolvida">Resolvida</option>
+                            <option value="Arquivada">Arquivada</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="foto">Foto/Evidencia</label>
+                    <div class="upload-box">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg> 
+                         <label for="foto">Clique aqui para adicionar</label>
+                          <input type="file" id="foto" name="foto">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Dados do Denunciado</h3>
+                <p class="card-description">Informacoes sobre o suspeito/responsavel</p>
+            </div>
+            <div class="card-content">
+                <div class="form-group">
+                    <label for="nome">Nome do Denunciado</label>
+                    <input type="text" id="nome" name="nome" placeholder="Nome ou razao social">
+                </div>
+                <div class="form-group">
+                    <label for="enderecoProprietario">Endereco do Denunciado</label>
+                    <input type="text" id="enderecoProprietario" name="enderecoProprietario">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Providencias Tomadas</h3>
+                <p class="card-description">Acoes realizadas pela equipe</p>
+            </div>
+            <div class="card-content">
+                <div class="form-group">
+                    <textarea id="providencia" name="providencia" rows="5" placeholder="Descreva as providencias tomadas..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="btn btn-outline" onclick="window.location.href='/admin/denuncia/lst'">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Cadastrar Denuncia</button>
+        </div>
+    </form>
+</div>
+
+<script src="/script.js"></script>
+<%- include('../rodape.ejs') %>

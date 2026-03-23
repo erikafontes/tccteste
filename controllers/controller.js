@@ -9,37 +9,30 @@ export const home = async (req, res) => {
   };
 
 export async function abreadddenuncia(req, res) {
-    res.render('admin/denuncia/add')
+    res.render('admin/denuncia/add2')
 }
 export async function adddenuncia(req, res) {
-    var fotoupload=null
-    if(req.file!=null)
-{
-    fotoupload=req.file.filename
-}
-else
-{
-    fotoupload=null
-}
-    await Denuncia.create({
-        ndenuncia:req.body.ndenuncia,
-        fonte:req.body.fonte,
-        data:req.body.data,
-        hora:req.body.hora,
-        endereco:req.body.endereco,
-        espécie:req.body.espécie,
-        quantidade:req.body.quantidade,
-        situacao:req.body.situacao,
-         foto:fotoupload,    
+    const fotoupload = req.file ? req.file.filename : null;
 
-         
-        nome:req.body.nome,
-        cpf:req.body.cpf,
-        telefone:req.body.telefone,
-        enderecoProprietario:req.body.enderecoProprietario,
-        providencia:req.body.providencia
-    })
-    res.redirect('/admin/denuncia/add')
+    await Denuncia.create({
+        ndenuncia: req.body.ndenuncia,
+        nomedenunciante: req.body.nomeDenunciante,
+        email: req.body.email,
+        fonte: req.body.fonte || 'Site',
+        data: req.body.data,
+        hora: req.body.hora,
+        endereco: req.body.endereco,
+        especie: req.body.especie,
+        quantidade: req.body.quantidade,
+        situacao: req.body.situacao,
+        foto: fotoupload,
+        nome: req.body.nome,
+        cpf: req.body.cpf,
+        telefone: req.body.telefone,
+        enderecoProprietario: req.body.enderecoProprietario,
+        providencia: req.body.providencia
+    });
+    res.redirect('/admin/denuncia/lst');
 }
 export async function listardenuncia(req, res) {
     const resultado = await Denuncia.find({}).catch(function(err){console.log(err)});
@@ -325,4 +318,3 @@ const ruins = partidas.filter(p => !p.timedecasa || !p.timedefora)
 await Partida.deleteMany({_id: { $in: ruins.map(p => p._id)}})
 
 */
-

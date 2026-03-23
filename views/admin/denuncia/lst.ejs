@@ -40,7 +40,7 @@
                             <tr>
                                 <th>Número</th>
                                 <th>Denunciante</th>
-                                <th>Data/Hora</th>DEN
+                                <th>Data/Hora</th>
                                 <th>Espécie</th>
                                 <th>Situação</th>
                                 <th>Ações</th>
@@ -59,9 +59,10 @@
         const denuncias = [
      <%Denuncias.forEach(function(denuncia){ %>
         {
+        id: '<%=denuncia._id %>',
        
         numero: '<%=denuncia.ndenuncia %>',
-        nomeDenunciante: '<%=denuncia.nomeDenunciante %>',
+        nomeDenunciante: '<%=denuncia.nomedenunciante %>',
         cpf: '<%=denuncia.cpf %>',
         email: '<%=denuncia.email %>',
         fonte: '<%=denuncia.fonte %>',
@@ -71,9 +72,9 @@
         especie: '<%=denuncia.especie %>',
         quantidade: '<%=denuncia.quantidade %>',
         situacao: '<%=denuncia.situacao %>',
-        nome: '<%=denuncia.nome %>',
+        nomeDenunciado: '<%=denuncia.nome %>',
         enderecoProprietario: '<%=denuncia.enderecoProprietario %>',
-        providencias: '<%=denuncia.providenciasTomadas %>'
+        providenciasTomadas: '<%=denuncia.providencia %>'
     },
   <% }) %>
     ]

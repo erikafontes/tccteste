@@ -151,22 +151,22 @@ function showPage(pageName) {
 
     // Mostrar a página selecionada
     if (pageName === 'list') {
-        document.getElementById('listPage').classList.add('active');
-        document.querySelector('.nav-item[onclick*="list"]').classList.add('active');
+        document.getElementById('listPage')?.classList.add('active');
         renderTable(denuncias);
     } else if (pageName === 'form') {
-        document.getElementById('formPage').classList.add('active');
+        document.getElementById('formPage')?.classList.add('active');
         // Resetar o formulário se for nova denúncia
-        if (document.querySelector('#formPage .page-header h2').textContent === 'Nova Denúncia') {
-            document.getElementById('denunciaForm').reset();
+        if (document.querySelector('#formPage .page-header h2')?.textContent === 'Nova Denúncia') {
+            document.getElementById('denunciaForm')?.reset();
             // Setar data e hora atual
             const now = new Date();
-            document.getElementById('data').value = now.toISOString().split('T')[0];
-            document.getElementById('hora').value = now.toTimeString().slice(0, 5);
+            const inputData = document.getElementById('data');
+            const inputHora = document.getElementById('hora');
+            if (inputData) inputData.value = now.toISOString().split('T')[0];
+            if (inputHora) inputHora.value = now.toTimeString().slice(0, 5);
         }
     } else if (pageName === 'reports') {
-        document.getElementById('reportsPage').classList.add('active');
-        document.querySelector('.nav-item[onclick*="reports"]').classList.add('active');
+        document.getElementById('reportsPage')?.classList.add('active');
     }
 
     // Fechar sidebar no mobile
@@ -235,6 +235,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Setar data e hora atual no formulário
     const now = new Date();
-    document.getElementById('data').value = now.toISOString().split('T')[0];
-    document.getElementById('hora').value = now.toTimeString().slice(0, 5);
+    const inputData = document.getElementById('data');
+    const inputHora = document.getElementById('hora');
+    if (inputData) inputData.value = now.toISOString().split('T')[0];
+    if (inputHora) inputHora.value = now.toTimeString().slice(0, 5);
 });
