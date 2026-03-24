@@ -1,6 +1,6 @@
 import Denuncia from '../models/denuncia.js';
-import Jogador from '../models/jogador.js';
-import Partida from '../models/partida.js';
+// import Jogador from '../models/jogador.js';
+// import Partida from '../models/partida.js';
 
 export const home = async (req, res) => {
    
