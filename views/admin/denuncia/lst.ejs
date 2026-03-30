@@ -1,11 +1,9 @@
-<%- include('../cabecalho2.ejs') %>
- <!-- Página de Listagem -->
+<%- include('../cabecalho2.ejs', { currentSection: 'denuncia' }) %>
             <div id="listPage" class="page active">
                 <div class="page-header">
                     <h2>Gerenciar Denúncias</h2>
                 </div>
 
-                <!-- Filtros -->
                 <div class="filters-card">
                     <div class="filters-grid">
                         <div class="search-box">
@@ -33,7 +31,6 @@
 
                 <div class="results-count" id="resultsCount">Exibindo 8 de 8 denúncias</div>
 
-                <!-- Tabela -->
                 <div class="table-card">
                     <table class="table">
                         <thead>
@@ -46,39 +43,33 @@
                                 <th>Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="tableBody">
-                            <!-- Será preenchido pelo JavaScript -->
-                        </tbody>
+                        <tbody id="tableBody"></tbody>
                     </table>
                 </div>
             </div>
-        </main>
-    </div>
 
     <script>
         const denuncias = [
-     <%Denuncias.forEach(function(denuncia){ %>
-        {
-        id: '<%=denuncia._id %>',
-       
-        ndenuncia: '<%=denuncia.ndenuncia %>',
-        nomeDenunciante: '<%=denuncia.nomedenunciante %>',
-        cpf: '<%=denuncia.cpf %>',
-        email: '<%=denuncia.email %>',
-        fonte: '<%=denuncia.fonte %>',
-        data: '<%=denuncia.data %>',
-        hora: '<%=denuncia.hora %>',
-        endereco: '<%=denuncia.endereco %>',
-        especie: '<%=denuncia.especie %>',
-        quantidade: '<%=denuncia.quantidade %>',
-        situacao: '<%=denuncia.situacao %>',
-        nome: '<%=denuncia.nome %>',
-        enderecoProprietario: '<%=denuncia.enderecoProprietario %>',
-        providencia: '<%=denuncia.providencia %>'
-    },
-  <% }) %>
-    ]
-
+            <% Denuncias.forEach(function(denuncia) { %>
+            {
+                id: '<%= denuncia._id %>',
+                ndenuncia: '<%= denuncia.ndenuncia %>',
+                nomeDenunciante: '<%= denuncia.nomedenunciante %>',
+                cpf: '<%= denuncia.cpf %>',
+                email: '<%= denuncia.email %>',
+                fonte: '<%= denuncia.fonte %>',
+                data: '<%= denuncia.data %>',
+                hora: '<%= denuncia.hora %>',
+                endereco: '<%= denuncia.endereco %>',
+                especie: '<%= denuncia.especie %>',
+                quantidade: '<%= denuncia.quantidade %>',
+                situacao: '<%= denuncia.situacao %>',
+                nome: '<%= denuncia.nome %>',
+                enderecoProprietario: '<%= denuncia.enderecoProprietario %>',
+                providencia: '<%= denuncia.providencia %>'
+            },
+            <% }) %>
+        ];
     </script>
     <script src="/script.js"></script>
 

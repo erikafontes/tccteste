@@ -28,6 +28,9 @@ import {
     abreedtdenuncia,
     edtdenuncia,
 
+
+    //relatorio
+    listarrelatorio,
     // // Jogador
     // abreaddjogador,
     // addjogador,
@@ -67,6 +70,9 @@ router.get('/admin/denuncia/del/:id', deletardenuncia);
 
 router.get('/admin/denuncia/edt/:id', abreedtdenuncia);
 router.post('/admin/denuncia/edt/:id', upload.single('foto'), edtdenuncia);
+
+// ----- Relatorio -----
+router.get('/admin/relatorio/lst', listarrelatorio);
 
 // // ----- JOGADOR -----
 // router.get('/admin/jogador/add', abreaddjogador);

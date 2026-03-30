@@ -193,7 +193,7 @@ body {
 }
 
 .page-header h2 {
-    margin-right: 1250px;
+    margin-right: 0;
     font-size: 1.7605rem;
     color: #111827;
 }

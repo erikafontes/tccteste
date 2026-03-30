@@ -1,4 +1,5 @@
 import Denuncia from '../models/denuncia.js';
+import Relatorio from '../models/relatorio.js';
 // import Jogador from '../models/jogador.js';
 // import Partida from '../models/partida.js';
 
@@ -111,10 +112,50 @@ export async function edtdenuncia(req, res) {
 
 //     res.redirect('/admin/jogador/add')
 // }
-// export async function listarjogador(req, res) {
-//     const resultado = await Jogador.find({}).populate('time').catch(err => console.log(err));
-//     res.render('admin/jogador/lst', { jogadores: resultado });
-// }
+export async function listarrelatorio(req, res) {
+    try {
+        // denúncias para cards e gráficos 
+        const denuncias = await Denuncia.find({});
+        const totalDenuncias = denuncias.length;
+        const totalResolvidas = denuncias.filter((denuncia) => denuncia.situacao === 'Resolvida').length;
+        const totalPendentes = denuncias.filter((denuncia) => denuncia.situacao === 'Pendente').length;
+        // denúncias p status  o gráfico de pizza
+        const statusLabels = ['Pendente', 'Em Análise', 'Em Andamento', 'Resolvida', 'Arquivada'];
+        const statusCounts = statusLabels.map((status) =>
+            denuncias.filter((denuncia) => denuncia.situacao === status).length
+        );
+        // denúncias animais e ambientais
+        const totalAnimais = denuncias.filter((denuncia) => denuncia.especie === 'Animais').length;
+        const totalAmbiental = denuncias.filter((denuncia) => denuncia.especie === 'Ambiental').length;
+        // porcentagem para  barras
+        const percentualAnimais = totalDenuncias > 0
+            ? ((totalAnimais / totalDenuncias) * 100).toFixed(1)
+            : '0.0';
+        const percentualAmbiental = totalDenuncias > 0
+            ? ((totalAmbiental / totalDenuncias) * 100).toFixed(1)
+            : '0.0';
+        // taxa de resolução 
+        const taxaResolucao = totalDenuncias > 0
+            ? ((totalResolvidas / totalDenuncias) * 100).toFixed(1)
+            : '0.0';
+
+        res.render('admin/relatorio/lst', {
+            totalDenuncias,
+            totalResolvidas,
+            totalPendentes,
+            taxaResolucao,
+            statusLabels,
+            statusCounts,
+            totalAnimais,
+            totalAmbiental,
+            percentualAnimais,
+            percentualAmbiental
+        });
+    } catch (error) {
+        console.error('Erro ao carregar relatório:', error);
+        res.status(500).send('Erro ao carregar relatório');
+    }
+}
 
 // export async function filtrarjogador(req, res) {
 //     const resposta = await Jogador.find({ nome: new RegExp(req.body.pesquisar, "i") }).populate('time');
