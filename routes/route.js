@@ -21,8 +21,11 @@ import {
     home,
     // Time
     abreadddenuncia,
+    abreadddenunciaUsuario,
     adddenuncia,
+    adddenunciaUsuario,
     listardenuncia,
+    listardenunciaUsuario,
     filtrardenuncia,
     deletardenuncia,
     abreedtdenuncia,
@@ -30,10 +33,13 @@ import {
     alertarExclusaoDenuncia,
     testewpp,
     abreverdenuncia,
+    abreverdenunciaUsuario,
+    solicitarInativacaoDenuncia,
 
 
     //relatorio
     listarrelatorio,
+    listarrelatorioUsuario,
     // // Jogador
     // abreaddjogador,
     // addjogador,
@@ -78,6 +84,15 @@ router.get('/admin/denuncia/testwpp', testewpp);
 
 // ----- Relatorio -----
 router.get('/admin/relatorio/lst', listarrelatorio);
+
+// ----- Usuario -----
+router.get('/usuario/denuncia/add', abreadddenunciaUsuario);
+router.post('/usuario/denuncia/add', upload.single('foto'), adddenunciaUsuario);
+router.get('/usuario/denuncia/lst', listardenunciaUsuario);
+router.get('/usuario/denuncia/ver/:id', abreverdenunciaUsuario);
+router.get('/usuario/denuncia/solicitar-inativacao/:ndenuncia', solicitarInativacaoDenuncia);
+
+router.get('/usuario/relatorio/lst', listarrelatorioUsuario);
 
 // // ----- JOGADOR -----
 // router.get('/admin/jogador/add', abreaddjogador);

@@ -1,7 +1,9 @@
 <%- include('../cabecalho2.ejs') %>
+<% const isAdminFlag = typeof isAdmin === 'undefined' ? true : isAdmin; %>
+<% const basePath = isAdminFlag ? '/admin' : '/usuario'; %>
 <div id="formPage" class="page active">
     <div class="page-header">
-        <button class="btn-back" type="button" onclick="window.location.href='/admin/denuncia/lst'">
+        <button class="btn-back" type="button" onclick="window.location.href='<%= basePath %>/denuncia/lst'">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
@@ -10,7 +12,7 @@
         <h2>Nova Denuncia</h2>
     </div>
 
-    <form class="form" action="/admin/denuncia/add2" method="POST" enctype="multipart/form-data" id="denunciaFormServer">
+    <form class="form" action="<%= basePath %>/denuncia/add<%= isAdminFlag ? '2' : '' %>" method="POST" enctype="multipart/form-data" id="denunciaFormServer">
         <div class="card">
             <div class="card-header">
                 <h3>Informacoes da Denúncia</h3>
@@ -137,20 +139,22 @@
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <h3>Providências Tomadas</h3>
-                <p class="card-description">Ações realizadas pela equipe</p>
-            </div>
-            <div class="card-content">
-                <div class="form-group">
-                    <textarea id="providencia" name="providencia" rows="5" placeholder="Descreva as providências tomadas..."></textarea>
+        <% if (isAdminFlag) { %>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Providências Tomadas</h3>
+                    <p class="card-description">Ações realizadas pela equipe</p>
+                </div>
+                <div class="card-content">
+                    <div class="form-group">
+                        <textarea id="providencia" name="providencia" rows="5" placeholder="Descreva as providências tomadas..."></textarea>
+                    </div>
                 </div>
             </div>
-        </div>
+        <% } %>
 
         <div class="form-actions">
-            <button type="button" class="btn btn-outline" onclick="window.location.href='/admin/denuncia/lst'">Cancelar</button>
+            <button type="button" class="btn btn-outline" onclick="window.location.href='<%= basePath %>/denuncia/lst'">Cancelar</button>
             <button type="submit" class="btn btn-primary">Cadastrar Denúncia</button>
         </div>
     </form>

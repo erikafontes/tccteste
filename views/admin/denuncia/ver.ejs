@@ -1,7 +1,9 @@
 <%- include('../cabecalho2.ejs', { currentSection: 'denuncia' }) %>
+<% const isAdminFlag = typeof isAdmin === 'undefined' ? true : isAdmin; %>
+<% const basePath = isAdminFlag ? '/admin' : '/usuario'; %>
 <div id="viewPage" class="page active">
     <div class="page-header">
-        <button class="btn-back" type="button" onclick="window.location.href='/admin/denuncia/lst'">
+        <button class="btn-back" type="button" onclick="window.location.href='<%= basePath %>/denuncia/lst'">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
@@ -101,6 +103,7 @@
                             <option value="Em Andamento" <%= Denuncia.situacao === 'Em Andamento' ? 'selected' : '' %>>Em Andamento</option>
                             <option value="Resolvida" <%= Denuncia.situacao === 'Resolvida' ? 'selected' : '' %>>Resolvida</option>
                             <option value="Arquivada" <%= Denuncia.situacao === 'Arquivada' ? 'selected' : '' %>>Arquivada</option>
+                            <option value="Inativa" <%= Denuncia.situacao === 'Inativa' ? 'selected' : '' %>>Inativa</option>
                         </select>
                     </div>
                 </div>
@@ -134,20 +137,22 @@
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <h3>Providências Tomadas</h3>
-                <p class="card-description">Ações realizadas pela equipe</p>
-            </div>
-            <div class="card-content">
-                <div class="form-group">
-                    <textarea id="providencia" name="providencia" rows="5" readonly><%= Denuncia.providencia %></textarea>
+        <% if (isAdminFlag) { %>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Providências Tomadas</h3>
+                    <p class="card-description">Ações realizadas pela equipe</p>
+                </div>
+                <div class="card-content">
+                    <div class="form-group">
+                        <textarea id="providencia" name="providencia" rows="5" readonly><%= Denuncia.providencia %></textarea>
+                    </div>
                 </div>
             </div>
-        </div>
+        <% } %>
 
         <div class="form-actions">
-            <button type="button" class="btn btn-outline" onclick="window.location.href='/admin/denuncia/lst'">Voltar</button>
+            <button type="button" class="btn btn-outline" onclick="window.location.href='<%= basePath %>/denuncia/lst'">Voltar</button>
         </div>
     </div>
 </div>

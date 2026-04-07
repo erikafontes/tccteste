@@ -8,7 +8,8 @@ function getSituacaoBadgeClass(situacao) {
         'Em Análise': 'badge-blue',
         'Em Andamento': 'badge-purple',
         'Resolvida': 'badge-green',
-        'Arquivada': 'badge-gray'
+        'Arquivada': 'badge-gray',
+        'Inativa': 'badge-gray'
     };
     return classes[situacao] || '';
 }
@@ -19,6 +20,9 @@ function renderTable(data) {
     if (!tbody) return;
 
     tbody.innerHTML = '';
+
+    const basePath = window.DENUNCIA_BASE_PATH || '/admin';
+    const isUser = basePath === '/usuario';
 
     data.forEach(denuncia => {
         const dataFormatada = new Date(denuncia.data).toLocaleDateString('pt-BR');
@@ -44,7 +48,7 @@ function renderTable(data) {
             </td>
             <td>
                 <div class="actions">
-                    <button class="action-btn view" title="Visualizar" onclick="window.location.href='/admin/denuncia/ver/${denuncia.id}'">
+                    <button class="action-btn view" title="Visualizar" onclick="window.location.href='${basePath}/denuncia/ver/${denuncia.id}'">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                             <circle cx="12" cy="12" r="3"></circle>
@@ -58,7 +62,7 @@ function renderTable(data) {
                         </svg>
                     </button>
                     -->
-                    <button class="action-btn delete" title="Excluir" onclick="deleteDenuncia('${denuncia.ndenuncia}')">
+                    <button class="action-btn delete" title="${isUser ? 'Solicitar Inativação' : 'Excluir'}" onclick="${isUser ? `solicitarInativacao('${denuncia.ndenuncia}')` : `deleteDenuncia('${denuncia.ndenuncia}')`}">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="3 6 5 6 21 6"></polyline>
                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -140,8 +144,14 @@ function editDenuncia(id) {
 // }
 
 function deleteDenuncia(ndenuncia) {
-    if (confirm('Tem certeza que deseja excluir esta denúncia?')) {
+    if (confirm('Tem certeza que deseja inativar esta denúncia?')) {
         window.location.href = `/admin/denuncia/del/${ndenuncia}`;
+    }
+}
+
+function solicitarInativacao(ndenuncia) {
+    if (confirm('Deseja solicitar a inativação desta denúncia?')) {
+        window.location.href = `/usuario/denuncia/solicitar-inativacao/${ndenuncia}`;
     }
 }
 // Função para trocar de página

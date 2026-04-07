@@ -1,0 +1,89 @@
+<%- include('../../admin/cabecalho2.ejs', { currentSection: 'denuncia', isAdmin: false }) %>
+            <div id="listPage" class="page active">
+                <div class="page-header">
+                    <h2>Minhas Denúncias</h2>
+                    <%
+                        const relatorioParams = [];
+                        if (filtro && filtro.email) relatorioParams.push(`email=${encodeURIComponent(filtro.email)}`);
+                        if (filtro && filtro.cpf) relatorioParams.push(`cpf=${encodeURIComponent(filtro.cpf)}`);
+                        if (filtro && filtro.ndenuncia) relatorioParams.push(`ndenuncia=${encodeURIComponent(filtro.ndenuncia)}`);
+                        const relatorioUrl = relatorioParams.length
+                            ? `/usuario/relatorio/lst?${relatorioParams.join('&')}`
+                            : '/usuario/relatorio/lst';
+                    %>
+                    <a class="btn btn-primary" href="<%= relatorioUrl %>">Ver Relatório</a>
+                </div>
+
+                <div class="filters-card">
+                    <div class="filters-grid">
+                        <div class="search-box">
+                            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                            <input type="text" placeholder="Buscar por número ou nome..." id="searchInput">
+                        </div>
+                        <select id="filterSituacao">
+                            <option value="todas">Todas as situações</option>
+                            <option value="Pendente">Pendente</option>
+                            <option value="Em Análise">Em Análise</option>
+                            <option value="Em Andamento">Em Andamento</option>
+                            <option value="Resolvida">Resolvida</option>
+                            <option value="Arquivada">Arquivada</option>
+                        </select>
+                        <select id="filterEspecie">
+                            <option value="todas">Todas as espécies</option>
+                            <option value="Animais">Animais</option>
+                            <option value="Ambiental">Ambiental</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="results-count" id="resultsCount">Exibindo 0 de 0 denúncias</div>
+
+                <div class="table-card">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Número</th>
+                                <th>Denunciante</th>
+                                <th>Data/Hora</th>
+                                <th>Espécie</th>
+                                <th>Situação</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+    <script>
+        const denuncias = [
+            <% Denuncias.forEach(function(denuncia) { %>
+            {
+                id: '<%= denuncia._id %>',
+                ndenuncia: '<%= denuncia.ndenuncia %>',
+                nomeDenunciante: '<%= denuncia.nomedenunciante %>',
+                cpf: '<%= denuncia.cpf %>',
+                email: '<%= denuncia.email %>',
+                fonte: '<%= denuncia.fonte %>',
+                data: '<%= denuncia.data %>',
+                hora: '<%= denuncia.hora %>',
+                endereco: '<%= denuncia.endereco %>',
+                especie: '<%= denuncia.especie %>',
+                quantidade: '<%= denuncia.quantidade %>',
+                situacao: '<%= denuncia.situacao %>',
+                nome: '<%= denuncia.nome %>',
+                enderecoProprietario: '<%= denuncia.enderecoProprietario %>',
+                providencia: '<%= denuncia.providencia %>'
+            },
+            <% }) %>
+        ];
+    </script>
+    <script>
+        window.DENUNCIA_BASE_PATH = '/usuario';
+    </script>
+    <script src="/script.js"></script>
+
+<%- include('../../admin/rodape.ejs') %>

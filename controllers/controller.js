@@ -14,6 +14,9 @@ export const home = async (req, res) => {
 export async function abreadddenuncia(req, res) {
     res.render('admin/denuncia/add2')
 }
+export async function abreadddenunciaUsuario(req, res) {
+    res.render('admin/denuncia/add2', { isAdmin: false, currentSection: 'denuncia' })
+}
 export async function adddenuncia(req, res) {
     const fotoupload = req.file ? req.file.filename : null;
 
@@ -37,9 +40,65 @@ export async function adddenuncia(req, res) {
     });
     res.redirect('/admin/denuncia/lst');
 }
+export async function adddenunciaUsuario(req, res) {
+    const fotoupload = req.file ? req.file.filename : null;
+
+    await Denuncia.create({
+        ndenuncia: req.body.ndenuncia,
+        nomedenunciante: req.body.nomeDenunciante,
+        email: req.body.email,
+        fonte: req.body.fonte || 'Site',
+        data: req.body.data,
+        hora: req.body.hora,
+        endereco: req.body.endereco,
+        especie: req.body.especie,
+        quantidade: req.body.quantidade,
+        situacao: req.body.situacao,
+        foto: fotoupload,
+        nome: req.body.nome,
+        cpf: req.body.cpf,
+        telefone: req.body.telefone,
+        enderecoProprietario: req.body.enderecoProprietario,
+        providencia: req.body.providencia
+    });
+    const email = req.body.email ? encodeURIComponent(req.body.email) : '';
+    const cpf = req.body.cpf ? encodeURIComponent(req.body.cpf) : '';
+    const query = email ? `?email=${email}` : (cpf ? `?cpf=${cpf}` : '');
+    res.redirect(`/usuario/denuncia/lst${query}`);
+}
 export async function listardenuncia(req, res) {
     const resultado = await Denuncia.find({}).catch(function(err){console.log(err)});
     res.render('admin/denuncia/lst',{Denuncias: resultado});
+}
+function buildUserDenunciaFiltro(req) {
+    const { email, cpf, ndenuncia } = req.query;
+    const conditions = [];
+
+    if (email) conditions.push({ email });
+    if (cpf) conditions.push({ cpf });
+    if (ndenuncia && !Number.isNaN(Number(ndenuncia))) {
+        conditions.push({ ndenuncia: Number(ndenuncia) });
+    }
+
+    if (conditions.length === 0) return null;
+    return { $or: conditions };
+}
+export async function listardenunciaUsuario(req, res) {
+    const filtro = buildUserDenunciaFiltro(req);
+    const resultado = filtro
+        ? await Denuncia.find(filtro).catch(function(err){console.log(err)})
+        : [];
+
+    res.render('usuario/denuncia/lst', {
+        Denuncias: resultado,
+        filtro: {
+            email: req.query.email || '',
+            cpf: req.query.cpf || '',
+            ndenuncia: req.query.ndenuncia || ''
+        },
+        isAdmin: false,
+        currentSection: 'denuncia'
+    });
 }
 export async function filtrardenuncia(req, res) {
     const resposta = await Denuncia.find({nome: new RegExp(req.body.pesquisar,"i")})
@@ -52,43 +111,12 @@ export async function deletardenuncia(req, res) {
 }
 export async function alertarExclusaoDenuncia(req, res) {
     const { ndenuncia } = req.params;
+    await Denuncia.findOneAndUpdate(
+        { ndenuncia },
+        { situacao: 'Inativa' }
+    );
 
-    const denuncia = await Denuncia.findOne({ ndenuncia });
-
-    await Alerta.create({
-        tipo: 'EXCLUSAO_DENUNCIA',
-        denunciaId: denuncia?._id?.toString() || 'N/A',
-        mensagem: `Tentativa de exclusao da denuncia ${ndenuncia}`
-    });
-
-    try {
-        const dataFormatada = denuncia?.data
-            ? new Date(denuncia.data).toLocaleDateString('pt-BR')
-            : 'N/A';
-        const hora = denuncia?.hora || 'N/A';
-        const numero = denuncia?.ndenuncia ?? ndenuncia ?? 'N/A';
-        const denunciante = denuncia?.nomedenunciante || 'N/A';
-        const situacao = denuncia?.situacao || 'N/A';
-
-        const mensagem = [
-            'ALERTA DE EXCLUSAO DE DENUNCIA',
-            `Denuncia: ${numero}`,
-            `Data/Hora: ${dataFormatada} ${hora}`,
-            `Denunciante: ${denunciante}`,
-            `Situacao: ${situacao}`,
-            `ID: ${denuncia?._id || 'N/A'}`
-        ].join('\n');
-
-        const result = await sendAdminAlert(
-            mensagem
-        );
-        console.log('WPP enviado:', result);
-    } catch (error) {
-        console.error('Falha ao enviar alerta WPP:', error);
-    }
-
-    // res.status(403).send('Exclusao bloqueada. Alerta registrado.');
-    res.status(403).end();
+    res.redirect('/admin/denuncia/lst');
 }
 
 export async function testewpp(req, res) {
@@ -107,6 +135,14 @@ export async function abreedtdenuncia(req, res){
 export async function abreverdenuncia(req, res){
     const resultado = await Denuncia.findById(req.params.id)
     res.render('admin/denuncia/ver',{Denuncia: resultado})
+}
+export async function abreverdenunciaUsuario(req, res){
+    const resultado = await Denuncia.findById(req.params.id)
+    res.render('admin/denuncia/ver',{
+        Denuncia: resultado,
+        isAdmin: false,
+        currentSection: 'denuncia'
+    })
 }
 export async function edtdenuncia(req, res) {
   try {
@@ -211,6 +247,88 @@ export async function listarrelatorio(req, res) {
         console.error('Erro ao carregar relatório:', error);
         res.status(500).send('Erro ao carregar relatório');
     }
+}
+export async function listarrelatorioUsuario(req, res) {
+    try {
+        const filtro = buildUserDenunciaFiltro(req);
+        const denuncias = filtro ? await Denuncia.find(filtro) : [];
+
+        const totalDenuncias = denuncias.length;
+        const totalResolvidas = denuncias.filter((denuncia) => denuncia.situacao === 'Resolvida').length;
+        const totalPendentes = denuncias.filter((denuncia) => denuncia.situacao === 'Pendente').length;
+        const statusLabels = ['Pendente', 'Em Análise', 'Em Andamento', 'Resolvida', 'Arquivada'];
+        const statusCounts = statusLabels.map((status) =>
+            denuncias.filter((denuncia) => denuncia.situacao === status).length
+        );
+        const totalAnimais = denuncias.filter((denuncia) => denuncia.especie === 'Animais').length;
+        const totalAmbiental = denuncias.filter((denuncia) => denuncia.especie === 'Ambiental').length;
+        const percentualAnimais = totalDenuncias > 0
+            ? ((totalAnimais / totalDenuncias) * 100).toFixed(1)
+            : '0.0';
+        const percentualAmbiental = totalDenuncias > 0
+            ? ((totalAmbiental / totalDenuncias) * 100).toFixed(1)
+            : '0.0';
+        const taxaResolucao = totalDenuncias > 0
+            ? ((totalResolvidas / totalDenuncias) * 100).toFixed(1)
+            : '0.0';
+
+        res.render('admin/relatorio/lst', {
+            totalDenuncias,
+            totalResolvidas,
+            totalPendentes,
+            taxaResolucao,
+            statusLabels,
+            statusCounts,
+            totalAnimais,
+            totalAmbiental,
+            percentualAnimais,
+            percentualAmbiental,
+            isAdmin: false,
+            currentSection: 'relatorio'
+        });
+    } catch (error) {
+        console.error('Erro ao carregar relatório do usuário:', error);
+        res.status(500).send('Erro ao carregar relatório do usuário');
+    }
+}
+
+export async function solicitarInativacaoDenuncia(req, res) {
+    const { ndenuncia } = req.params;
+
+    const denuncia = await Denuncia.findOne({ ndenuncia });
+
+    await Alerta.create({
+        tipo: 'PEDIDO_INATIVACAO_DENUNCIA',
+        denunciaId: denuncia?._id?.toString() || 'N/A',
+        mensagem: `Pedido de inativacao da denuncia ${ndenuncia}`
+    });
+
+    try {
+        const dataFormatada = denuncia?.data
+            ? new Date(denuncia.data).toLocaleDateString('pt-BR')
+            : 'N/A';
+        const hora = denuncia?.hora || 'N/A';
+        const numero = denuncia?.ndenuncia ?? ndenuncia ?? 'N/A';
+        const denunciante = denuncia?.nomedenunciante || 'N/A';
+        const situacao = denuncia?.situacao || 'N/A';
+
+        const mensagem = [
+            'PEDIDO DE INATIVACAO DE DENUNCIA',
+            `Denuncia: ${numero}`,
+            `Data/Hora: ${dataFormatada} ${hora}`,
+            `Denunciante: ${denunciante}`,
+            `Situacao: ${situacao}`,
+            `ID: ${denuncia?._id || 'N/A'}`
+        ].join('\n');
+
+        const result = await sendAdminAlert(mensagem);
+        console.log('WPP enviado (pedido inativacao):', result);
+    } catch (error) {
+        console.error('Falha ao enviar pedido de inativacao WPP:', error);
+    }
+
+    const back = req.get('Referer') || '/usuario/denuncia/lst';
+    res.redirect(back);
 }
 
 // export async function filtrarjogador(req, res) {
