@@ -27,6 +27,9 @@ import {
     deletardenuncia,
     abreedtdenuncia,
     edtdenuncia,
+    alertarExclusaoDenuncia,
+    testewpp,
+    abreverdenuncia,
 
 
     //relatorio
@@ -66,10 +69,12 @@ router.post('/admin/denuncia/add2', upload.single('foto'), adddenuncia);
 router.get('/admin/denuncia/lst', listardenuncia);
 router.post('/admin/denuncia/lst', filtrardenuncia);
 
-router.get('/admin/denuncia/del/:id', deletardenuncia);
+router.get('/admin/denuncia/del/:ndenuncia', alertarExclusaoDenuncia);
 
 router.get('/admin/denuncia/edt/:id', abreedtdenuncia);
 router.post('/admin/denuncia/edt/:id', upload.single('foto'), edtdenuncia);
+router.get('/admin/denuncia/ver/:id', abreverdenuncia);
+router.get('/admin/denuncia/testwpp', testewpp);
 
 // ----- Relatorio -----
 router.get('/admin/relatorio/lst', listarrelatorio);

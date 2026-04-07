@@ -1,5 +1,7 @@
 import Denuncia from '../models/denuncia.js';
 import Relatorio from '../models/relatorio.js';
+import Alerta from '../models/alerta.js';
+import { sendAdminAlert } from '../services/wppconnect.js';
 // import Jogador from '../models/jogador.js';
 // import Partida from '../models/partida.js';
 
@@ -48,9 +50,63 @@ export async function deletardenuncia(req, res) {
     await Denuncia.findByIdAndDelete(req.params.id)
     res.redirect('/admin/denuncia/lst')
 }
+export async function alertarExclusaoDenuncia(req, res) {
+    const { ndenuncia } = req.params;
+
+    const denuncia = await Denuncia.findOne({ ndenuncia });
+
+    await Alerta.create({
+        tipo: 'EXCLUSAO_DENUNCIA',
+        denunciaId: denuncia?._id?.toString() || 'N/A',
+        mensagem: `Tentativa de exclusao da denuncia ${ndenuncia}`
+    });
+
+    try {
+        const dataFormatada = denuncia?.data
+            ? new Date(denuncia.data).toLocaleDateString('pt-BR')
+            : 'N/A';
+        const hora = denuncia?.hora || 'N/A';
+        const numero = denuncia?.ndenuncia ?? ndenuncia ?? 'N/A';
+        const denunciante = denuncia?.nomedenunciante || 'N/A';
+        const situacao = denuncia?.situacao || 'N/A';
+
+        const mensagem = [
+            'ALERTA DE EXCLUSAO DE DENUNCIA',
+            `Denuncia: ${numero}`,
+            `Data/Hora: ${dataFormatada} ${hora}`,
+            `Denunciante: ${denunciante}`,
+            `Situacao: ${situacao}`,
+            `ID: ${denuncia?._id || 'N/A'}`
+        ].join('\n');
+
+        const result = await sendAdminAlert(
+            mensagem
+        );
+        console.log('WPP enviado:', result);
+    } catch (error) {
+        console.error('Falha ao enviar alerta WPP:', error);
+    }
+
+    // res.status(403).send('Exclusao bloqueada. Alerta registrado.');
+    res.status(403).end();
+}
+
+export async function testewpp(req, res) {
+    try {
+        const result = await sendAdminAlert('TESTE WPP: mensagem de alerta ativa.');
+        res.json({ ok: true, result });
+    } catch (error) {
+        console.error('Falha ao enviar teste WPP:', error);
+        res.status(500).json({ ok: false, error: String(error) });
+    }
+}
 export async function abreedtdenuncia(req, res){
     const resultado = await Denuncia.findById(req.params.id)
     res.render('admin/denuncia/edt',{Denuncia: resultado})
+}
+export async function abreverdenuncia(req, res){
+    const resultado = await Denuncia.findById(req.params.id)
+    res.render('admin/denuncia/ver',{Denuncia: resultado})
 }
 export async function edtdenuncia(req, res) {
   try {

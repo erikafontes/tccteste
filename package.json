@@ -6,10 +6,11 @@
   "type": "module",
   "scripts": {
     "test": "teste"
-},
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@wppconnect-team/wppconnect": "^1.41.1",
     "ejs": "^3.1.10",
     "express": "^4.22.1",
     "mongodb": "6.15.0",
