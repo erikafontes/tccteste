@@ -1,10 +1,10 @@
 import conexao from '../config/conexao.js'
 
 const Alerta = conexao.Schema({
-    tipo: { type: String, required: true },
+    nomealert: { type: String, required: true }, 
     denunciaId: { type: String, required: true },
     mensagem: { type: String, required: true },
     criadoEm: { type: Date, default: Date.now }
 });
 
-export default conexao.model('Alerta', Alerta)
+export default conexao.model('Alerta', Alerta);

@@ -1,7 +1,6 @@
 import Denuncia from '../models/denuncia.js';
-import Relatorio from '../models/relatorio.js';
 import Alerta from '../models/alerta.js';
-import { sendAdminAlert } from '../services/wppconnect.js';
+import Relatorio from '../models/relatorio.js';
 // import Jogador from '../models/jogador.js';
 // import Partida from '../models/partida.js';
 
@@ -13,9 +12,6 @@ export const home = async (req, res) => {
 
 export async function abreadddenuncia(req, res) {
     res.render('admin/denuncia/add2')
-}
-export async function abreadddenunciaUsuario(req, res) {
-    res.render('admin/denuncia/add2', { isAdmin: false, currentSection: 'denuncia' })
 }
 export async function adddenuncia(req, res) {
     const fotoupload = req.file ? req.file.filename : null;
@@ -40,65 +36,9 @@ export async function adddenuncia(req, res) {
     });
     res.redirect('/admin/denuncia/lst');
 }
-export async function adddenunciaUsuario(req, res) {
-    const fotoupload = req.file ? req.file.filename : null;
-
-    await Denuncia.create({
-        ndenuncia: req.body.ndenuncia,
-        nomedenunciante: req.body.nomeDenunciante,
-        email: req.body.email,
-        fonte: req.body.fonte || 'Site',
-        data: req.body.data,
-        hora: req.body.hora,
-        endereco: req.body.endereco,
-        especie: req.body.especie,
-        quantidade: req.body.quantidade,
-        situacao: req.body.situacao,
-        foto: fotoupload,
-        nome: req.body.nome,
-        cpf: req.body.cpf,
-        telefone: req.body.telefone,
-        enderecoProprietario: req.body.enderecoProprietario,
-        providencia: req.body.providencia
-    });
-    const email = req.body.email ? encodeURIComponent(req.body.email) : '';
-    const cpf = req.body.cpf ? encodeURIComponent(req.body.cpf) : '';
-    const query = email ? `?email=${email}` : (cpf ? `?cpf=${cpf}` : '');
-    res.redirect(`/usuario/denuncia/lst${query}`);
-}
 export async function listardenuncia(req, res) {
     const resultado = await Denuncia.find({}).catch(function(err){console.log(err)});
     res.render('admin/denuncia/lst',{Denuncias: resultado});
-}
-function buildUserDenunciaFiltro(req) {
-    const { email, cpf, ndenuncia } = req.query;
-    const conditions = [];
-
-    if (email) conditions.push({ email });
-    if (cpf) conditions.push({ cpf });
-    if (ndenuncia && !Number.isNaN(Number(ndenuncia))) {
-        conditions.push({ ndenuncia: Number(ndenuncia) });
-    }
-
-    if (conditions.length === 0) return null;
-    return { $or: conditions };
-}
-export async function listardenunciaUsuario(req, res) {
-    const filtro = buildUserDenunciaFiltro(req);
-    const resultado = filtro
-        ? await Denuncia.find(filtro).catch(function(err){console.log(err)})
-        : [];
-
-    res.render('usuario/denuncia/lst', {
-        Denuncias: resultado,
-        filtro: {
-            email: req.query.email || '',
-            cpf: req.query.cpf || '',
-            ndenuncia: req.query.ndenuncia || ''
-        },
-        isAdmin: false,
-        currentSection: 'denuncia'
-    });
 }
 export async function filtrardenuncia(req, res) {
     const resposta = await Denuncia.find({nome: new RegExp(req.body.pesquisar,"i")})
@@ -109,25 +49,6 @@ export async function deletardenuncia(req, res) {
     await Denuncia.findByIdAndDelete(req.params.id)
     res.redirect('/admin/denuncia/lst')
 }
-export async function alertarExclusaoDenuncia(req, res) {
-    const { ndenuncia } = req.params;
-    await Denuncia.findOneAndUpdate(
-        { ndenuncia },
-        { situacao: 'Inativa' }
-    );
-
-    res.redirect('/admin/denuncia/lst');
-}
-
-export async function testewpp(req, res) {
-    try {
-        const result = await sendAdminAlert('TESTE WPP: mensagem de alerta ativa.');
-        res.json({ ok: true, result });
-    } catch (error) {
-        console.error('Falha ao enviar teste WPP:', error);
-        res.status(500).json({ ok: false, error: String(error) });
-    }
-}
 export async function abreedtdenuncia(req, res){
     const resultado = await Denuncia.findById(req.params.id)
     res.render('admin/denuncia/edt',{Denuncia: resultado})
@@ -135,14 +56,6 @@ export async function abreedtdenuncia(req, res){
 export async function abreverdenuncia(req, res){
     const resultado = await Denuncia.findById(req.params.id)
     res.render('admin/denuncia/ver',{Denuncia: resultado})
-}
-export async function abreverdenunciaUsuario(req, res){
-    const resultado = await Denuncia.findById(req.params.id)
-    res.render('admin/denuncia/ver',{
-        Denuncia: resultado,
-        isAdmin: false,
-        currentSection: 'denuncia'
-    })
 }
 export async function edtdenuncia(req, res) {
   try {
@@ -169,41 +82,8 @@ export async function edtdenuncia(req, res) {
   }
 }
 
-//A primeira função prepara e mostra o
-//  formulário para criar um jogador, listando times para escolher.
 
-//A segunda função recebe os dados enviados do formulário, 
-// salva o jogador no banco, com o time escolhido e a foto enviada.
 
-// export async function abreaddjogador(req, res) {
-//     const resultado = await Time.find({}).catch(function(err){console.log(err)})
-//     res.render('admin/jogador/add',{Times:resultado})
-// }
-// export async function addjogador(req, res) {
-//     var jtime = null;
-//     if(req.body.time!=null)
-//     {
-//         jtime = await Time.findById(req.body.time)
-//     }    
-//     var fotoupload=null
-//         if(req.file!=null)
-//     {
-//         fotoupload=req.file.filename
-//     }
-//         else
-//     {
-//         fotoupload=null
-//     }
-// await Jogador.create({
-//     nome: req.body.nome,
-//     camisa: req.body.camisa,
-//     time: jtime,
-//     posicao: req.body.posicao,
-//     foto: fotoupload, // <<< aqui
-// })
-
-//     res.redirect('/admin/jogador/add')
-// }
 export async function listarrelatorio(req, res) {
     try {
         // denúncias para cards e gráficos 
@@ -238,6 +118,8 @@ export async function listarrelatorio(req, res) {
             taxaResolucao,
             statusLabels,
             statusCounts,
+
+            
             totalAnimais,
             totalAmbiental,
             percentualAnimais,
@@ -248,283 +130,22 @@ export async function listarrelatorio(req, res) {
         res.status(500).send('Erro ao carregar relatório');
     }
 }
-export async function listarrelatorioUsuario(req, res) {
-    try {
-        const filtro = buildUserDenunciaFiltro(req);
-        const denuncias = filtro ? await Denuncia.find(filtro) : [];
 
-        const totalDenuncias = denuncias.length;
-        const totalResolvidas = denuncias.filter((denuncia) => denuncia.situacao === 'Resolvida').length;
-        const totalPendentes = denuncias.filter((denuncia) => denuncia.situacao === 'Pendente').length;
-        const statusLabels = ['Pendente', 'Em Análise', 'Em Andamento', 'Resolvida', 'Arquivada'];
-        const statusCounts = statusLabels.map((status) =>
-            denuncias.filter((denuncia) => denuncia.situacao === status).length
-        );
-        const totalAnimais = denuncias.filter((denuncia) => denuncia.especie === 'Animais').length;
-        const totalAmbiental = denuncias.filter((denuncia) => denuncia.especie === 'Ambiental').length;
-        const percentualAnimais = totalDenuncias > 0
-            ? ((totalAnimais / totalDenuncias) * 100).toFixed(1)
-            : '0.0';
-        const percentualAmbiental = totalDenuncias > 0
-            ? ((totalAmbiental / totalDenuncias) * 100).toFixed(1)
-            : '0.0';
-        const taxaResolucao = totalDenuncias > 0
-            ? ((totalResolvidas / totalDenuncias) * 100).toFixed(1)
-            : '0.0';
+// export async function alertarExclusaoDenuncia(req, res) {
+//     const { id } = req.params;
 
-        res.render('admin/relatorio/lst', {
-            totalDenuncias,
-            totalResolvidas,
-            totalPendentes,
-            taxaResolucao,
-            statusLabels,
-            statusCounts,
-            totalAnimais,
-            totalAmbiental,
-            percentualAnimais,
-            percentualAmbiental,
-            isAdmin: false,
-            currentSection: 'relatorio'
-        });
-    } catch (error) {
-        console.error('Erro ao carregar relatório do usuário:', error);
-        res.status(500).send('Erro ao carregar relatório do usuário');
-    }
-}
-
-export async function solicitarInativacaoDenuncia(req, res) {
-    const { ndenuncia } = req.params;
-
-    const denuncia = await Denuncia.findOne({ ndenuncia });
-
-    await Alerta.create({
-        tipo: 'PEDIDO_INATIVACAO_DENUNCIA',
-        denunciaId: denuncia?._id?.toString() || 'N/A',
-        mensagem: `Pedido de inativacao da denuncia ${ndenuncia}`
-    });
-
-    try {
-        const dataFormatada = denuncia?.data
-            ? new Date(denuncia.data).toLocaleDateString('pt-BR')
-            : 'N/A';
-        const hora = denuncia?.hora || 'N/A';
-        const numero = denuncia?.ndenuncia ?? ndenuncia ?? 'N/A';
-        const denunciante = denuncia?.nomedenunciante || 'N/A';
-        const situacao = denuncia?.situacao || 'N/A';
-
-        const mensagem = [
-            'PEDIDO DE INATIVACAO DE DENUNCIA',
-            `Denuncia: ${numero}`,
-            `Data/Hora: ${dataFormatada} ${hora}`,
-            `Denunciante: ${denunciante}`,
-            `Situacao: ${situacao}`,
-            `ID: ${denuncia?._id || 'N/A'}`
-        ].join('\n');
-
-        const result = await sendAdminAlert(mensagem);
-        console.log('WPP enviado (pedido inativacao):', result);
-    } catch (error) {
-        console.error('Falha ao enviar pedido de inativacao WPP:', error);
-    }
-
-    const back = req.get('Referer') || '/usuario/denuncia/lst';
-    res.redirect(back);
-}
-
-// export async function filtrarjogador(req, res) {
-//     const resposta = await Jogador.find({ nome: new RegExp(req.body.pesquisar, "i") }).populate('time');
-//     res.render('admin/jogador/lst', { jogadores: resposta });
-// }
-
-
-// export async function deletajogador(req, res) {
-//     await Jogador.findByIdAndDelete(req.params.id)
-//     res.redirect('/admin/jogador/lst')
-// }
-// export async function abreedtjogador(req, res) {
-//     try {
-//         const resultado = await Jogador.findById(req.params.id);
-//         const jtimes = await Time.find({}).catch(function(err){ console.log(err) });
-
-//         if (!resultado) {
-//             // Se o jogador não for encontrado, retorna erro 404
-//             return res.status(404).send("Jogador não encontrado");
-//         }
-
-//         // Renderiza a view com o jogador e os times
-//         res.render('admin/jogador/edt', {
-//             Jogador: resultado,
-//             Times: jtimes
-//         });
-
-//     } catch (err) {
-//         console.error("Erro ao carregar jogador:", err);
-//         res.status(500).send("Erro interno do servidor");
-//     }
-// }
-
-// export async function edtjogador(req, res) {
-//   try {
-//     const jogador = await Jogador.findById(req.params.id);
-
-//     if (!jogador) {
-//       return res.status(404).send("Jogador não encontrado");
-//     }
-
-//     // Atualiza os campos básicos
-//     jogador.nome = req.body.nome || jogador.nome;
-//     jogador.camisa = req.body.camisa || jogador.camisa;
-//     jogador.posicao = req.body.posicao || jogador.posicao;
-
-//     // Se o time foi enviado, atualiza (senão mantém)
-//     if (req.body.time) {
-//       jogador.time = req.body.time;
-//     }
-
-//     // Se enviou uma nova foto, atualiza
-//     if (req.file) {
-//       jogador.foto = req.file.filename;
-//     } else if (req.body.fotoatual) {
-//       // Mantém a foto atual, se não enviou nova
-//       jogador.foto = req.body.fotoatual;
-//     }
-
-//     await jogador.save();
-
-//     res.redirect('/admin/jogador/lst');
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Erro ao atualizar jogador");
-//   }
-// }
-
-
-
-
-// export async function abreaddpartida(req, res) {
-//     const resultado = await Denuncia.find({}).catch(function(err){console.log(err)})
-//     res.render('admin/partida/add',{Denuncias:resultado})
-// }
-// export async function addpartida(req, res) {
-//     const timeCasa = await Time.findById(req.body.timedecasa);
-//     const timeFora = await Time.findById(req.body.timedefora);
-//     var pontocasa, pontofora
-
-//     if (req.body.golcasa > req.body.golfora) {
-//         pontocasa = 3;
-//         pontofora = 0;
-//     } else if (req.body.golcasa < req.body.golfora) {
-//         pontofora = 3;
-//         pontocasa = 0
-//     } else {
-//         pontocasa = 1;
-//         pontofora = 1;
-//     }
-//     await Partida.create({ 
-//         timedecasa: timeCasa,
-//         timedefora: timeFora,
-//         golcasa: req.body.golcasa,
-//         golfora: req.body.golfora,
-//         datapartida: req.body.datapartida,       
-//     })
-//     timeCasa.pontos = timeCasa.pontos+pontocasa;
-//     timeFora.pontos = timeFora.pontos+pontofora;
-
-//     await timeCasa.save()
-//     await timeFora.save()
-//     res.redirect('/admin/partida/add');
-
-// }
-// export async function listarpartida(req, res) {
-//     const resultado = await Partida.find({})
-//     .populate('timedecasa')
-//     .populate('timedefora')
-//     .catch(function(err){console.log(err)});
-//     res.render('admin/partida/lst',{Partidas: resultado});
-// }
-// export async function filtrarpartida(req, res) {
-//     const resposta = await Partida.find({nome: new RegExp(req.body.pesquisar,"i")})
-//     res.render('admin/partida/lst',{Partidas: resposta});
-// }
-
-// export async function deletapartida(req, res) {
-//     await Partida.findByIdAndDelete(req.params.id)
-//     res.redirect('/admin/partida/lst')
-// }
-
-// export async function abreedtpartida(req, res){
-//     const resultado = await Partida.findById(req.params.id)
-//     const jtimes = await Time.find({}).catch(function(err){console.log(err)})
-//     res.render('admin/partida/edt',{Partida: resultado,Times:jtimes})
-// }
-
-// export async function edtpartida(req, res){
-//     const partida = await Partida.findById(req.params.id);
-
-//     const timeCasa = await Time.findById(partida.timedecasa);
-//     const timeFora = await Time.findById(partida.timedefora);
-
-    
-//     const golsAntigosCasa = partida.golcasa;
-//     const golsAntigosFora = partida.golfora;
-       
-
-    
-//     if (golsAntigosCasa > golsAntigosFora) {
-//         timeCasa.pontos -= 3;
-//     } else if (golsAntigosCasa < golsAntigosFora) {
-//         timeFora.pontos -= 3;
-//     } else {
-//         timeCasa.pontos -= 1;
-//         timeFora.pontos -= 1;
-//     }
-
-   
-//     const novoGolCasa = parseInt(req.body.golcasa);
-//     const novoGolFora = parseInt(req.body.golfora);
-
-//     if (novoGolCasa > novoGolFora) {
-//         timeCasa.pontos += 3;
-//     } else if (novoGolCasa < novoGolFora) {
-//         timeFora.pontos += 3;
-//     } else {
-//         timeCasa.pontos += 1;
-//         timeFora.pontos += 1;
-//     }
-
-//     await Partida.findByIdAndUpdate(req.params.id, {
-//         golcasa: novoGolCasa,
-//         golfora: novoGolFora,
-//         datapartida: req.body.datapartida,
+//     await Alerta.create({
+//         nomealert: 'EXCLUSAO DA DENúNCIA',
+//         denunciaId: id,
+//         mensagem: `Tentativa de exclusão da denúncia ${id}`
 //     });
 
-//     await timeCasa.save();
-//     await timeFora.save();
-
-//     res.redirect('/admin/partida/lst');
+//     // bloqueia a exclusão
+//       res.status(500).send('Erro ao excluir. Alerta registrado.');
+//     // res.status(403).send('Exclusão bloqueada. Alerta registrado.');
 // }
 
 
-//edição de gols
-/*else if (req.body.golcasa > req.body.golfora) {
-    pontocasa = 3;
-    pontofora = -3;
-} 
-else if(req.body.golcasa < req.body.golfora) {
-    pontocasa = -3;
-    pontofora = 3;
-} 
-else if(req.body.golcasa == req.body.golfora){
-    pontocasa = -2;
-    pontofora = 1;
-}
-else if(req.body.golcasa == req.body.golfora){
-    pontocasa = 1;
-    pontofora = -2;
-}
-
-*/
-     
 /*
           funccion para desfazier cagadióis 
 

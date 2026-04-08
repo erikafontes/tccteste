@@ -2,7 +2,7 @@
             <div id="listPage" class="page active">
                 <div class="page-header">
                     <h2>Minhas Denúncias</h2>
-                    <%
+                    <!-- <%
                         const relatorioParams = [];
                         if (filtro && filtro.email) relatorioParams.push(`email=${encodeURIComponent(filtro.email)}`);
                         if (filtro && filtro.cpf) relatorioParams.push(`cpf=${encodeURIComponent(filtro.cpf)}`);
@@ -10,11 +10,12 @@
                         const relatorioUrl = relatorioParams.length
                             ? `/usuario/relatorio/lst?${relatorioParams.join('&')}`
                             : '/usuario/relatorio/lst';
-                    %>
+                    %> -->
                     <a class="btn btn-primary" href="<%= relatorioUrl %>">Ver Relatório</a>
                 </div>
 
-                <div class="filters-card">
+
+                <div class="filters-card" style="margin-top: 16px;">
                     <div class="filters-grid">
                         <div class="search-box">
                             <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
