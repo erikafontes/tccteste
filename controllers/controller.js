@@ -110,10 +110,35 @@ export async function deletardenuncia(req, res) {
             return res.status(404).send('Denúncia não encontrada.');
         }
 
-        res.redirect('/admin/denuncia/lst');
+        const back = req.get('referer');
+        res.redirect(back || '/admin/denuncia/lst');
     } catch (error) {
         console.error('Erro ao inativar denúncia (admin):', error);
         res.status(500).send('Erro ao inativar denúncia.');
+    }
+}
+
+export async function reativardenuncia(req, res) {
+    const { id } = req.params;
+    if (!id) {
+        return res.status(400).send('ID da denúncia é obrigatório.');
+    }
+
+    try {
+        const denuncia = await Denuncia.findByIdAndUpdate(
+            id,
+            { situacao: 'Pendente' },
+            { new: true }
+        );
+
+        if (!denuncia) {
+            return res.status(404).send('Denúncia não encontrada.');
+        }
+
+        res.redirect('/admin/denuncia/lst');
+    } catch (error) {
+        console.error('Erro ao reativar denúncia (admin):', error);
+        res.status(500).send('Erro ao reativar denúncia.');
     }
 }
 export async function abreedtdenuncia(req, res){

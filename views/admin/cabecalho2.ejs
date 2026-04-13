@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
     <% const isAdminFlag = typeof isAdmin === 'undefined' ? true : isAdmin; %>
     <title>Sistema de Denúncias Ambientais - <%= isAdminFlag ? 'Administração' : 'Área do Usuário' %></title>
     <link rel="stylesheet" href="/styles.css">
@@ -19,6 +20,9 @@
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
                 </button>
+                <div class="imagem">
+                    <img src="/imagem/logoro.png" alt="Logo">
+                </div>
                 <h1>Sistema de Denúncias Ambientais</h1>
             </div>
             <% if (isAdminFlag) { %>

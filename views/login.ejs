@@ -1,431 +1,179 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: white;
-            color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        main {
-            background-color: #fff;
-            color: #333;
-            border-radius: 10px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 380px;
-            padding: 40px;
-            text-align: center;
-        }
-
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
-
-        label {
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-            display: block;
-            color: #555;
-            text-align: left;
-        }
-
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0 20px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            background-color: #f5f5f5;
-            color: #333;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        input[type="email"]:focus,
-        input[type="password"]:focus {
-            border-color: #28a745;
-            background-color: #fff;
-        }
-
-        button {
-            background-color: #28a745;
-            color: #fff;
-            padding: 12px;/* Reset geral */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* Fonte principal */
-body {
-    background-color: #F0F8FF; /* Azul muito claro */
-    color: #0D0D0D;
-    font-family: 'Poppins', sans-serif;
-    line-height: 1.6;
-}
-
-/* Cabeçalho */
-header {
-    background-color: #0092e7c5;
-    padding: 20px 0;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-}
-
-header h1 {
-    color: #FFFFFF;
-    font-size: 2.2rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-}
-
-/* Navegação */
-nav {
-    background-color: #FFFFFF;
-    padding: 15px 0;
-    box-shadow: 0 4px 20px rgba(0, 123, 255, 0.08);
-}
-
-nav ul {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-    gap: 30px;
-}
-
-nav a {
-    color: #00a2ffc5;
-    text-decoration: none;
-    font-weight: 600;
-    padding: 8px 16px;
-    border-radius: 8px;
-    transition: background-color 0.3s ease, color 0.3s;
-}
-
-nav a:hover {
-    background-color: #00a2ffc5;
-    color: #FFFFFF;
-}
-
-/* Container */
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 40px auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Títulos */
-h1 {
-    text-align: center;
-    color: #00a2ffc5;
-    margin-bottom: 20px;
-}
-
-/* Formulário */
-form {
-    background-color: #FFFFFF;
-    padding: 32px;
-    border-radius: 16px;
-    box-shadow: 0 8px 30px rgba(0, 123, 255, 0.07);
-    width: 100%;
-    max-width: 600px;
-    border: 1px solid #D0D0D0;
-    transition: transform 0.3s ease;
-}
-
-form:hover {
-    transform: scale(1.02);
-    box-shadow: 0 8px 40px rgba(0, 123, 255, 0.1);
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    color: #00a2ffc5;
-    font-weight: 600;
-}
-
-input, select {
-    width: 100%;
-    padding: 12px 16px;
-    border: 1px solid #D0D0D0;
-    border-radius: 10px;
-    background-color: #F8FAFF;
-    color: #0D0D0D;
-    margin-bottom: 20px;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
-}
-
-input:focus, select:focus {
-    border-color: #00a2ffc5;
-    background-color: #FFFFFF;
-    outline: none;
-}
-
-/* Botões */
-button, .add-button a {
-    width: 100%;
-    background-color: #00a2ffc5;
-    color: #FFFFFF;
-    padding: 14px 20px;
-    border: none;
-    border-radius: 10px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    text-decoration: none;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
-}
-
-button:hover, .add-button a:hover {
-    background-color: #005FCC;
-    transform: translateY(-2px);
-}
-
-/* Tabela */
-table {
-    width: 100%;
-    max-width: 1000px;
-    margin: 40px auto; /* Centraliza horizontalmente */
-    border-collapse: collapse;
-    background-color: #FFFFFF;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 4px 30px rgba(0, 123, 255, 0.05);
-    border: 1px solid #D0D0D0;
-    transition: box-shadow 0.3s ease;
-}
-
-th, td {
-    padding: 16px;
-    text-align: left;
-    border-bottom: 1px solid #E0E0E0;
-}
-
-th {
-    background-color: #F0F8FF;
-    color: #00a2ffc5;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-}
-
-tr:hover {
-    background-color: #F8FAFF;
-}
-
-td a {
-    background-color: #00a2ffc5;
-    padding: 8px 16px;
-    border-radius: 8px;
-    color: #FFFFFF;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-    font-weight: 600;
-}
-
-td a:hover {
-    background-color: #005FCC;
-}
-
-/* Foto no formulário */
-.foto {
-    display: block;
-    width: 120px;
-    height: auto;
-    margin: 10px 0;
-    border-radius: 10px;
-    object-fit: cover;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
-    transition: transform 0.3s ease;
-    border: 1px solid #00a2ffc5;
-}
-
-.foto:hover {
-    transform: scale(1.05);
-}
-
-/* Input file */
-input[type="file"] {
-    background-color: #F8FAFF;
-    color: #00a2ffc5;
-    border: 1px solid #00a2ffc5;
-    cursor: pointer;
-}
-
-/* Responsivo */
-@media (max-width: 600px) {
-    nav ul {
-        flex-direction: column;
-        gap: 15px;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    .foto {
-        width: 80px;
+    :root {
+      --brand-900: #0b1f4b;
+      --brand-800: #0d2a66;
+      --brand-600: #2563eb;
+      --brand-100: #dbeafe;
+      --text-900: #0f172a;
+      --text-600: #475569;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
     }
 
-    table, form {
-        width: 100%;
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text-900);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
     }
-}
-header {
-    background-color: #007BFF;
-    padding: 20px 0;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-    position: relative;
-}
 
-.header-inner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    max-width: 120px;
-    margin: 0 auto;
-}
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(2, 6, 23, 0.08);
+      padding: 32px;
+    }
 
-.logo {
-    position: absolute;
-    left: 20px;
-    width: 60px;
-    height: 60px;
-    object-fit: contain;
-}
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
 
-header h1 {
-    color: #FFFFFF;
-    font-size: 2.2rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin: 0 auto;
-}
+    .brand-logo {
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 6px;
+    }
 
-            font-size: 1rem;
-            width: 100%;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    h1 {
+      font-size: 1.4rem;
+      color: var(--brand-900);
+    }
 
-        button:hover {
-            background-color: #218838;
-        }
+    p {
+      margin-top: 6px;
+      color: var(--text-600);
+      font-size: 0.95rem;
+    }
 
-        button:active {
-            background-color: #1e7e34;
-        }
+    form {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
 
-        .success-message {
-            display: none;
-            background-color: #28a745;
-            color: #fff;
-            padding: 15px;
-            border-radius: 6px;
-            margin: 20px 0;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
+    label {
+      font-size: 0.9rem;
+      color: var(--text-600);
+      margin-bottom: 6px;
+      display: block;
+    }
 
-        p {
-            margin-top: 15px;
-            color: #777;
-            font-size: 0.9rem;
-        }
+    input,
+    select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      background: #fff;
+      color: var(--text-900);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
 
-        p a {
-            color: #28a745;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
+    input:focus,
+    select:focus {
+      border-color: var(--brand-600);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
 
-        p a:hover {
-            color: #218838;
-        }
+    button {
+      width: 100%;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 10px;
+      background: var(--brand-900);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
 
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
+    button:hover {
+      background: var(--brand-800);
+    }
 
-            main {
-                padding: 30px;
-                max-width: 100%;
-            }
-        }
-    </style>
+    .hint {
+      font-size: 0.85rem;
+      color: var(--text-600);
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
-
 <body>
-    <main>
-        <img src=".." alt="Logo da shell" style=" height:70px; margin-right: 30px;">
+  <main class="card">
+    <div class="brand">
+      <img class="brand-logo" src="/imagem/ro.png" alt="Logo">
+      <div>
         <h1>Login</h1>
-        <div id="successMessage" class="success-message">Logado com sucesso!</div>
+        <p>Acesse o sistema de denúncias</p>
+      </div>
+    </div>
 
-        <form id="loginForm" method="post" onsubmit="return showSuccessMessage(event)">
-            <div>
-                <label for="email">Email</label>
-                <input type="email" name="email" id="email" required>
-            </div>
-            <div>
-                <label for="senha">Senha</label>
-                <input type="password" name="senha" id="senha" required>
-            </div>
-            <div>
-                <button type="submit">Logar</button>
-            </div>
-            <p>
-                Você não tem cadastro? <a href="/cadastro">Clique aqui!</a>
-            </p>
-        </form>
-    </main>
+    <form action="/login" method="POST">
+      <% if (typeof erro !== 'undefined' && erro) { %>
+        <div class="error"><%= erro %></div>
+      <% } %>
+      <div>
+        <label for="nome">Nome do usuário</label>
+        <input id="nome" name="nome" type="text" placeholder="Digite seu nome" required>
+      </div>
 
-    <script>
-        // Função JavaScript para mostrar a mensagem de sucesso após o login
-        function showSuccessMessage(event) {
-            event.preventDefault();  // Impede o envio do formulário (não envia para o servidor)
+      <div>
+        <label for="senha">Senha</label>
+        <input id="senha" name="senha" type="password" placeholder="Digite sua senha" required>
+      </div>
 
-            // Exibe a mensagem de sucesso
-            const successMessage = document.getElementById("successMessage");
-            successMessage.style.display = "block"; 
+      <div>
+        <label for="tipo">Tipo de usuário</label>
+        <select id="tipo" name="tipo" required>
+          <option value="admin">Admin</option>
+          <option value="geral">Geral</option>
+        </select>
+      </div>
 
-            // Limpa os campos do formulário
-            document.getElementById("loginForm").reset(); 
+      <button type="submit">Entrar</button>
+    </form>
 
-            // Redireciona para a página desejada após 2 segundos
-            setTimeout(function() {
-                window.location.href = "/admin/produto/lst";  // Substitua "/pagina-principal" pela URL da página que deseja redirecionar
-            }, 2000); // Redirecionamento após 2 segundos
-        }
-    </script>
+    <div class="hint">Se esqueceu sua senha, fale com o administrador.</div>
+  </main>
 </body>
-
 </html>

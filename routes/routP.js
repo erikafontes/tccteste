@@ -6,6 +6,7 @@ const upload = multer({ dest: 'public/usuarios/' })
 import { abrecadastro, cadastro, abrelogin, login,} from '../controllers/public.js';
 
 router.get('/cadastro', abrecadastro)
+router.post('/cadastro', cadastro)
 
 router.get('/login', abrelogin)
 

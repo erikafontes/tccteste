@@ -62,12 +62,25 @@ function renderTable(data) {
                          </svg>
                      </button>
                     -->
-                    <button class="action-btn delete" title="${isUser ? 'Solicitar Inativação' : 'Inativar'}" onclick="${isUser ? `solicitarInativacao('${denuncia.id}')` : `deleteDenuncia('${denuncia.id}')`}">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="3 6 5 6 21 6"></polyline>
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                        </svg>
-                    </button>
+                    ${denuncia.situacao === 'Inativa'
+                        ? (isUser ? '' : `
+                        <button class="action-btn edit" title="Reativar" onclick="reativarDenuncia('${denuncia.id}')">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 12a9 9 0 0 1 15.5-6.36"></path>
+                                <polyline points="19 3 19 8 14 8"></polyline>
+                                <path d="M21 12a9 9 0 0 1-15.5 6.36"></path>
+                                <polyline points="5 21 5 16 10 16"></polyline>
+                            </svg>
+                        </button>
+                        `)
+                        : `
+                        <button class="action-btn delete" title="${isUser ? 'Solicitar Inativação' : 'Inativar'}" onclick="${isUser ? `solicitarInativacao('${denuncia.id}')` : `deleteDenuncia('${denuncia.id}')`}">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                        </button>
+                    `}
                 </div>
             </td>
         `;
@@ -152,6 +165,12 @@ function deleteDenuncia(id) {
 function solicitarInativacao(id) {
     if (confirm('Deseja solicitar a inativação desta denúncia?')) {
         window.location.href = `/usuario/denuncia/solicitar-inativacao/${id}`;
+    }
+}
+
+function reativarDenuncia(id) {
+    if (confirm('Deseja reativar esta denúncia?')) {
+        window.location.href = `/admin/denuncia/reativar/${id}`;
     }
 }
 // Função para trocar de página

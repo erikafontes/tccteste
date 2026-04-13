@@ -25,6 +25,7 @@ import {
     listardenuncia,
     filtrardenuncia,
     deletardenuncia,
+    reativardenuncia,
     solicitarInativacaoDenuncia,
     abreedtdenuncia,
     edtdenuncia,
@@ -53,6 +54,7 @@ import {
     // edtpartida
 
 } from '../controllers/controller.js';
+import { abreCadastroAdmin, cadastroAdmin } from '../controllers/public.js';
 
 // ----------------------
 // ROTAS
@@ -72,6 +74,10 @@ router.get('/admin/denuncia/lst', listardenuncia);
 router.post('/admin/denuncia/lst', filtrardenuncia);
 
 router.get('/admin/denuncia/del/:id', deletardenuncia);
+router.get('/admin/denuncia/reativar/:id', reativardenuncia);
+
+router.get('/admin/usuarios/add', abreCadastroAdmin);
+router.post('/admin/usuarios/add', cadastroAdmin);
 
 router.get('/admin/denuncia/edt/:id', abreedtdenuncia);
 router.post('/admin/denuncia/edt/:id', upload.single('foto'), edtdenuncia);
