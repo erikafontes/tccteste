@@ -2,15 +2,16 @@
             <div id="listPage" class="page active">
                 <div class="page-header">
                     <h2>Minhas Denúncias</h2>
-                    <!-- <%
+                    <%
+                        const filtroParams = typeof filtro !== 'undefined' ? filtro : {};
                         const relatorioParams = [];
-                        if (filtro && filtro.email) relatorioParams.push(`email=${encodeURIComponent(filtro.email)}`);
-                        if (filtro && filtro.cpf) relatorioParams.push(`cpf=${encodeURIComponent(filtro.cpf)}`);
-                        if (filtro && filtro.ndenuncia) relatorioParams.push(`ndenuncia=${encodeURIComponent(filtro.ndenuncia)}`);
+                        if (filtroParams && filtroParams.email) relatorioParams.push(`email=${encodeURIComponent(filtroParams.email)}`);
+                        if (filtroParams && filtroParams.cpf) relatorioParams.push(`cpf=${encodeURIComponent(filtroParams.cpf)}`);
+                        if (filtroParams && filtroParams.ndenuncia) relatorioParams.push(`ndenuncia=${encodeURIComponent(filtroParams.ndenuncia)}`);
                         const relatorioUrl = relatorioParams.length
                             ? `/usuario/relatorio/lst?${relatorioParams.join('&')}`
                             : '/usuario/relatorio/lst';
-                    %> -->
+                    %>
                     <a class="btn btn-primary" href="<%= relatorioUrl %>">Ver Relatório</a>
                 </div>
 
@@ -60,27 +61,7 @@
             </div>
 
     <script>
-        const denuncias = [
-            <% Denuncias.forEach(function(denuncia) { %>
-            {
-                id: '<%= denuncia._id %>',
-                ndenuncia: '<%= denuncia.ndenuncia %>',
-                nomeDenunciante: '<%= denuncia.nomedenunciante %>',
-                cpf: '<%= denuncia.cpf %>',
-                email: '<%= denuncia.email %>',
-                fonte: '<%= denuncia.fonte %>',
-                data: '<%= denuncia.data %>',
-                hora: '<%= denuncia.hora %>',
-                endereco: '<%= denuncia.endereco %>',
-                especie: '<%= denuncia.especie %>',
-                quantidade: '<%= denuncia.quantidade %>',
-                situacao: '<%= denuncia.situacao %>',
-                nome: '<%= denuncia.nome %>',
-                enderecoProprietario: '<%= denuncia.enderecoProprietario %>',
-                providencia: '<%= denuncia.providencia %>'
-            },
-            <% }) %>
-        ];
+        const denuncias = <%- JSON.stringify(DenunciasView || []) %>;
     </script>
     <script>
         window.DENUNCIA_BASE_PATH = '/usuario';

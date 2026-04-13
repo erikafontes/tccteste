@@ -25,6 +25,7 @@ import {
     listardenuncia,
     filtrardenuncia,
     deletardenuncia,
+    solicitarInativacaoDenuncia,
     abreedtdenuncia,
     edtdenuncia,
     abreverdenuncia,
@@ -32,7 +33,7 @@ import {
 
     //relatorio
     listarrelatorio,
-    alertarExclusaoDenuncia,
+    //alertarExclusaoDenuncia,
     // // Jogador
     // abreaddjogador,
     // addjogador,
@@ -64,15 +65,22 @@ router.get('/', home);
 // router.post('/admin/denuncia/add', upload.single('foto'), adddenuncia);
 router.get('/admin/denuncia/add2', abreadddenuncia);
 router.post('/admin/denuncia/add2', upload.single('foto'), adddenuncia);
+router.get('/usuario/denuncia/add', abreadddenuncia);
+router.post('/usuario/denuncia/add', upload.single('foto'), adddenuncia);
 
 router.get('/admin/denuncia/lst', listardenuncia);
 router.post('/admin/denuncia/lst', filtrardenuncia);
 
-router.get('/admin/denuncia/del', deletardenuncia);
+router.get('/admin/denuncia/del/:id', deletardenuncia);
 
 router.get('/admin/denuncia/edt/:id', abreedtdenuncia);
 router.post('/admin/denuncia/edt/:id', upload.single('foto'), edtdenuncia);
 router.get('/admin/denuncia/ver/:id', abreverdenuncia);
+
+router.get('/usuario/denuncia/lst', listardenuncia);
+router.post('/usuario/denuncia/lst', filtrardenuncia);
+router.get('/usuario/denuncia/ver/:id', abreverdenuncia);
+router.get('/usuario/denuncia/solicitar-inativacao/:id', solicitarInativacaoDenuncia);
 
 // ----- Relatorio -----
 router.get('/admin/relatorio/lst', listarrelatorio);

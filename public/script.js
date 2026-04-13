@@ -62,7 +62,7 @@ function renderTable(data) {
                          </svg>
                      </button>
                     -->
-                    <button class="action-btn delete" title="${isUser ? 'Solicitar Inativação' : 'Excluir'}" onclick="${isUser ? `solicitarInativacao('${denuncia.ndenuncia}')` : `deleteDenuncia('${denuncia.ndenuncia}')`}">
+                    <button class="action-btn delete" title="${isUser ? 'Solicitar Inativação' : 'Inativar'}" onclick="${isUser ? `solicitarInativacao('${denuncia.id}')` : `deleteDenuncia('${denuncia.id}')`}">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="3 6 5 6 21 6"></polyline>
                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -143,15 +143,15 @@ function editDenuncia(id) {
 //     }
 // }
 
-function deleteDenuncia(ndenuncia) {
+function deleteDenuncia(id) {
     if (confirm('Tem certeza que deseja inativar esta denúncia?')) {
-        window.location.href = `/admin/denuncia/del/${ndenuncia}`;
+        window.location.href = `/admin/denuncia/del/${id}`;
     }
 }
 
-function solicitarInativacao(ndenuncia) {
+function solicitarInativacao(id) {
     if (confirm('Deseja solicitar a inativação desta denúncia?')) {
-        window.location.href = `/usuario/denuncia/solicitar-inativacao/${ndenuncia}`;
+        window.location.href = `/usuario/denuncia/solicitar-inativacao/${id}`;
     }
 }
 // Função para trocar de página

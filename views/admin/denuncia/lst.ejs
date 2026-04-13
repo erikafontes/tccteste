@@ -50,27 +50,7 @@
             </div>
 
     <script>
-        const denuncias = [
-            <% Denuncias.forEach(function(denuncia) { %>
-            {
-                id: '<%= denuncia._id %>',
-                ndenuncia: '<%= denuncia.ndenuncia %>',
-                nomeDenunciante: '<%= denuncia.nomedenunciante %>',
-                cpf: '<%= denuncia.cpf %>',
-                email: '<%= denuncia.email %>',
-                fonte: '<%= denuncia.fonte %>',
-                data: '<%= denuncia.data %>',
-                hora: '<%= denuncia.hora %>',
-                endereco: '<%= denuncia.endereco %>',
-                especie: '<%= denuncia.especie %>',
-                quantidade: '<%= denuncia.quantidade %>',
-                situacao: '<%= denuncia.situacao %>',
-                nome: '<%= denuncia.nome %>',
-                enderecoProprietario: '<%= denuncia.enderecoProprietario %>',
-                providencia: '<%= denuncia.providencia %>'
-            },
-            <% }) %>
-        ];
+        const denuncias = <%- JSON.stringify(DenunciasView || []) %>;
     </script>
     <script>
         window.DENUNCIA_BASE_PATH = '/admin';
