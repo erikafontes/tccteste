@@ -53,6 +53,9 @@ import {
     // abreedtpartida,
     // edtpartida
 
+
+    //testando o wpp
+
 } from '../controllers/controller.js';
 import { abreCadastroAdmin, cadastroAdmin } from '../controllers/public.js';
 
