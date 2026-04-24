@@ -2,7 +2,7 @@ import conexao from '../config/conexao.js'
 
 const Usuario = conexao.Schema({
     nome: {type:String, required:true},
-    numero: {type:Number, required:false},
+    numero: {type:String, required:false},
     email: {type:String, required:true},
     senha: {type:String, required:true},
     datanasc:{type: Date, required:false},

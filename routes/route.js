@@ -57,13 +57,13 @@ import {
     //testando o wpp
 
 } from '../controllers/controller.js';
-import { abreCadastroAdmin, cadastroAdmin } from '../controllers/public.js';
+import { abreCadastroAdmin, cadastroAdmin, abreperfil, atualizarPerfil } from '../controllers/public.js';
 
 // ----------------------
 // ROTAS
 
 // Página inicial
-router.get('/', home);
+router.get('/', (req, res) => res.redirect('/cadastro'));
 
 // // ----- Denuncia -----
 // router.get('/admin/denuncia/add', abreadddenuncia);
@@ -90,6 +90,8 @@ router.get('/usuario/denuncia/lst', listardenuncia);
 router.post('/usuario/denuncia/lst', filtrardenuncia);
 router.get('/usuario/denuncia/ver/:id', abreverdenuncia);
 router.get('/usuario/denuncia/solicitar-inativacao/:id', solicitarInativacaoDenuncia);
+router.get('/usuario/perfil', abreperfil);
+router.post('/usuario/perfil', atualizarPerfil);
 
 // ----- Relatorio -----
 router.get('/admin/relatorio/lst', listarrelatorio);

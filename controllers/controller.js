@@ -19,11 +19,12 @@ export async function adddenuncia(req, res) {
     const fotoupload = req.file ? req.file.filename : null;
     const isUser = req.originalUrl.startsWith('/usuario');
     const situacao = isUser ? 'Pendente' : req.body.situacao;
+    const emailDenunciante = isUser && req.session.user?.email ? req.session.user.email : req.body.email;
 
     const denunciaCriada = await Denuncia.create({
         ndenuncia: req.body.ndenuncia,
         nomedenunciante: req.body.nomeDenunciante,
-        email: req.body.email,
+        email: emailDenunciante,
         fonte: req.body.fonte || 'Site',
         data: req.body.data,
         hora: req.body.hora,
@@ -47,7 +48,10 @@ export async function adddenuncia(req, res) {
 export async function listardenuncia(req, res) {
     const isUser = req.originalUrl.startsWith('/usuario');
     if (isUser) {
-        const resultado = await Denuncia.find({}).catch(function(err){console.log(err)});
+        const emailUsuario = req.session.user?.email;
+        const resultado = emailUsuario
+            ? await Denuncia.find({ email: emailUsuario }).catch(function(err){console.log(err)})
+            : [];
         const DenunciasView = (resultado || []).map((denuncia) => ({
             id: denuncia._id,
             ndenuncia: denuncia.ndenuncia ?? '',
@@ -89,8 +93,38 @@ export async function listardenuncia(req, res) {
     res.render('admin/denuncia/lst',{DenunciasView});
 }
 export async function filtrardenuncia(req, res) {
-    const resposta = await Denuncia.find({nome: new RegExp(req.body.pesquisar,"i")})
-    res.render('admin/denuncia/lst',{Denuncias: resposta});
+    const isUser = req.originalUrl.startsWith('/usuario');
+    const pesquisar = req.body.pesquisar || '';
+    const filtro = { nome: new RegExp(pesquisar, "i") };
+
+    if (isUser) {
+        const emailUsuario = req.session.user?.email;
+        if (!emailUsuario) {
+            return res.render('usuario/denuncia/lst', { DenunciasView: [] });
+        }
+        filtro.email = emailUsuario;
+    }
+
+    const resposta = await Denuncia.find(filtro);
+    const DenunciasView = (resposta || []).map((denuncia) => ({
+        id: denuncia._id,
+        ndenuncia: denuncia.ndenuncia ?? '',
+        nomeDenunciante: denuncia.nomedenunciante ?? '',
+        cpf: denuncia.cpf ?? '',
+        email: denuncia.email ?? '',
+        fonte: denuncia.fonte ?? '',
+        data: denuncia.data ?? '',
+        hora: denuncia.hora ?? '',
+        endereco: denuncia.endereco ?? '',
+        especie: denuncia.especie ?? '',
+        quantidade: denuncia.quantidade ?? '',
+        situacao: denuncia.situacao ?? '',
+        nome: denuncia.nome ?? '',
+        enderecoProprietario: denuncia.enderecoProprietario ?? '',
+        providencia: denuncia.providencia ?? ''
+    }));
+
+    res.render(isUser ? 'usuario/denuncia/lst' : 'admin/denuncia/lst', { DenunciasView });
 }
 
 export async function deletardenuncia(req, res) {

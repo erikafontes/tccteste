@@ -42,6 +42,7 @@
                     <span>Nova Denúncia</span>
                 </a>
             <% } %>
+           
         </div>
     </header>
 
@@ -86,6 +87,13 @@
                             <line x1="6" y1="20" x2="6" y2="14"></line>
                         </svg>
                         <span>Meu Relatório</span>
+                    </a>
+                    <a href="/usuario/perfil" class="nav-item <%= typeof currentSection !== 'undefined' && currentSection === 'perfil' ? 'active' : '' %>">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21a8 8 0 0 0-16 0"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span>Meu Perfil</span>
                     </a>
                 <% } %>
             </nav>

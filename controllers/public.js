@@ -1,4 +1,5 @@
 import Usuario from '../models/usuarios.js'
+import Denuncia from '../models/denuncia.js'
 
 
 export async function abrecadastro(req, res){
@@ -55,6 +56,8 @@ export async function login(req, res){
         req.session.user = {
             id: usuario._id,
             nome: usuario.nome,
+            email: usuario.email,
+            numero: usuario.numero || '',
             role: tipo,
             superadmin: usuario.superadmin === true
         };
@@ -64,6 +67,72 @@ export async function login(req, res){
         console.error('Erro no login:', error);
         return res.status(500).render('login', { erro: 'Erro ao realizar login.' });
     }
+}
+
+export async function abreperfil(req, res) {
+    try {
+        const usuario = await Usuario.findById(req.session.user.id);
+        if (!usuario) {
+            req.session.destroy(() => {});
+            return res.redirect('/login');
+        }
+
+        return res.render('usuario/perfil', { usuario });
+    } catch (error) {
+        console.error('Erro ao abrir perfil:', error);
+        return res.status(500).send('Erro ao abrir perfil.');
+    }
+}
+
+export async function atualizarPerfil(req, res) {
+    try {
+        const { nome, email, numero } = req.body;
+        const usuario = await Usuario.findById(req.session.user.id);
+
+        if (!usuario) {
+            req.session.destroy(() => {});
+            return res.redirect('/login');
+        }
+
+        if (email && email !== usuario.email) {
+            const existente = await Usuario.findOne({ email });
+            if (existente && String(existente._id) !== String(usuario._id)) {
+                return res.status(409).render('usuario/perfil', {
+                    usuario,
+                    erro: 'Email já cadastrado por outro usuário.'
+                });
+            }
+        }
+
+        const emailAnterior = usuario.email;
+
+        usuario.nome = nome;
+        usuario.email = email;
+        usuario.numero = numero;
+        await usuario.save();
+
+        if (emailAnterior !== usuario.email) {
+            await Denuncia.updateMany({ email: emailAnterior }, { email: usuario.email });
+        }
+
+        req.session.user.nome = usuario.nome;
+        req.session.user.email = usuario.email;
+        req.session.user.numero = usuario.numero || '';
+
+        return res.render('usuario/perfil', {
+            usuario,
+            sucesso: 'Perfil atualizado com sucesso.'
+        });
+    } catch (error) {
+        console.error('Erro ao atualizar perfil:', error);
+        return res.status(500).send('Erro ao atualizar perfil.');
+    }
+}
+
+export async function logout(req, res) {
+    req.session.destroy(() => {
+        res.redirect('/login');
+    });
 }
 
 export async function abreCadastroAdmin(req, res) {
