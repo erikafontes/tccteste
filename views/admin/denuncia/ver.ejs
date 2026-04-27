@@ -108,10 +108,16 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="descricaoSituacao">Situação do caso</label>
+                    <textarea id="descricaoSituacao" name="descricaoSituacao" rows="5" readonly><%= Denuncia.descricaoSituacao || '' %></textarea>
+                </div>
+                <div class="form-group">
                     <label>Foto/Evidência</label>
                     <% if (Denuncia.foto) { %>
+                        <% const fotoNome = String(Denuncia.foto).split(/[\\/]/).pop(); %>
+                        <% const fotoUrl = `/imagem/${encodeURIComponent(fotoNome)}`; %>
                         <div>
-                            <img src="/imagem/<%= Denuncia.foto %>" alt="Foto da denúncia" style="max-width: 100%; height: auto; border-radius: 8px;">
+                            <img src="<%= fotoUrl %>" alt="Foto da denúncia" style="max-width: 100%; height: auto; border-radius: 8px;">
                         </div>
                     <% } else { %>
                         <div style="color: #6b7280; font-size: 0.9rem;">Sem foto anexada</div>

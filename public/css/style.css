@@ -19,7 +19,7 @@
 
 /* Fonte principal */
 body {
-    background-color: #F0F8FF; /* Azul muito claro */
+    background-color: #f3faf5;
     color: #000000;
     font-family: 'Poppins', sans-serif;
     line-height: 1.6;
@@ -28,10 +28,10 @@ body {
 
 /* Cabeçalho */
 header {
-    background-color: #0092e7c5;
+    background-color: #16421f;
     padding: 20px 0;
     text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(22, 66, 31, 0.28);
 }
 
 header h1 {
@@ -45,7 +45,7 @@ header h1 {
 nav {
     background-color: #FFFFFF;
     padding: 15px 0;
-    box-shadow: 0 4px 20px rgba(0, 123, 255, 0.08);
+    box-shadow: 0 4px 20px rgba(22, 66, 31, 0.08);
 }
 
 nav ul {
@@ -56,7 +56,7 @@ nav ul {
 }
 
 nav a {
-    color: #00a2ffc5;
+    color: #16421f;
     text-decoration: none;
     font-weight: 600;
     padding: 8px 16px;
@@ -65,7 +65,7 @@ nav a {
 }
 
 nav a:hover {
-    background-color: #00a2ffc5;
+    background-color: #16421f;
     color: #FFFFFF;
 }
 
@@ -97,7 +97,7 @@ form {
 
 /* form:hover {
     transform: scale(1.02);
-    box-shadow: 0 8px 40px rgba(0, 123, 255, 0.1);
+    box-shadow: 0 8px 40px rgba(22, 66, 31, 0.1);
 } */
 
 /* cores dos titulos do formulario */
@@ -157,7 +157,7 @@ table {
     background-color: #FFFFFF;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 4px 30px rgba(0, 123, 255, 0.05);
+    box-shadow: 0 4px 30px rgba(22, 66, 31, 0.08);
     border: 1px solid #D0D0D0;
     transition: box-shadow 0.3s ease;
 }
@@ -236,9 +236,9 @@ input[type="file"] {
     }
 }
 header {
-    background-color: #007BFF;
+    background-color: #16421f;
     padding: 20px 0;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(22, 66, 31, 0.28);
     position: relative;
 }
 

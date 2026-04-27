@@ -14,6 +14,10 @@ function getSituacaoBadgeClass(situacao) {
     return classes[situacao] || '';
 }
 
+function normalizeSearchValue(value) {
+    return String(value ?? '').toLowerCase();
+}
+
 // Função para renderizar a tabela
 function renderTable(data) {
     const tbody = document.getElementById('tableBody');
@@ -26,11 +30,25 @@ function renderTable(data) {
 
     data.forEach(denuncia => {
         const dataFormatada = new Date(denuncia.data).toLocaleDateString('pt-BR');
+        const temSolicitacaoInativacao = !isUser && denuncia.solicitacaoInativacao === true;
         
         const tr = document.createElement('tr');
+        if (temSolicitacaoInativacao) {
+            tr.classList.add('row-alert');
+        }
         tr.innerHTML = `
             <td>
                 <div style="font-size: 0.875rem">${denuncia.ndenuncia}</div>
+                ${temSolicitacaoInativacao ? `
+                    <div class="request-alert" title="Usuário solicitou a inativação desta denúncia">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        Solicitou inativação
+                    </div>
+                ` : ''}
             </td>
             <td>
                 <div style="font-size: 0.875rem; color: #111827">${denuncia.nomeDenunciante}</div>
@@ -45,6 +63,7 @@ function renderTable(data) {
             </td>
             <td>
                 <span class="badge ${getSituacaoBadgeClass(denuncia.situacao)}">${denuncia.situacao}</span>
+                ${temSolicitacaoInativacao ? '<span class="badge badge-request">Aguardando admin</span>' : ''}
             </td>
             <td>
                 <div class="actions">
@@ -96,15 +115,21 @@ function renderTable(data) {
 
 // Função para filtrar denúncias
 function filterDenuncias() {
-    const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
+    const searchTerm = normalizeSearchValue(document.getElementById('searchInput')?.value);
     const filterSituacao = document.getElementById('filterSituacao')?.value || 'todas';
     const filterEspecie = document.getElementById('filterEspecie')?.value || 'todas';
 
     const filtered = denuncias.filter(denuncia => {
-        const matchesSearch = 
-            denuncia.ndenuncia.toLowerCase().includes(searchTerm) ||
-            denuncia.nomeDenunciante.toLowerCase().includes(searchTerm) ||
-            denuncia.nome.toLowerCase().includes(searchTerm);
+        const searchableText = [
+            denuncia.ndenuncia,
+            denuncia.nomeDenunciante,
+            denuncia.email,
+            denuncia.nome,
+            denuncia.especie,
+            denuncia.situacao
+        ].map(normalizeSearchValue).join(' ');
+
+        const matchesSearch = searchableText.includes(searchTerm);
         
         const matchesSituacao = filterSituacao === 'todas' || denuncia.situacao === filterSituacao;
         const matchesEspecie = filterEspecie === 'todas' || denuncia.especie === filterEspecie;

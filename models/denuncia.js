@@ -13,6 +13,7 @@ const Denuncia = conexao.Schema({
     especie:{type:String},
     quantidade:{type:Number},
     situacao:{type:String, required:true},
+    descricaoSituacao:{type:String},
      foto: { type: String, required: false },
 
     //3,dados do proprietário

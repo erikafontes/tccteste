@@ -32,6 +32,7 @@ export async function adddenuncia(req, res) {
         especie: req.body.especie,
         quantidade: req.body.quantidade,
         situacao,
+        descricaoSituacao: req.body.descricaoSituacao,
         foto: fotoupload,
         nome: req.body.nome,
         cpf: req.body.cpf,
@@ -65,6 +66,7 @@ export async function listardenuncia(req, res) {
             especie: denuncia.especie ?? '',
             quantidade: denuncia.quantidade ?? '',
             situacao: denuncia.situacao ?? '',
+            descricaoSituacao: denuncia.descricaoSituacao ?? '',
             nome: denuncia.nome ?? '',
             enderecoProprietario: denuncia.enderecoProprietario ?? '',
             providencia: denuncia.providencia ?? ''
@@ -73,6 +75,8 @@ export async function listardenuncia(req, res) {
     }
 
     const resultado = await Denuncia.find({}).catch(function(err){console.log(err)});
+    const alertasInativacao = await Alerta.find({ nomealert: 'SOLICITACAO INATIVACAO' }).catch(function(err){console.log(err)});
+    const denunciasComSolicitacao = new Set((alertasInativacao || []).map((alerta) => alerta.denunciaId));
     const DenunciasView = (resultado || []).map((denuncia) => ({
         id: denuncia._id,
         ndenuncia: denuncia.ndenuncia ?? '',
@@ -86,6 +90,8 @@ export async function listardenuncia(req, res) {
         especie: denuncia.especie ?? '',
         quantidade: denuncia.quantidade ?? '',
         situacao: denuncia.situacao ?? '',
+        descricaoSituacao: denuncia.descricaoSituacao ?? '',
+        solicitacaoInativacao: denuncia.situacao !== 'Inativa' && denunciasComSolicitacao.has(String(denuncia._id)),
         nome: denuncia.nome ?? '',
         enderecoProprietario: denuncia.enderecoProprietario ?? '',
         providencia: denuncia.providencia ?? ''
@@ -106,6 +112,10 @@ export async function filtrardenuncia(req, res) {
     }
 
     const resposta = await Denuncia.find(filtro);
+    const alertasInativacao = isUser
+        ? []
+        : await Alerta.find({ nomealert: 'SOLICITACAO INATIVACAO' }).catch(function(err){console.log(err)});
+    const denunciasComSolicitacao = new Set((alertasInativacao || []).map((alerta) => alerta.denunciaId));
     const DenunciasView = (resposta || []).map((denuncia) => ({
         id: denuncia._id,
         ndenuncia: denuncia.ndenuncia ?? '',
@@ -119,6 +129,8 @@ export async function filtrardenuncia(req, res) {
         especie: denuncia.especie ?? '',
         quantidade: denuncia.quantidade ?? '',
         situacao: denuncia.situacao ?? '',
+        descricaoSituacao: denuncia.descricaoSituacao ?? '',
+        solicitacaoInativacao: !isUser && denuncia.situacao !== 'Inativa' && denunciasComSolicitacao.has(String(denuncia._id)),
         nome: denuncia.nome ?? '',
         enderecoProprietario: denuncia.enderecoProprietario ?? '',
         providencia: denuncia.providencia ?? ''
@@ -143,6 +155,11 @@ export async function deletardenuncia(req, res) {
         if (!denuncia) {
             return res.status(404).send('Denúncia não encontrada.');
         }
+
+        await Alerta.deleteMany({
+            nomealert: 'SOLICITACAO INATIVACAO',
+            denunciaId: String(denuncia._id)
+        });
 
         const back = req.get('referer');
         res.redirect(back || '/admin/denuncia/lst');

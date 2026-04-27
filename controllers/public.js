@@ -28,8 +28,18 @@ export async function cadastro(req, res){
             return res.status(409).render('cadastro', { erro: 'Email já cadastrado.' });
         }
 
-        await novousuario.save();
-        return res.redirect('/login');
+        const usuario = await novousuario.save();
+
+        req.session.user = {
+            id: usuario._id,
+            nome: usuario.nome,
+            email: usuario.email,
+            numero: usuario.numero || '',
+            role: 'geral',
+            superadmin: false
+        };
+
+        return res.redirect('/usuario/denuncia/lst');
     } catch (error) {
         console.error('Erro ao cadastrar usuário:', error);
         return res.status(500).render('cadastro', { erro: 'Erro ao cadastrar usuário.' });
