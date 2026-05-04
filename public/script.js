@@ -26,33 +26,40 @@ function renderTable(data) {
 
     data.forEach(denuncia => {
         const dataFormatada = new Date(denuncia.data).toLocaleDateString('pt-BR');
+        const especieIcon = denuncia.especie === 'Animais'
+            ? '<path d="M11.5 9.5c.8-1.6 2.8-1.6 3.6 0 .8 1.6-.3 3.5-1.8 3.5s-2.6-1.9-1.8-3.5Z"></path><circle cx="6.5" cy="8.5" r="1.6"></circle><circle cx="10" cy="5.5" r="1.6"></circle><circle cx="14" cy="5.5" r="1.6"></circle><circle cx="17.5" cy="8.5" r="1.6"></circle>'
+            : '<path d="M11 20A7 7 0 0 1 4 13c0-5 7-9 7-9s7 4 7 9a7 7 0 0 1-7 7Z"></path><path d="M11 20c0-4 2-7 5-9"></path>';
         
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>
-                <div style="font-size: 0.875rem">${denuncia.ndenuncia}</div>
+                <div class="denuncia-number">${denuncia.ndenuncia}</div>
             </td>
             <td>
-                <div style="font-size: 0.875rem; color: #111827">${denuncia.nomeDenunciante}</div>
-                <div style="font-size: 0.875rem; color: #6b7280">${denuncia.email}</div>
+                <div class="person-name">${denuncia.nomeDenunciante}</div>
+                <div class="muted">${denuncia.email}</div>
             </td>
             <td>
-                <div style="font-size: 0.875rem">${dataFormatada}</div>
-                <div style="font-size: 0.875rem; color: #6b7280">${denuncia.hora}</div>
+                <div class="date-main">${dataFormatada}</div>
+                <div class="muted">${denuncia.hora}</div>
             </td>
             <td>
-                <span class="badge badge-outline">${denuncia.especie}</span>
+                <span class="badge badge-outline badge-species">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${especieIcon}</svg>
+                    ${denuncia.especie}
+                </span>
             </td>
             <td>
                 <span class="badge ${getSituacaoBadgeClass(denuncia.situacao)}">${denuncia.situacao}</span>
             </td>
             <td>
                 <div class="actions">
-                    <button class="action-btn view" title="Visualizar" onclick="window.location.href='${basePath}/denuncia/ver/${denuncia.id}'">
+                    <button class="action-btn view action-details" title="Visualizar" onclick="window.location.href='${basePath}/denuncia/ver/${denuncia.id}'">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                             <circle cx="12" cy="12" r="3"></circle>
                         </svg>
+                        <span>Ver detalhes</span>
                     </button>
                     <!--
                     <button class="action-btn edit" title="Editar" onclick="editDenuncia('${denuncia.id}')">
@@ -64,7 +71,7 @@ function renderTable(data) {
                     -->
                     ${denuncia.situacao === 'Inativa'
                         ? (isUser ? '' : `
-                        <button class="action-btn edit" title="Reativar" onclick="reativarDenuncia('${denuncia.id}')">
+                        <button class="action-btn edit icon-action" title="Reativar" onclick="reativarDenuncia('${denuncia.id}')">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M3 12a9 9 0 0 1 15.5-6.36"></path>
                                 <polyline points="19 3 19 8 14 8"></polyline>
@@ -74,7 +81,7 @@ function renderTable(data) {
                         </button>
                         `)
                         : `
-                        <button class="action-btn delete" title="${isUser ? 'Solicitar Inativação' : 'Inativar'}" onclick="${isUser ? `solicitarInativacao('${denuncia.id}')` : `deleteDenuncia('${denuncia.id}')`}">
+                        <button class="action-btn delete icon-action" title="${isUser ? 'Solicitar Inativação' : 'Inativar'}" onclick="${isUser ? `solicitarInativacao('${denuncia.id}')` : `deleteDenuncia('${denuncia.id}')`}">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="3 6 5 6 21 6"></polyline>
                                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -102,9 +109,9 @@ function filterDenuncias() {
 
     const filtered = denuncias.filter(denuncia => {
         const matchesSearch = 
-            denuncia.ndenuncia.toLowerCase().includes(searchTerm) ||
-            denuncia.nomeDenunciante.toLowerCase().includes(searchTerm) ||
-            denuncia.nome.toLowerCase().includes(searchTerm);
+            String(denuncia.ndenuncia || '').toLowerCase().includes(searchTerm) ||
+            String(denuncia.nomeDenunciante || '').toLowerCase().includes(searchTerm) ||
+            String(denuncia.nome || '').toLowerCase().includes(searchTerm);
         
         const matchesSituacao = filterSituacao === 'todas' || denuncia.situacao === filterSituacao;
         const matchesEspecie = filterEspecie === 'todas' || denuncia.especie === filterEspecie;

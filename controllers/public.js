@@ -136,7 +136,7 @@ export async function logout(req, res) {
 }
 
 export async function abreCadastroAdmin(req, res) {
-    return res.render('admin/usuarios/add');
+    return res.render('admin/usuarioscadastro/add');
 }
 
 export async function cadastroAdmin(req, res) {
@@ -144,7 +144,7 @@ export async function cadastroAdmin(req, res) {
         const { nome, email, senha } = req.body;
         const existente = await Usuario.findOne({ email });
         if (existente) {
-            return res.status(409).render('admin/usuarios/add', { erro: 'Email já cadastrado.' });
+            return res.status(409).render('admin/usuarioscadastro/add', { erro: 'Email já cadastrado.' });
         }
 
         const novoAdmin = new Usuario({
@@ -159,6 +159,6 @@ export async function cadastroAdmin(req, res) {
         return res.redirect('/admin/denuncia/lst');
     } catch (error) {
         console.error('Erro ao cadastrar admin:', error);
-        return res.status(500).render('admin/usuarios/add', { erro: 'Erro ao cadastrar admin.' });
+        return res.status(500).render('admin/usuarioscadastro/add', { erro: 'Erro ao cadastrar admin.' });
     }
 }

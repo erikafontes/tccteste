@@ -42,7 +42,11 @@ export function getWppClient() {
     clientPromise = wppconnect
       .create({
         session: 'admin-alerts',
+        folderNameToken: 'tokens',
         autoClose: 0,
+        deviceSyncTimeout: 0,
+        waitForLogin: true,
+        browserArgs: ['--no-sandbox', '--disable-setuid-sandbox'],
         logQR: true,
         catchQR: (_base64, asciiQR, attempts) => {
           console.log('WPPConnect QR (tentativas):', attempts);
@@ -52,9 +56,22 @@ export function getWppClient() {
           console.log('WPPConnect status:', statusSession, 'session:', session);
         }
       })
-      .then((client) => client);
+      .then((client) => client)
+      .catch((error) => {
+        clientPromise = null;
+        throw error;
+      });
   }
   return clientPromise;
+}
+
+export async function startWppClient() {
+  try {
+    await getWppClient();
+    console.log('WPPConnect iniciado.');
+  } catch (error) {
+    console.warn('Nao foi possivel iniciar o WPPConnect:', error);
+  }
 }
 
 export async function sendAdminAlert(message) {

@@ -1,7 +1,6 @@
 <%- include('../../admin/cabecalho2.ejs', { currentSection: 'denuncia', isAdmin: false }) %>
             <div id="listPage" class="page active">
                 <div class="page-header">
-                    <h2>Minhas Denúncias</h2>
                     <%
                         const filtroParams = typeof filtro !== 'undefined' ? filtro : {};
                         const relatorioParams = [];
@@ -12,7 +11,17 @@
                             ? `/usuario/relatorio/lst?${relatorioParams.join('&')}`
                             : '/usuario/relatorio/lst';
                     %>
-                    <a class="btn btn-primary" href="<%= relatorioUrl %>">Ver Relatório</a>
+                    <div>
+                        <h2>Minhas Denúncias</h2>
+                        <p>Acompanhe suas denúncias registradas no sistema.</p>
+                    </div>
+                    <a class="btn btn-primary" href="/usuario/denuncia/add">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14"></path>
+                            <path d="M5 12h14"></path>
+                        </svg>
+                        <span>Nova Denúncia</span>
+                    </a>
                 </div>
 
 
@@ -57,6 +66,18 @@
                         </thead>
                         <tbody id="tableBody"></tbody>
                     </table>
+                </div>
+
+                <div class="info-banner">
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        <path d="m9 12 2 2 4-5"></path>
+                    </svg>
+                    <div>
+                        <strong>Importante</strong>
+                        <span>O acompanhamento das denúncias é fundamental para a proteção do meio ambiente e dos animais.</span>
+                    </div>
+                    <a class="info-link" href="<%= relatorioUrl %>">Ver relatório</a>
                 </div>
             </div>
 
