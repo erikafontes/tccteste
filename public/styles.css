@@ -739,7 +739,7 @@ body {
     --brand-900: #0b3b22;
     --brand-800: #0f4a2b;
     --brand-700: #1f6b43;
-    --brand-100: #dcefe4;
+    --brand-100: #efe2dc;
     --brand-50: #eef8f2;
     --ink-900: #082416;
     --ink-700: #4b5563;
@@ -1263,6 +1263,261 @@ body {
     background: #d6dde0;
 }
 
+/* Tela de nova denúncia */
+.denuncia-create {
+    max-width: 1460px;
+    margin: 0 auto;
+}
+
+.denuncia-create .denuncia-page-title {
+    display: flex;
+    align-items: center;
+    gap: 1.45rem;
+    margin-bottom: 1.35rem;
+}
+
+.denuncia-create .title-icon {
+    width: 64px;
+    height: 64px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    background: #e8f4ec;
+    color: var(--brand-700);
+    box-shadow: inset 0 0 0 1px rgba(31, 107, 67, 0.08);
+}
+
+.denuncia-create .denuncia-page-title h2 {
+    margin: 0;
+    color: var(--brand-900);
+    font-size: 2rem;
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.denuncia-create .denuncia-page-title p {
+    margin-top: 0.45rem;
+    color: var(--ink-500);
+}
+
+.denuncia-create .form {
+    gap: 1rem;
+}
+
+.denuncia-card {
+    border: 1px solid #dfe6e2;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(12, 40, 24, 0.045);
+}
+
+.denuncia-card .card-header {
+    padding: 1.1rem 1.2rem 0.6rem;
+    border-bottom: none;
+}
+
+.denuncia-card .card-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 0 0.35rem;
+    color: var(--brand-900);
+    font-size: 1.08rem;
+    font-weight: 800;
+}
+
+.denuncia-card .card-header h3 svg {
+    color: var(--brand-700);
+}
+
+.denuncia-card .card-description {
+    color: #667085;
+    font-size: 0.92rem;
+}
+
+.denuncia-card .card-content {
+    padding: 0.65rem 1.2rem 1.2rem;
+}
+
+.denuncia-create .form-grid,
+.denuncia-create .form-grid-3,
+.denuncia-create .form-grid-4 {
+    gap: 1.15rem;
+}
+
+.denuncia-create .form-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.denuncia-create .form-grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.denuncia-create .form-grid-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.denuncia-create .form-group {
+    position: relative;
+    margin-bottom: 0.95rem;
+}
+
+.denuncia-create .form-group:last-child {
+    margin-bottom: 0;
+}
+
+.denuncia-create .form-group label {
+    color: var(--brand-900);
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+.denuncia-create .form-group input,
+.denuncia-create .form-group select,
+.denuncia-create .form-group textarea {
+    min-height: 44px;
+    border: 1px solid #d7dedb;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #1f2937;
+    font-size: 0.94rem;
+}
+
+.denuncia-create .form-group input::placeholder,
+.denuncia-create .form-group textarea::placeholder {
+    color: #7a8594;
+}
+
+.denuncia-create .form-group input:disabled,
+.denuncia-create .form-group input[readonly] {
+    background: #fafcfb;
+    color: #697586;
+}
+
+.denuncia-create .form-group textarea {
+    min-height: 68px;
+    resize: vertical;
+    padding-bottom: 1.7rem;
+}
+
+.field-with-icon {
+    position: relative;
+}
+
+.field-with-icon > svg {
+    position: absolute;
+    left: 0.85rem;
+    top: 50%;
+    z-index: 1;
+    transform: translateY(-50%);
+    color: var(--brand-700);
+    pointer-events: none;
+}
+
+.field-with-icon input,
+.field-with-icon select {
+    padding-left: 2.55rem;
+}
+
+.textarea-counter {
+    position: absolute;
+    right: 0.9rem;
+    bottom: 0.55rem;
+    color: #667085;
+    font-size: 0.8rem;
+}
+
+.occurrence-evidence-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.55fr);
+    gap: 1.15rem;
+    align-items: stretch;
+}
+
+.occurrence-evidence-grid .form-group {
+    margin-bottom: 0;
+}
+
+.evidence-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.evidence-hint {
+    margin: -0.2rem 0 0.55rem;
+    color: #667085;
+    font-size: 0.78rem;
+    line-height: 1.35;
+}
+
+.evidence-upload {
+    min-height: 94px;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 1rem;
+    border: 1px dashed #cfd8d4;
+    border-radius: 7px;
+    background: #fbfdfc;
+    color: var(--brand-900);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.evidence-upload:hover,
+.evidence-upload:focus-within {
+    border-color: var(--brand-700);
+    background: #f4faf6;
+    box-shadow: 0 0 0 3px rgba(31, 107, 67, 0.1);
+}
+
+.evidence-upload svg {
+    color: var(--brand-700);
+}
+
+.evidence-upload span {
+    font-size: 0.84rem;
+    font-weight: 800;
+}
+
+.evidence-upload small {
+    color: #667085;
+    font-size: 0.68rem;
+    line-height: 1.35;
+}
+
+.evidence-upload input {
+    display: none;
+}
+
+.denuncia-create .form-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    gap: 1rem;
+    padding: 0.9rem 0 0;
+    background: linear-gradient(180deg, rgba(248, 250, 249, 0), #f8faf9 36%);
+}
+
+.denuncia-create .form-actions .btn {
+    min-width: 138px;
+    min-height: 44px;
+    justify-content: center;
+}
+
+.denuncia-create .form-actions .btn-outline {
+    background: #fff;
+    color: #1f2937;
+}
+
+.denuncia-create .form-actions .btn svg {
+    flex: 0 0 auto;
+}
+
 @media (max-width: 1024px) {
     .sidebar {
         top: 94px;
@@ -1274,6 +1529,16 @@ body {
 
     .header-right {
         gap: 0.45rem;
+    }
+
+    .denuncia-create .form-grid,
+    .denuncia-create .form-grid-3,
+    .denuncia-create .form-grid-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .occurrence-evidence-grid {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -1348,5 +1613,34 @@ body {
 
     .footer-separator {
         display: none;
+    }
+
+    .denuncia-create .denuncia-page-title {
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .denuncia-create .title-icon {
+        width: 54px;
+        height: 54px;
+    }
+
+    .denuncia-create .denuncia-page-title h2 {
+        font-size: 1.55rem;
+    }
+
+    .denuncia-create .form-grid,
+    .denuncia-create .form-grid-3,
+    .denuncia-create .form-grid-4 {
+        grid-template-columns: 1fr;
+    }
+
+    .denuncia-create .form-actions {
+        position: static;
+        flex-direction: column-reverse;
+    }
+
+    .denuncia-create .form-actions .btn {
+        width: 100%;
     }
 }

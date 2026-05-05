@@ -13,12 +13,15 @@ const Denuncia = conexao.Schema({
     especie:{type:String},
     quantidade:{type:Number},
     situacao:{type:String, required:true},
+    descricao:{type:String},
+    evidencias:{type:[String], default:[]},
      foto: { type: String, required: false },
 
     //3,dados do proprietário
     nome:{type:String},
     cpf:{type:String},
     telefone:{type:String}, 
+    sigilo:{type:String},
     enderecoProprietario:{type:String},
 
     //4. providencias tomadas

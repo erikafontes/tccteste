@@ -15,14 +15,32 @@ export async function abreadddenuncia(req, res) {
     const isAdmin = req.originalUrl.startsWith('/admin');
     res.render('admin/denuncia/add2', { isAdmin })
 }
+
+async function gerarNumeroDenuncia() {
+    const ultimaDenuncia = await Denuncia
+        .findOne({ ndenuncia: { $ne: null } })
+        .sort({ ndenuncia: -1 })
+        .select('ndenuncia')
+        .lean();
+
+    return Number(ultimaDenuncia?.ndenuncia || 0) + 1;
+}
+
 export async function adddenuncia(req, res) {
-    const fotoupload = req.file ? req.file.filename : null;
+    const arquivosUpload = Array.isArray(req.files)
+        ? req.files.map((file) => file.filename)
+        : [
+            ...(req.files?.evidencias || []),
+            ...(req.files?.foto || [])
+        ].map((file) => file.filename);
+    const fotoupload = arquivosUpload[0] || (req.file ? req.file.filename : null);
     const isUser = req.originalUrl.startsWith('/usuario');
     const situacao = isUser ? 'Pendente' : req.body.situacao;
     const emailDenunciante = isUser && req.session.user?.email ? req.session.user.email : req.body.email;
+    const ndenuncia = await gerarNumeroDenuncia();
 
     const denunciaCriada = await Denuncia.create({
-        ndenuncia: req.body.ndenuncia,
+        ndenuncia,
         nomedenunciante: req.body.nomeDenunciante,
         email: emailDenunciante,
         fonte: req.body.fonte || 'Site',
@@ -32,10 +50,13 @@ export async function adddenuncia(req, res) {
         especie: req.body.especie,
         quantidade: req.body.quantidade,
         situacao,
+        descricao: req.body.descricao,
         foto: fotoupload,
+        evidencias: arquivosUpload,
         nome: req.body.nome,
         cpf: req.body.cpf,
         telefone: req.body.telefone,
+        sigilo: req.body.sigilo,
         enderecoProprietario: req.body.enderecoProprietario,
         providencia: req.body.providencia
     });
@@ -65,6 +86,7 @@ export async function listardenuncia(req, res) {
             especie: denuncia.especie ?? '',
             quantidade: denuncia.quantidade ?? '',
             situacao: denuncia.situacao ?? '',
+            descricao: denuncia.descricao ?? '',
             nome: denuncia.nome ?? '',
             enderecoProprietario: denuncia.enderecoProprietario ?? '',
             providencia: denuncia.providencia ?? ''
@@ -86,6 +108,7 @@ export async function listardenuncia(req, res) {
         especie: denuncia.especie ?? '',
         quantidade: denuncia.quantidade ?? '',
         situacao: denuncia.situacao ?? '',
+        descricao: denuncia.descricao ?? '',
         nome: denuncia.nome ?? '',
         enderecoProprietario: denuncia.enderecoProprietario ?? '',
         providencia: denuncia.providencia ?? ''
@@ -119,6 +142,7 @@ export async function filtrardenuncia(req, res) {
         especie: denuncia.especie ?? '',
         quantidade: denuncia.quantidade ?? '',
         situacao: denuncia.situacao ?? '',
+        descricao: denuncia.descricao ?? '',
         nome: denuncia.nome ?? '',
         enderecoProprietario: denuncia.enderecoProprietario ?? '',
         providencia: denuncia.providencia ?? ''

@@ -1,42 +1,61 @@
-<%- include('../cabecalho2.ejs') %>
+<%- include('../cabecalho2.ejs', { currentSection: 'denuncia' }) %>
 <% const isAdminFlag = typeof isAdmin === 'undefined' ? true : isAdmin; %>
 <% const basePath = isAdminFlag ? '/admin' : '/usuario'; %>
-<div id="formPage" class="page active">
-    <div class="page-header">
-        <button class="btn-back" type="button" onclick="window.location.href='<%= basePath %>/denuncia/lst'">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="19" y1="12" x2="5" y2="12"></line>
-                <polyline points="12 19 5 12 12 5"></polyline>
+<div id="formPage" class="page active denuncia-create">
+    <div class="denuncia-page-title">
+        <div class="title-icon">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <path d="M14 2v6h6"></path>
+                <path d="M12 18v-6"></path>
+                <path d="M9 15h6"></path>
             </svg>
-        </button>
-        <h2>Nova Denuncia</h2>
+        </div>
+        <div>
+            <h2>Nova Denúncia</h2>
+            <p>Preencha as informações abaixo para registrar sua denúncia.</p>
+        </div>
     </div>
 
     <form class="form" action="<%= basePath %>/denuncia/add<%= isAdminFlag ? '2' : '' %>" method="POST" enctype="multipart/form-data" id="denunciaFormServer">
-        <div class="card">
+        <div class="card denuncia-card">
             <div class="card-header">
-                <h3>Informacoes da Denúncia</h3>
+                <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <path d="M14 2v6h6"></path>
+                        <path d="M16 13H8"></path>
+                        <path d="M16 17H8"></path>
+                    </svg>
+                    Informações da Denúncia
+                </h3>
                 <p class="card-description">Dados básicos da denúncia registrada</p>
             </div>
             <div class="card-content">
-                <div class="form-grid">
+                <div class="form-grid form-grid-4">
                     <div class="form-group">
-                        <label for="ndenuncia">Numero da Denúncia</label>
-                        <input type="number" id="ndenuncia" name="ndenuncia" required>
+                        <label for="numeroPreview">Número da Denúncia</label>
+                        <input type="text" id="numeroPreview" value="Será gerado automaticamente" disabled>
                     </div>
                     <div class="form-group">
                         <label for="fonte">Fonte</label>
-                        <select id="fonte" name="fonte" required>
-                            <option value="WhatsApp">WhatsApp</option>
-                            <option value="Telefonema">Telefonema</option>
-                            <option value="Email">Email</option>
-                            <option value="Presencial">Presencial</option>
-                            <option value="Site">Site</option>
-                        </select>
+                        <div class="field-with-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
+                            </svg>
+                            <select id="fonte" name="fonte" required>
+                                <option value="Site">Site</option>
+                                <option value="WhatsApp">WhatsApp</option>
+                                <option value="Email">Email</option>
+                                   <option value="Telefonema">Telefonema</option>
+                                <option value="Presencial">Presencial</option>
+                             x
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="data">Data</label>
-                    <input type="date" name="data" value="<%= new Date().toISOString().split('T')[0] %>">
+                        <input type="date" id="data" name="data" value="<%= new Date().toISOString().split('T')[0] %>" required>
                     </div>
                     <div class="form-group">
                         <label for="hora">Hora</label>
@@ -46,15 +65,21 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="card denuncia-card">
             <div class="card-header">
-                <h3>Dados do Denunciante</h3>
+                <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21a8 8 0 0 0-16 0"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    Dados do Denunciante
+                </h3>
                 <p class="card-description">Informações da pessoa que registrou a denúncia</p>
             </div>
             <div class="card-content">
                 <div class="form-group">
                     <label for="nomeDenunciante">Nome Completo</label>
-                    <input type="text" id="nomeDenunciante" name="nomeDenunciante" required>
+                    <input type="text" id="nomeDenunciante" name="nomeDenunciante" placeholder="Digite seu nome completo" required>
                 </div>
                 <div class="form-grid">
                     <div class="form-group">
@@ -63,7 +88,7 @@
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
+                        <input type="email" id="email" name="email" placeholder="Digite seu email" required>
                     </div>
                     <div class="form-group">
                         <label for="telefone">Telefone</label>
@@ -71,99 +96,156 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="endereco">Endereco do Local</label>
-                    <input type="text" id="endereco" name="endereco" required>
+                    <label for="endereco">Endereço do denunciante (opcional)</label>
+                    <input type="text" id="endereco" name="endereco" placeholder="Digite seu endereço completo">
+                </div>
+                <div class="form-group sigilo-field">
+                    <label for="sigilo">Sigilo da Denúncia</label>
+                    <div class="field-with-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+                            <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
+                        </svg>
+                        <select id="sigilo" name="sigilo" required>
+                            <option value="sim">Sim, desejo manter meus dados em sigilo</option>
+                            <option value="nao">Não, autorizo a identificação dos meus dados</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="card">
+        <div class="card denuncia-card">
             <div class="card-header">
-                <h3>Detalhes da Ocorrencia</h3>
-                <p class="card-description">Informações específicas sobre a denuncia</p>
+                <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 20A7 7 0 0 1 4 13c0-5 7-9 7-9s7 4 7 9a7 7 0 0 1-7 7Z"></path>
+                        <path d="M11 20c0-4 2-7 5-9"></path>
+                    </svg>
+                    Detalhes da Ocorrência
+                </h3>
+                <p class="card-description">Informações específicas sobre a denúncia</p>
             </div>
             <div class="card-content">
                 <div class="form-grid-3">
                     <div class="form-group">
                         <label for="especie">Espécie</label>
-                        <select id="especie" name="especie" required>
-                            <option value="Animais">Animais</option>
-                            <option value="Ambiental">Ambiental</option>
-                        </select>
+                        <div class="field-with-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11.5 9.5c.8-1.6 2.8-1.6 3.6 0 .8 1.6-.3 3.5-1.8 3.5s-2.6-1.9-1.8-3.5Z"></path>
+                                <circle cx="6.5" cy="8.5" r="1.6"></circle>
+                                <circle cx="10" cy="5.5" r="1.6"></circle>
+                                <circle cx="14" cy="5.5" r="1.6"></circle>
+                                <circle cx="17.5" cy="8.5" r="1.6"></circle>
+                            </svg>
+                            <select id="especie" name="especie" required>
+                                <option value="Animais">Animais</option>
+                                <option value="Ambiental">Ambiental</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="quantidade">Quantidade</label>
-                        <input type="number" id="quantidade" name="quantidade" min="1" value="1" required>
+                        <div class="field-with-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 9h16"></path>
+                                <path d="M4 15h16"></path>
+                                <path d="M10 3 8 21"></path>
+                                <path d="m16 3-2 18"></path>
+                            </svg>
+                            <input type="number" id="quantidade" name="quantidade" min="1" value="1" required>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="situacao">Situação</label>
                         <% if (isAdminFlag) { %>
-                            <select id="situacao" name="situacao" required>
-                                <option value="Pendente">Pendente</option>
-                                <option value="Em Análise">Em Análise</option>
-                                <option value="Em Andamento">Em Andamento</option>
-                                <option value="Resolvida">Resolvida</option>
-                                <option value="Arquivada">Arquivada</option>
-                            </select>
+                            <div class="field-with-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 22V4"></path>
+                                    <path d="M4 4h14l-1 5 1 5H4"></path>
+                                </svg>
+                                <select id="situacao" name="situacao" required>
+                                    <option value="Pendente">Pendente</option>
+                                    <option value="Em Análise">Em Análise</option>
+                                    <option value="Em Andamento">Em Andamento</option>
+                                    <option value="Resolvida">Resolvida</option>
+                                    <option value="Arquivada">Arquivada</option>
+                                </select>
+                            </div>
                         <% } else { %>
                             <input type="hidden" id="situacao" name="situacao" value="Pendente">
-                            <input type="text" value="Pendente" readonly>
+                            <div class="field-with-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 22V4"></path>
+                                    <path d="M4 4h14l-1 5 1 5H4"></path>
+                                </svg>
+                                <input type="text" value="Pendente" readonly>
+                            </div>
                         <% } %>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="foto">Foto/Evidência</label>
-                    <div class="upload-box">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="17 8 12 3 7 8"></polyline>
-                            <line x1="12" y1="3" x2="12" y2="15"></line>
-                        </svg> 
-                         <label for="foto">Clique aqui para adicionar</label>
-                          <input type="file" id="foto" name="foto">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h3>Dados do Denunciado</h3>
-                <p class="card-description">Informações sobre o suspeito/responsável</p>
-            </div>
-            <div class="card-content">
-                <div class="form-group">
-                    <label for="nome">Nome do Denunciado</label>
-                    <input type="text" id="nome" name="nome" placeholder="Nome ou razão social">
-                </div>
-                <div class="form-group">
-                    <label for="enderecoProprietario">Endereco do Denunciado</label>
-                    <input type="text" id="enderecoProprietario" name="enderecoProprietario">
-                </div>
-            </div>
-        </div>
-
-        <% if (isAdminFlag) { %>
-            <div class="card">
-                <div class="card-header">
-                    <h3>Providências Tomadas</h3>
-                    <p class="card-description">Ações realizadas pela equipe</p>
-                </div>
-                <div class="card-content">
+                <div class="occurrence-evidence-grid">
                     <div class="form-group">
-                        <textarea id="providencia" name="providencia" rows="5" placeholder="Descreva as providências tomadas..."></textarea>
+                        <label for="descricao">Descrição da ocorrência</label>
+                        <textarea id="descricao" name="descricao" rows="4" maxlength="1000" placeholder="Descreva detalhes da ocorrência, local, características e outras informações relevantes..."></textarea>
+                        <span class="textarea-counter">0/1000</span>
+                    </div>
+                    <div class="form-group evidence-field">
+                        <label for="evidencias">Evidências (fotos, vídeos, áudios e arquivos)</label>
+                        <p class="evidence-hint">Anexe fotos, vídeos, áudios, PDFs ou documentos que comprovem a ocorrência.</p>
+                        <label class="evidence-upload" for="evidencias">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                                <path d="M14 2v6h6"></path>
+                                <path d="M12 18v-6"></path>
+                                <path d="M9 15h6"></path>
+                            </svg>
+                            <span>Clique para anexar ou arraste arquivos aqui</span>
+                            <small>PNG, JPG, MP4, AVI, MP3, WAV, PDF, DOC, XLS, ZIP. Máx. 50MB cada.</small>
+                            <input
+                                type="file"
+                                id="evidencias"
+                                name="evidencias"
+                                multiple
+                                accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.zip,.rar,.7z"
+                            >
+                        </label>
                     </div>
                 </div>
             </div>
-        <% } %>
+        </div>
 
         <div class="form-actions">
-            <button type="button" class="btn btn-outline" onclick="window.location.href='<%= basePath %>/denuncia/lst'">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Cadastrar Denúncia</button>
+            <button type="button" class="btn btn-outline" onclick="window.location.href='<%= basePath %>/denuncia/lst'">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6 6 18"></path>
+                    <path d="m6 6 12 12"></path>
+                </svg>
+                Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m22 2-7 20-4-9-9-4Z"></path>
+                    <path d="M22 2 11 13"></path>
+                </svg>
+                Registrar Denúncia
+            </button>
         </div>
     </form>
 </div>
 
 <script src="/script.js"></script>
+<script>
+    const descricao = document.getElementById('descricao');
+    const descricaoCounter = document.querySelector('.textarea-counter');
+
+    if (descricao && descricaoCounter) {
+        const updateCounter = () => {
+            descricaoCounter.textContent = `${descricao.value.length}/1000`;
+        };
+
+        descricao.addEventListener('input', updateCounter);
+        updateCounter();
+    }
+</script>
 <%- include('../rodape.ejs') %>

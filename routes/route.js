@@ -15,6 +15,10 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+const uploadDenuncia = upload.fields([
+    { name: 'evidencias', maxCount: 10 },
+    { name: 'foto', maxCount: 10 }
+]);
 
 // Importando os controllers
 import {
@@ -69,9 +73,9 @@ router.get('/', (req, res) => res.redirect('/cadastro'));
 // router.get('/admin/denuncia/add', abreadddenuncia);
 // router.post('/admin/denuncia/add', upload.single('foto'), adddenuncia);
 router.get('/admin/denuncia/add2', abreadddenuncia);
-router.post('/admin/denuncia/add2', upload.single('foto'), adddenuncia);
+router.post('/admin/denuncia/add2', uploadDenuncia, adddenuncia);
 router.get('/usuario/denuncia/add', abreadddenuncia);
-router.post('/usuario/denuncia/add', upload.single('foto'), adddenuncia);
+router.post('/usuario/denuncia/add', uploadDenuncia, adddenuncia);
 
 router.get('/admin/denuncia/lst', listardenuncia);
 router.post('/admin/denuncia/lst', filtrardenuncia);
