@@ -14,12 +14,12 @@ body {
 }
 
 :root {
-    --brand-900: #0b1f4b;
-    --brand-800: #0d2a66;
-    --brand-700: #1e3a8a;
-    --brand-600: #2563eb;
-    --brand-100: #dbeafe;
-    --brand-50: #eff6ff;
+    --brand-900: #0d311d;
+    --brand-800: #16421f;
+    --brand-700: #1f5b2e;
+    --brand-600: #2f7a3f;
+    --brand-100: #e8f4ec;
+    --brand-50: #f3faf5;
 }
 
 /* Header */
@@ -314,8 +314,8 @@ body {
 }
 
 .badge-blue {
-    background-color: #dbeafe;
-    color: #1e3a8a;
+    background-color: var(--brand-100);
+    color: var(--brand-700);
 }
 
 .badge-purple {
@@ -331,6 +331,32 @@ body {
 .badge-gray {
     background-color: #f3f4f6;
     color: #374151;
+}
+
+.badge-request {
+    display: block;
+    width: max-content;
+    margin-top: 0.35rem;
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.row-alert {
+    background-color: #fff7ed;
+}
+
+.row-alert:hover {
+    background-color: #ffedd5;
+}
+
+.request-alert {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 0.35rem;
+    color: #991b1b;
+    font-size: 0.75rem;
+    font-weight: 700;
 }
 
 /* Actions */
@@ -354,7 +380,7 @@ body {
 }
 
 .action-btn.view {
-    color: #2563eb;
+    color: var(--brand-600);
 }
 
 .action-btn.edit {
@@ -451,7 +477,7 @@ body {
 .form-group textarea:focus {
     outline: none;
     border-color: var(--brand-700);
-    box-shadow: 0 0 0 3px rgba(11, 31, 75, 0.12);
+    box-shadow: 0 0 0 3px rgba(31, 91, 46, 0.14);
 }
 
 .form-group input:disabled {
@@ -554,7 +580,7 @@ body {
 }
 
 .stat-icon.blue {
-    color: #3b82f6;
+    color: var(--brand-600);
 }
 
 .stat-icon.green {
@@ -640,7 +666,7 @@ body {
 }
 
 .status-dot.blue {
-    background-color: #3b82f6;
+    background-color: var(--brand-600);
 }
 
 .status-dot.purple {

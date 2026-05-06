@@ -13,6 +13,18 @@ function normalizeNumber(raw) {
   return digits;
 }
 
+function buildNumberCandidates(digits) {
+  const candidates = [digits];
+
+  // Brasil: 55 + DDD + numero. Se vier celular antigo com 8 digitos,
+  // tenta tambem com o nono digito depois do DDD.
+  if (digits.startsWith('55') && digits.length === 12) {
+    candidates.push(`${digits.slice(0, 4)}9${digits.slice(4)}`);
+  }
+
+  return [...new Set(candidates)];
+}
+
 async function waitForReady(client, timeoutMs = 30000, intervalMs = 1000) {
   const started = Date.now();
   while (Date.now() - started < timeoutMs) {
@@ -48,6 +60,13 @@ export function getWppClient() {
         waitForLogin: true,
         browserArgs: ['--no-sandbox', '--disable-setuid-sandbox'],
         logQR: true,
+        puppeteerOptions: {
+          args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage'
+          ]
+        },
         catchQR: (_base64, asciiQR, attempts) => {
           console.log('WPPConnect QR (tentativas):', attempts);
           console.log(asciiQR);
@@ -84,24 +103,32 @@ export async function sendAdminAlert(message) {
 
   const client = await getWppClient();
   await waitForReady(client);
-  let chatId = `${digits}@c.us`;
-  try {
-    if (typeof client.checkNumberStatus === 'function') {
-      const status = await client.checkNumberStatus(digits);
-      if (status && status.numberExists && status.id && status.id._serialized) {
-        chatId = status.id._serialized;
-      } else {
-        console.warn('Numero nao existe ou nao recebeu ID do WhatsApp:', status);
+
+  const candidates = buildNumberCandidates(digits);
+  for (const candidate of candidates) {
+    let chatId = `${candidate}@c.us`;
+
+    try {
+      if (typeof client.checkNumberStatus === 'function') {
+        const status = await client.checkNumberStatus(candidate);
+        if (!status || status.numberExists === false) {
+          console.warn('Numero nao encontrado no WhatsApp:', candidate, status);
+          continue;
+        }
+        if (status.id && status.id._serialized) {
+          chatId = status.id._serialized;
+        }
       }
+    } catch (error) {
+      console.warn('Falha ao checar numero no WhatsApp:', candidate, error);
     }
-  } catch (error) {
-    console.warn('Falha ao checar numero no WhatsApp:', error);
+
+    try {
+      return await client.sendText(chatId, message);
+    } catch (error) {
+      console.warn('Falha ao enviar alerta pelo WhatsApp:', chatId, error);
+    }
   }
 
-  try {
-    return await client.sendText(chatId, message);
-  } catch (error) {
-    console.warn('Falha ao enviar alerta pelo WhatsApp:', error);
-    return;
-  }
+  console.warn('Alerta nao enviado. Nenhum numero valido encontrado para WPP_ADMIN_NUMBER:', rawNumber);
 }

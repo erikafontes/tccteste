@@ -9,7 +9,11 @@ const storage = multer.diskStorage({
         cb(null, './public/imagem');
     },
     filename: function (req, file, cb) {
-        const nome = Date.now() + '-' + file.originalname;
+        const nomeArquivo = file.originalname
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-zA-Z0-9._-]/g, '-');
+        const nome = Date.now() + '-' + nomeArquivo;
         cb(null, nome);
     }
 });
