@@ -196,7 +196,7 @@
                     <div class="form-group evidence-field">
                         <label for="evidencias">Evidências (fotos, vídeos, áudios e arquivos)</label>
                         <p class="evidence-hint">Anexe fotos, vídeos, áudios, PDFs ou documentos que comprovem a ocorrência.</p>
-                        <label class="evidence-upload" for="evidencias">
+                        <label class="evidence-upload" id="evidenceUploadBox" for="evidencias">
                             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
                                 <path d="M14 2v6h6"></path>
@@ -213,6 +213,10 @@
                                 accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.xls,.xlsx,.csv,.txt,.zip,.rar,.7z"
                             >
                         </label>
+                        <div class="evidence-list" id="evidenceList" aria-live="polite"></div>
+                        <button class="btn btn-outline evidence-add-more" type="button" id="addMoreEvidence">
+                            Adicionar mais
+                        </button>
                     </div>
                 </div>
             </div>
@@ -250,5 +254,80 @@
         descricao.addEventListener('input', updateCounter);
         updateCounter();
     }
+
+    const evidenciasInput = document.getElementById('evidencias');
+    const evidenceUploadBox = document.getElementById('evidenceUploadBox');
+    const evidenceList = document.getElementById('evidenceList');
+    const addMoreEvidence = document.getElementById('addMoreEvidence');
+    const selectedEvidenceFiles = [];
+
+    const formatFileSize = (bytes) => {
+        if (bytes < 1024) return `${bytes} B`;
+        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+        return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    };
+
+    const syncEvidenceInput = () => {
+        if (!evidenciasInput) return;
+
+        const transfer = new DataTransfer();
+        selectedEvidenceFiles.forEach((file) => transfer.items.add(file));
+        evidenciasInput.files = transfer.files;
+    };
+
+    const renderEvidenceList = () => {
+        if (!evidenceList) return;
+
+        if (!selectedEvidenceFiles.length) {
+            evidenceList.innerHTML = '';
+            evidenceList.classList.remove('has-files');
+            evidenceUploadBox?.classList.remove('is-hidden');
+            return;
+        }
+
+        evidenceUploadBox?.classList.add('is-hidden');
+        evidenceList.classList.add('has-files');
+        evidenceList.innerHTML = '';
+
+        selectedEvidenceFiles.forEach((file, index) => {
+            const item = document.createElement('div');
+            const content = document.createElement('div');
+            const idLabel = document.createElement('strong');
+            const fileName = document.createElement('span');
+            const fileSize = document.createElement('small');
+
+            item.className = 'evidence-item';
+            idLabel.textContent = `ID do arquivo: Arquivo ${index + 1}`;
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+
+            content.append(idLabel, fileName);
+            item.append(content, fileSize);
+            evidenceList.appendChild(item);
+        });
+    };
+
+    if (evidenciasInput) {
+        evidenciasInput.addEventListener('change', () => {
+            Array.from(evidenciasInput.files || []).forEach((file) => {
+                const alreadyAdded = selectedEvidenceFiles.some((selectedFile) => (
+                    selectedFile.name === file.name &&
+                    selectedFile.size === file.size &&
+                    selectedFile.lastModified === file.lastModified
+                ));
+
+                if (!alreadyAdded) {
+                    selectedEvidenceFiles.push(file);
+                }
+            });
+
+            syncEvidenceInput();
+            renderEvidenceList();
+        });
+    }
+
+    addMoreEvidence?.addEventListener('click', () => {
+        evidenciasInput?.click();
+    });
 </script>
 <%- include('../rodape.ejs') %>

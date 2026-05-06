@@ -1520,6 +1520,137 @@ body {
     display: none;
 }
 
+.evidence-upload.is-hidden {
+    display: none;
+}
+
+.evidence-list {
+    display: none;
+    flex-direction: column;
+    gap: 0.55rem;
+    margin-top: 0.75rem;
+}
+
+.evidence-list.has-files {
+    display: flex;
+}
+
+.evidence-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    padding: 0.72rem 0.85rem;
+    border: 1px solid #d7e2dc;
+    border-radius: 7px;
+    background: #ffffff;
+}
+
+.evidence-item div {
+    min-width: 0;
+}
+
+.evidence-item strong,
+.evidence-item span {
+    display: block;
+}
+
+.evidence-item strong {
+    color: var(--brand-900);
+    font-size: 0.78rem;
+}
+
+.evidence-item span {
+    overflow: hidden;
+    margin-top: 0.18rem;
+    color: #475467;
+    font-size: 0.76rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.evidence-item small {
+    flex: 0 0 auto;
+    color: #667085;
+    font-size: 0.72rem;
+}
+
+.evidence-add-more {
+    display: none;
+    width: 100%;
+    margin-top: 0.75rem;
+    justify-content: center;
+}
+
+.evidence-list.has-files + .evidence-add-more {
+    display: inline-flex;
+}
+
+.evidence-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.9rem;
+}
+
+.evidence-preview-item {
+    min-width: 0;
+    padding: 0.85rem;
+    border: 1px solid #d7e2dc;
+    border-radius: 7px;
+    background: #ffffff;
+}
+
+.evidence-preview-item strong,
+.evidence-preview-item span {
+    display: block;
+}
+
+.evidence-preview-item strong {
+    margin-bottom: 0.6rem;
+    color: var(--brand-900);
+    font-size: 0.84rem;
+}
+
+.evidence-preview-item img,
+.evidence-preview-item video {
+    width: 100%;
+    max-height: 280px;
+    border-radius: 7px;
+    background: #f3f6f4;
+    object-fit: contain;
+}
+
+.evidence-preview-item audio {
+    width: 100%;
+}
+
+.evidence-preview-item span {
+    overflow: hidden;
+    margin-top: 0.55rem;
+    color: #475467;
+    font-size: 0.78rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.evidence-file-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    width: 100%;
+    border: 1px solid #cfd8d4;
+    border-radius: 7px;
+    color: var(--brand-900);
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.evidence-file-link:hover {
+    background: #f4faf6;
+    border-color: var(--brand-700);
+}
+
 .denuncia-create .form-actions {
     position: sticky;
     bottom: 0;

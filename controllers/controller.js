@@ -33,7 +33,11 @@ export async function adddenuncia(req, res) {
             ...(req.files?.evidencias || []),
             ...(req.files?.foto || [])
         ].map((file) => file.filename);
-    const fotoupload = arquivosUpload[0] || (req.file ? req.file.filename : null);
+    const extensoesImagem = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif', '.bmp'];
+    const fotoupload = arquivosUpload.find((arquivo) => {
+        const arquivoLower = arquivo.toLowerCase();
+        return extensoesImagem.some((extensao) => arquivoLower.endsWith(extensao));
+    }) || (req.file ? req.file.filename : null);
     const isUser = req.originalUrl.startsWith('/usuario');
     const situacao = isUser ? 'Pendente' : req.body.situacao;
     const emailDenunciante = isUser && req.session.user?.email ? req.session.user.email : req.body.email;
