@@ -26,18 +26,27 @@ async function gerarNumeroDenuncia() {
     return Number(ultimaDenuncia?.ndenuncia || 0) + 1;
 }
 
-export async function adddenuncia(req, res) {
-    const arquivosUpload = Array.isArray(req.files)
+function obterArquivosUpload(req) {
+    return Array.isArray(req.files)
         ? req.files.map((file) => file.filename)
         : [
             ...(req.files?.evidencias || []),
             ...(req.files?.foto || [])
         ].map((file) => file.filename);
+}
+
+function obterPrimeiraImagem(arquivos) {
     const extensoesImagem = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif', '.bmp'];
-    const fotoupload = arquivosUpload.find((arquivo) => {
-        const arquivoLower = arquivo.toLowerCase();
+
+    return arquivos.find((arquivo) => {
+        const arquivoLower = String(arquivo).toLowerCase();
         return extensoesImagem.some((extensao) => arquivoLower.endsWith(extensao));
-    }) || (req.file ? req.file.filename : null);
+    }) || null;
+}
+
+export async function adddenuncia(req, res) {
+    const arquivosUpload = obterArquivosUpload(req);
+    const fotoupload = obterPrimeiraImagem(arquivosUpload) || (req.file ? req.file.filename : null);
     const isUser = req.originalUrl.startsWith('/usuario');
     const situacao = isUser ? 'Pendente' : req.body.situacao;
     const emailDenunciante = isUser && req.session.user?.email ? req.session.user.email : req.body.email;
@@ -54,6 +63,7 @@ export async function adddenuncia(req, res) {
         especie: req.body.especie,
         quantidade: req.body.quantidade,
         situacao,
+        descricaoSituacao: req.body.descricaoSituacao,
         descricao: req.body.descricao,
         foto: fotoupload,
         evidencias: arquivosUpload,
@@ -90,6 +100,7 @@ export async function listardenuncia(req, res) {
             especie: denuncia.especie ?? '',
             quantidade: denuncia.quantidade ?? '',
             situacao: denuncia.situacao ?? '',
+            descricaoSituacao: denuncia.descricaoSituacao ?? '',
             descricao: denuncia.descricao ?? '',
             nome: denuncia.nome ?? '',
             enderecoProprietario: denuncia.enderecoProprietario ?? '',
@@ -112,6 +123,7 @@ export async function listardenuncia(req, res) {
         especie: denuncia.especie ?? '',
         quantidade: denuncia.quantidade ?? '',
         situacao: denuncia.situacao ?? '',
+        descricaoSituacao: denuncia.descricaoSituacao ?? '',
         descricao: denuncia.descricao ?? '',
         nome: denuncia.nome ?? '',
         enderecoProprietario: denuncia.enderecoProprietario ?? '',
@@ -146,6 +158,7 @@ export async function filtrardenuncia(req, res) {
         especie: denuncia.especie ?? '',
         quantidade: denuncia.quantidade ?? '',
         situacao: denuncia.situacao ?? '',
+        descricaoSituacao: denuncia.descricaoSituacao ?? '',
         descricao: denuncia.descricao ?? '',
         nome: denuncia.nome ?? '',
         enderecoProprietario: denuncia.enderecoProprietario ?? '',
@@ -205,7 +218,7 @@ export async function reativardenuncia(req, res) {
 }
 export async function abreedtdenuncia(req, res){
     const resultado = await Denuncia.findById(req.params.id)
-    res.render('admin/denuncia/edt',{Denuncia: resultado})
+    res.render('admin/denuncia/ver',{Denuncia: resultado, isAdmin: true})
 }
 export async function abreverdenuncia(req, res){
     const resultado = await Denuncia.findById(req.params.id)
@@ -261,23 +274,35 @@ export async function solicitarInativacaoDenuncia(req, res) {
 }
 export async function edtdenuncia(req, res) {
   try {
-    const updateData = {
-      providencia: req.body.providencia
-    };
+    const denunciaAtual = await Denuncia.findById(req.params.id);
 
-    if (req.file) {
-      updateData.foto = req.file.filename;
-    } else if (req.body.fotoatual) {
-      updateData.foto = req.body.fotoatual;
-    } else {
-      updateData.foto = null;
+    if (!denunciaAtual) {
+      return res.status(404).send('Denúncia não encontrada.');
     }
 
-    // Força retorno do documento atualizado (útil para depurar)
-    const denunciaAtualizada = await Denuncia.findByIdAndUpdate(req.params.id, updateData, { new: true });
-    console.log('Denuncia atualizada:', denunciaAtualizada);
+    const manterEvidencias = req.body.manterEvidencias
+      ? (Array.isArray(req.body.manterEvidencias) ? req.body.manterEvidencias : [req.body.manterEvidencias])
+      : [];
+    const evidenciasAtuais = Array.isArray(denunciaAtual.evidencias) && denunciaAtual.evidencias.length
+      ? denunciaAtual.evidencias
+      : (denunciaAtual.foto ? [denunciaAtual.foto] : []);
+    const arquivosUpload = obterArquivosUpload(req);
+    const evidencias = [
+      ...evidenciasAtuais.filter((arquivo) => manterEvidencias.includes(arquivo)),
+      ...arquivosUpload
+    ];
 
-    res.redirect('/admin/denuncia/lst');
+    const updateData = {
+      situacao: req.body.situacao,
+      descricaoSituacao: req.body.descricaoSituacao,
+      providencia: req.body.providencia,
+      evidencias,
+      foto: obterPrimeiraImagem(evidencias)
+    };
+
+    await Denuncia.findByIdAndUpdate(req.params.id, updateData, { new: true });
+
+    res.redirect(`/admin/denuncia/ver/${req.params.id}`);
   } catch (error) {
     console.error('Erro ao atualizar denuncia:', error);
     res.status(500).send('Erro ao atualizar denuncia');

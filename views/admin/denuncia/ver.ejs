@@ -12,7 +12,7 @@
         <h2>Visualizar Denúncia</h2>
     </div>
 
-    <div class="form">
+    <form class="form denuncia-case-form" action="<%= isAdminFlag ? `/admin/denuncia/edt/${Denuncia._id}` : '#' %>" method="POST" enctype="multipart/form-data">
         <div class="card">
             <div class="card-header">
                 <h3>Informacoes da Denúncia</h3>
@@ -97,7 +97,7 @@
                     </div>
                     <div class="form-group">
                         <label for="situacao">Situação</label>
-                        <select id="situacao" name="situacao" disabled>
+                        <select id="situacao" name="situacao" <%= isAdminFlag ? '' : 'disabled' %>>
                             <option value="Pendente" <%= Denuncia.situacao === 'Pendente' ? 'selected' : '' %>>Pendente</option>
                             <option value="Em Análise" <%= Denuncia.situacao === 'Em Análise' ? 'selected' : '' %>>Em Análise</option>
                             <option value="Em Andamento" <%= Denuncia.situacao === 'Em Andamento' ? 'selected' : '' %>>Em Andamento</option>
@@ -109,10 +109,10 @@
                 </div>
                 <div class="form-group">
                     <label for="descricaoSituacao">Situação do caso</label>
-                    <textarea id="descricaoSituacao" name="descricaoSituacao" rows="5" readonly><%= Denuncia.descricaoSituacao || '' %></textarea>
+                    <textarea id="descricaoSituacao" name="descricaoSituacao" rows="5" <%= isAdminFlag ? '' : 'readonly' %>><%= Denuncia.descricaoSituacao || '' %></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Foto/Evidência</label>
+                    <label>Arquivos e Evidências</label>
                     <%
                         const evidencias = Array.isArray(Denuncia.evidencias) && Denuncia.evidencias.length
                             ? Denuncia.evidencias
@@ -148,11 +148,30 @@
                                         </a>
                                     <% } %>
                                     <span title="<%= arquivoNome %>"><%= arquivoNome %></span>
+                                    <% if (isAdminFlag) { %>
+                                        <label class="evidence-keep-toggle">
+                                            <input type="checkbox" name="manterEvidencias" value="<%= arquivo %>" checked>
+                                            Manter arquivo
+                                        </label>
+                                    <% } %>
                                 </div>
                             <% }) %>
                         </div>
                     <% } else { %>
                         <div style="color: #6b7280; font-size: 0.9rem;">Sem foto anexada</div>
+                    <% } %>
+                    <% if (isAdminFlag) { %>
+                        <label class="evidence-upload evidence-upload-edit" for="evidencias">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <span>Adicionar novas evidências</span>
+                            <small>Fotos, vídeos, áudios, PDF ou outros documentos</small>
+                            <input type="file" id="evidencias" name="evidencias" multiple>
+                        </label>
+                        <div class="evidence-list" id="editEvidenceList"></div>
                     <% } %>
                 </div>
             </div>
@@ -183,7 +202,7 @@
                 </div>
                 <div class="card-content">
                     <div class="form-group">
-                        <textarea id="providencia" name="providencia" rows="5" readonly><%= Denuncia.providencia %></textarea>
+                        <textarea id="providencia" name="providencia" rows="5"><%= Denuncia.providencia %></textarea>
                     </div>
                 </div>
             </div>
@@ -191,8 +210,44 @@
 
         <div class="form-actions">
             <button type="button" class="btn btn-outline" onclick="window.location.href='<%= basePath %>/denuncia/lst'">Voltar</button>
+            <% if (isAdminFlag) { %>
+                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+            <% } %>
         </div>
-    </div>
+    </form>
 </div>
+
+<% if (isAdminFlag) { %>
+    <script>
+        const editEvidenceInput = document.getElementById('evidencias');
+        const editEvidenceList = document.getElementById('editEvidenceList');
+
+        editEvidenceInput?.addEventListener('change', () => {
+            const files = Array.from(editEvidenceInput.files || []);
+            if (!editEvidenceList) return;
+
+            editEvidenceList.innerHTML = '';
+            editEvidenceList.classList.toggle('has-files', files.length > 0);
+
+            files.forEach((file, index) => {
+                const item = document.createElement('div');
+                const info = document.createElement('div');
+                const title = document.createElement('strong');
+                const name = document.createElement('span');
+                const size = document.createElement('small');
+
+                item.className = 'evidence-item';
+                title.textContent = `Novo arquivo ${index + 1}`;
+                name.textContent = file.name;
+                name.title = file.name;
+                size.textContent = `${(file.size / 1024 / 1024).toFixed(2)} MB`;
+
+                info.append(title, name);
+                item.append(info, size);
+                editEvidenceList.appendChild(item);
+            });
+        });
+    </script>
+<% } %>
 
 <%- include('../rodape.ejs') %>

@@ -91,7 +91,7 @@ router.get('/admin/usuarios/add', abreCadastroAdmin);
 router.post('/admin/usuarios/add', cadastroAdmin);
 
 router.get('/admin/denuncia/edt/:id', abreedtdenuncia);
-router.post('/admin/denuncia/edt/:id', upload.single('foto'), edtdenuncia);
+router.post('/admin/denuncia/edt/:id', uploadDenuncia, edtdenuncia);
 router.get('/admin/denuncia/ver/:id', abreverdenuncia);
 
 router.get('/usuario/denuncia/lst', listardenuncia);

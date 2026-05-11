@@ -14,6 +14,15 @@ function getSituacaoBadgeClass(situacao) {
     return classes[situacao] || '';
 }
 
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
 // Função para renderizar a tabela
 function renderTable(data) {
     const tbody = document.getElementById('tableBody');
@@ -51,6 +60,7 @@ function renderTable(data) {
             </td>
             <td>
                 <span class="badge ${getSituacaoBadgeClass(denuncia.situacao)}">${denuncia.situacao}</span>
+                ${denuncia.descricaoSituacao ? `<div class="case-status-note">${escapeHtml(denuncia.descricaoSituacao)}</div>` : ''}
             </td>
             <td>
                 <div class="actions">
