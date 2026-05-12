@@ -1,4 +1,8 @@
 import express from 'express'
+import { loadEnv } from './config/env.js'
+
+loadEnv();
+
 const app = express();
 
 import session from 'express-session'

@@ -1,133 +1,93 @@
 <%- include('../cabecalho2.ejs', { currentSection: 'denuncia' }) %>
 <% const isAdminFlag = typeof isAdmin === 'undefined' ? true : isAdmin; %>
 <% const basePath = isAdminFlag ? '/admin' : '/usuario'; %>
-<div id="viewPage" class="page active">
-    <div class="page-header">
-        <button class="btn-back" type="button" onclick="window.location.href='<%= basePath %>/denuncia/lst'">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="19" y1="12" x2="5" y2="12"></line>
-                <polyline points="12 19 5 12 12 5"></polyline>
-            </svg>
-        </button>
-        <h2>Visualizar Denúncia</h2>
-    </div>
+<% const isAnimalCase = Denuncia.especie === 'Animais'; %>
+<% const tipoLabel = isAnimalCase ? 'Tipo de ocorrência' : 'Tipo de crime ambiental'; %>
+<% const pageTitle = isAnimalCase ? 'Denúncia de Crime contra Animais' : 'Denúncia de Crime Ambiental'; %>
+<% const crumbTitle = isAnimalCase ? 'Crimes contra Animais' : 'Crimes Ambientais'; %>
+<% const dataValue = Denuncia.data ? new Date(Denuncia.data).toISOString().split('T')[0] : ''; %>
+<%
+    const evidencias = Array.isArray(Denuncia.evidencias) && Denuncia.evidencias.length
+        ? Denuncia.evidencias
+        : (Denuncia.foto ? [Denuncia.foto] : []);
+    const imageExts = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif', '.bmp'];
+    const videoExts = ['.mp4', '.webm', '.ogg', '.mov', '.avi'];
+    const audioExts = ['.mp3', '.wav', '.ogg', '.m4a'];
+    const getFileName = (arquivo) => String(arquivo).split(/[\\/]/).pop();
+    const getFileUrl = (arquivo) => `/imagem/${encodeURIComponent(getFileName(arquivo))}`;
+    const getFileExt = (arquivo) => {
+        const arquivoLower = getFileName(arquivo).toLowerCase();
+        const dotIndex = arquivoLower.lastIndexOf('.');
+        return dotIndex >= 0 ? arquivoLower.slice(dotIndex) : '';
+    };
+%>
 
-    <form class="form denuncia-case-form" action="<%= isAdminFlag ? `/admin/denuncia/edt/${Denuncia._id}` : '#' %>" method="POST" enctype="multipart/form-data">
-        <div class="card">
-            <div class="card-header">
-                <h3>Informacoes da Denúncia</h3>
-                <p class="card-description">Dados básicos da denúncia registrada</p>
-            </div>
-            <div class="card-content">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="ndenuncia">Numero da Denúncia</label>
-                        <input type="number" id="ndenuncia" name="ndenuncia" value="<%= Denuncia.ndenuncia %>" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="fonte">Fonte</label>
-                        <select id="fonte" name="fonte" disabled>
-                            <option value="WhatsApp" <%= Denuncia.fonte === 'WhatsApp' ? 'selected' : '' %>>WhatsApp</option>
-                            <option value="Telefonema" <%= Denuncia.fonte === 'Telefonema' ? 'selected' : '' %>>Telefonema</option>
-                            <option value="Email" <%= Denuncia.fonte === 'Email' ? 'selected' : '' %>>Email</option>
-                            <option value="Presencial" <%= Denuncia.fonte === 'Presencial' ? 'selected' : '' %>>Presencial</option>
-                            <option value="Site" <%= Denuncia.fonte === 'Site' ? 'selected' : '' %>>Site</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="data">Data</label>
-                        <input type="date" id="data" name="data" value="<%= Denuncia.data ? new Date(Denuncia.data).toISOString().split('T')[0] : '' %>" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="hora">Hora</label>
-                        <input type="time" id="hora" name="hora" value="<%= Denuncia.hora %>" readonly>
-                    </div>
+<div id="viewPage" class="page active denuncia-create denuncia-view">
+    <form class="form environmental-form" action="<%= isAdminFlag ? `/admin/denuncia/edt/${Denuncia._id}` : '#' %>" method="POST" enctype="multipart/form-data">
+        <div class="environmental-form-header">
+            <div>
+                <div class="environmental-breadcrumb">
+                    <a href="<%= basePath %>/denuncia/lst" aria-label="Voltar para lista">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5"></path>
+                            <path d="m12 19-7-7 7-7"></path>
+                        </svg>
+                    </a>
+                    <span>Denúncia <%= Denuncia.ndenuncia ? `#${Denuncia.ndenuncia}` : '' %> / <%= crumbTitle %></span>
                 </div>
+                <h2><%= pageTitle %></h2>
+                <p>Confira os dados registrados e atualize as providências do caso.</p>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <h3>Dados do Denunciante</h3>
-                <p class="card-description">Informações da pessoa que registrou a denúncia</p>
-            </div>
-            <div class="card-content">
-                <div class="form-group">
-                    <label for="nomeDenunciante">Nome Completo</label>
-                    <input type="text" id="nomeDenunciante" name="nomeDenunciante" value="<%= Denuncia.nomedenunciante %>" readonly>
-                </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="cpf">CPF</label>
-                        <input type="text" id="cpf" name="cpf" value="<%= Denuncia.cpf %>" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" value="<%= Denuncia.email %>" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="telefone">Telefone</label>
-                        <input type="text" id="telefone" name="telefone" value="<%= Denuncia.telefone %>" readonly>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="endereco">Endereco do Local</label>
-                    <input type="text" id="endereco" name="endereco" value="<%= Denuncia.endereco %>" readonly>
-                </div>
-            </div>
-        </div>
+        <input type="hidden" name="descricaoSituacao" value="<%= Denuncia.descricaoSituacao || '' %>">
 
-        <div class="card">
-            <div class="card-header">
-                <h3>Detalhes da Ocorrencia</h3>
-                <p class="card-description">Informações específicas sobre a denuncia</p>
-            </div>
-            <div class="card-content">
-                <div class="form-grid-3">
-                    <div class="form-group">
-                        <label for="especie">Espécie</label>
-                        <select id="especie" name="especie" disabled>
-                            <option value="Animais" <%= Denuncia.especie === 'Animais' ? 'selected' : '' %>>Animais</option>
-                            <option value="Ambiental" <%= Denuncia.especie === 'Ambiental' ? 'selected' : '' %>>Ambiental</option>
-                        </select>
+        <div class="environmental-grid">
+            <div class="environmental-main">
+                <section class="environmental-section">
+                    <h3><span>1.</span> Sobre o crime <%= isAnimalCase ? 'contra animais' : 'ambiental' %></h3>
+                    <div class="environmental-fields top-fields">
+                        <div class="form-group">
+                            <label for="descricaoSituacaoView"><%= tipoLabel %></label>
+                            <input type="text" id="descricaoSituacaoView" value="<%= Denuncia.descricaoSituacao || '' %>" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="data">Data da ocorrência</label>
+                            <input type="date" id="data" value="<%= dataValue %>" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="hora">Horário aproximado</label>
+                            <input type="time" id="hora" value="<%= Denuncia.hora || '' %>" readonly>
+                        </div>
+                        <div class="form-group span-2">
+                            <label for="endereco">Local da ocorrência</label>
+                            <input type="text" id="endereco" value="<%= Denuncia.endereco || '' %>" readonly>
+                        </div>
+                        <% if (isAnimalCase) { %>
+                            <div class="form-group">
+                                <label for="quantidade">Quantidade de animais</label>
+                                <input type="number" id="quantidade" value="<%= Denuncia.quantidade || 1 %>" readonly>
+                            </div>
+                        <% } else { %>
+                            <div class="form-group">
+                                <label for="municipio">Município</label>
+                                <input type="text" id="municipio" value="<%= Denuncia.enderecoProprietario || '' %>" readonly>
+                            </div>
+                        <% } %>
                     </div>
+                </section>
+
+                <section class="environmental-section">
+                    <h3><span>2.</span> Descrição da ocorrência</h3>
                     <div class="form-group">
-                        <label for="quantidade">Quantidade</label>
-                        <input type="number" id="quantidade" name="quantidade" value="<%= Denuncia.quantidade %>" readonly>
+                        <label for="descricao">Descrição registrada</label>
+                        <textarea id="descricao" rows="6" readonly><%= Denuncia.descricao || '' %></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="situacao">Situação</label>
-                        <select id="situacao" name="situacao" <%= isAdminFlag ? '' : 'disabled' %>>
-                            <option value="Pendente" <%= Denuncia.situacao === 'Pendente' ? 'selected' : '' %>>Pendente</option>
-                            <option value="Em Análise" <%= Denuncia.situacao === 'Em Análise' ? 'selected' : '' %>>Em Análise</option>
-                            <option value="Em Andamento" <%= Denuncia.situacao === 'Em Andamento' ? 'selected' : '' %>>Em Andamento</option>
-                            <option value="Resolvida" <%= Denuncia.situacao === 'Resolvida' ? 'selected' : '' %>>Resolvida</option>
-                            <option value="Arquivada" <%= Denuncia.situacao === 'Arquivada' ? 'selected' : '' %>>Arquivada</option>
-                            <option value="Inativa" <%= Denuncia.situacao === 'Inativa' ? 'selected' : '' %>>Inativa</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="descricaoSituacao">Situação do caso</label>
-                    <textarea id="descricaoSituacao" name="descricaoSituacao" rows="5" <%= isAdminFlag ? '' : 'readonly' %>><%= Denuncia.descricaoSituacao || '' %></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Arquivos e Evidências</label>
-                    <%
-                        const evidencias = Array.isArray(Denuncia.evidencias) && Denuncia.evidencias.length
-                            ? Denuncia.evidencias
-                            : (Denuncia.foto ? [Denuncia.foto] : []);
-                        const imageExts = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif', '.bmp'];
-                        const videoExts = ['.mp4', '.webm', '.ogg', '.mov', '.avi'];
-                        const audioExts = ['.mp3', '.wav', '.ogg', '.m4a'];
-                        const getFileName = (arquivo) => String(arquivo).split(/[\\/]/).pop();
-                        const getFileUrl = (arquivo) => `/imagem/${encodeURIComponent(getFileName(arquivo))}`;
-                        const getFileExt = (arquivo) => {
-                            const arquivoLower = getFileName(arquivo).toLowerCase();
-                            const dotIndex = arquivoLower.lastIndexOf('.');
-                            return dotIndex >= 0 ? arquivoLower.slice(dotIndex) : '';
-                        };
-                    %>
+                </section>
+
+                <section class="environmental-section">
+                    <h3><span>3.</span> Evidências</h3>
+                    <p class="environmental-hint">Arquivos anexados à denúncia. O admin pode manter arquivos existentes e anexar novos.</p>
                     <% if (evidencias.length) { %>
                         <div class="evidence-preview-grid">
                             <% evidencias.forEach((arquivo, index) => { %>
@@ -143,9 +103,7 @@
                                     <% } else if (audioExts.includes(arquivoExt)) { %>
                                         <audio controls src="<%= arquivoUrl %>"></audio>
                                     <% } else { %>
-                                        <a class="evidence-file-link" href="<%= arquivoUrl %>" target="_blank" rel="noopener">
-                                            Abrir arquivo
-                                        </a>
+                                        <a class="evidence-file-link" href="<%= arquivoUrl %>" target="_blank" rel="noopener">Abrir arquivo</a>
                                     <% } %>
                                     <span title="<%= arquivoNome %>"><%= arquivoNome %></span>
                                     <% if (isAdminFlag) { %>
@@ -158,60 +116,78 @@
                             <% }) %>
                         </div>
                     <% } else { %>
-                        <div style="color: #6b7280; font-size: 0.9rem;">Sem foto anexada</div>
+                        <p class="environmental-hint">Nenhuma evidência foi anexada.</p>
                     <% } %>
+
                     <% if (isAdminFlag) { %>
-                        <label class="evidence-upload evidence-upload-edit" for="evidencias">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <label class="environmental-upload evidence-upload-edit" for="evidencias">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="17 8 12 3 7 8"></polyline>
-                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                                <path d="m17 8-5-5-5 5"></path>
+                                <path d="M12 3v12"></path>
                             </svg>
                             <span>Adicionar novas evidências</span>
-                            <small>Fotos, vídeos, áudios, PDF ou outros documentos</small>
+                            <small>Fotos, vídeos, áudios, PDF ou outros documentos.</small>
                             <input type="file" id="evidencias" name="evidencias" multiple>
                         </label>
                         <div class="evidence-list" id="editEvidenceList"></div>
                     <% } %>
-                </div>
+                </section>
             </div>
-        </div>
 
-        <div class="card">
-            <div class="card-header">
-                <h3>Dados do Denunciado</h3>
-                <p class="card-description">Informações sobre o suspeito/responsável</p>
-            </div>
-            <div class="card-content">
-                <div class="form-group">
-                    <label for="nome">Nome do Denunciado</label>
-                    <input type="text" id="nome" name="nome" value="<%= Denuncia.nome %>" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="enderecoProprietario">Endereco do Denunciado</label>
-                    <input type="text" id="enderecoProprietario" name="enderecoProprietario" value="<%= Denuncia.enderecoProprietario %>" readonly>
-                </div>
-            </div>
-        </div>
-
-        <% if (isAdminFlag) { %>
-            <div class="card">
-                <div class="card-header">
-                    <h3>Providências Tomadas</h3>
-                    <p class="card-description">Ações realizadas pela equipe</p>
-                </div>
-                <div class="card-content">
-                    <div class="form-group">
-                        <textarea id="providencia" name="providencia" rows="5"><%= Denuncia.providencia %></textarea>
+            <aside class="environmental-sidebar environmental-section">
+                <h3><span>4.</span> Seus dados</h3>
+                <div class="environmental-user-panel">
+                    <p class="environmental-hint">Dados informados pelo denunciante.</p>
+                    <div class="environmental-user-fields">
+                        <div class="form-group">
+                            <label for="nomeDenunciante">Nome completo</label>
+                            <input type="text" id="nomeDenunciante" value="<%= Denuncia.nomedenunciante || '' %>" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-mail</label>
+                            <input type="email" id="email" value="<%= Denuncia.email || '' %>" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="telefone">Telefone</label>
+                            <input type="text" id="telefone" value="<%= Denuncia.telefone || '' %>" readonly>
+                        </div>
                     </div>
                 </div>
-            </div>
-        <% } %>
+            </aside>
 
-        <div class="form-actions">
-            <button type="button" class="btn btn-outline" onclick="window.location.href='<%= basePath %>/denuncia/lst'">Voltar</button>
             <% if (isAdminFlag) { %>
-                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                <section class="environmental-section admin-providence-section">
+                    <h3><span>5.</span> Providências</h3>
+                    <div class="environmental-fields providence-fields">
+                        <div class="form-group">
+                            <label for="situacao">Situação do caso</label>
+                            <select id="situacao" name="situacao" required>
+                                <option value="Pendente" <%= Denuncia.situacao === 'Pendente' ? 'selected' : '' %>>Pendente</option>
+                                <option value="Em Análise" <%= Denuncia.situacao === 'Em Análise' ? 'selected' : '' %>>Em Análise</option>
+                                <option value="Em Andamento" <%= Denuncia.situacao === 'Em Andamento' ? 'selected' : '' %>>Em Andamento</option>
+                                <option value="Resolvida" <%= Denuncia.situacao === 'Resolvida' ? 'selected' : '' %>>Resolvida</option>
+                                <option value="Arquivada" <%= Denuncia.situacao === 'Arquivada' ? 'selected' : '' %>>Arquivada</option>
+                                <option value="Inativa" <%= Denuncia.situacao === 'Inativa' ? 'selected' : '' %>>Inativa</option>
+                            </select>
+                        </div>
+                        <div class="form-group span-2">
+                            <label for="providencia">Providências tomadas</label>
+                            <textarea id="providencia" name="providencia" rows="5" placeholder="Descreva as ações realizadas pela equipe..."><%= Denuncia.providencia || '' %></textarea>
+                        </div>
+                    </div>
+                </section>
+            <% } %>
+        </div>
+
+        <div class="environmental-actions">
+            <button type="button" class="btn btn-outline" onclick="window.location.href='<%= basePath %>/denuncia/lst'">
+                Voltar
+            </button>
+            <% if (isAdminFlag) { %>
+                <button type="submit" class="btn btn-primary">
+                    Salvar alterações
+                </button>
             <% } %>
         </div>
     </form>

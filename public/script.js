@@ -59,8 +59,10 @@ function renderTable(data) {
                 </span>
             </td>
             <td>
-                <span class="badge ${getSituacaoBadgeClass(denuncia.situacao)}">${denuncia.situacao}</span>
-                ${denuncia.descricaoSituacao ? `<div class="case-status-note">${escapeHtml(denuncia.descricaoSituacao)}</div>` : ''}
+                <div class="case-status-stack">
+                    <span class="badge ${getSituacaoBadgeClass(denuncia.situacao)}">${denuncia.situacao}</span>
+                    ${denuncia.descricaoSituacao ? `<span class="case-status-note">${escapeHtml(denuncia.descricaoSituacao)}</span>` : ''}
+                </div>
             </td>
             <td>
                 <div class="actions">

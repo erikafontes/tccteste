@@ -16,13 +16,26 @@ function normalizeNumber(raw) {
 function buildNumberCandidates(digits) {
   const candidates = [digits];
 
-  // Brasil: 55 + DDD + numero. Se vier celular antigo com 8 digitos,
-  // tenta tambem com o nono digito depois do DDD.
+  // Brasil: 55 + DDD + numero. O WhatsApp as vezes resolve o contato
+  // com ou sem o nono digito, entao tentamos os dois formatos.
   if (digits.startsWith('55') && digits.length === 12) {
     candidates.push(`${digits.slice(0, 4)}9${digits.slice(4)}`);
   }
+  if (digits.startsWith('55') && digits.length === 13 && digits[4] === '9') {
+    candidates.push(`${digits.slice(0, 4)}${digits.slice(5)}`);
+  }
 
   return [...new Set(candidates)];
+}
+
+function isProbablySentError(error) {
+  const text = [
+    error?.message,
+    error?.stack,
+    error?.toString?.()
+  ].filter(Boolean).join('\n');
+
+  return text.includes('msgChunks') || text.includes('getMessageById');
 }
 
 async function waitForReady(client, timeoutMs = 30000, intervalMs = 1000) {
@@ -106,7 +119,7 @@ export async function sendAdminAlert(message) {
 
   const candidates = buildNumberCandidates(digits);
   for (const candidate of candidates) {
-    let chatId = `${candidate}@c.us`;
+    const chatIds = [`${candidate}@c.us`];
 
     try {
       if (typeof client.checkNumberStatus === 'function') {
@@ -116,17 +129,24 @@ export async function sendAdminAlert(message) {
           continue;
         }
         if (status.id && status.id._serialized) {
-          chatId = status.id._serialized;
+          chatIds.push(status.id._serialized);
         }
       }
     } catch (error) {
       console.warn('Falha ao checar numero no WhatsApp:', candidate, error);
     }
 
-    try {
-      return await client.sendText(chatId, message);
-    } catch (error) {
-      console.warn('Falha ao enviar alerta pelo WhatsApp:', chatId, error);
+    for (const chatId of [...new Set(chatIds)]) {
+      try {
+        return await client.sendText(chatId, message);
+      } catch (error) {
+        if (isProbablySentError(error)) {
+          console.warn('WhatsApp retornou erro ao confirmar a mensagem, mas ela provavelmente foi enviada:', chatId, error.message);
+          return { probableSent: true, chatId };
+        }
+
+        console.warn('Falha ao enviar alerta pelo WhatsApp:', chatId, error);
+      }
     }
   }
 

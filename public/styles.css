@@ -1331,6 +1331,492 @@ body {
     gap: 1rem;
 }
 
+.denuncia-type-selection {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.2rem;
+    max-width: 1120px;
+}
+
+.denuncia-type-card {
+    display: grid;
+    grid-template-columns: 128px minmax(0, 1fr);
+    gap: 1.35rem;
+    align-items: center;
+    min-height: 220px;
+    padding: 2rem 2.35rem;
+    border: 1px solid #dfe6e2;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 10px 26px rgba(12, 40, 24, 0.055);
+    color: inherit;
+    text-decoration: none;
+}
+
+.denuncia-type-card:hover,
+.denuncia-type-card:focus-visible {
+    border-color: #cbd9d2;
+    box-shadow: 0 14px 30px rgba(12, 40, 24, 0.08);
+    outline: none;
+}
+
+.denuncia-type-icon {
+    width: 112px;
+    height: 112px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #edf6f0;
+    color: var(--brand-700);
+}
+
+.animal-card .denuncia-type-icon {
+    background: #fff3d6;
+    color: #f2a900;
+}
+
+.denuncia-type-content h3 {
+    margin: 0 0 0.7rem;
+    color: var(--brand-900);
+    font-size: 1.12rem;
+    font-weight: 800;
+}
+
+.denuncia-type-content p {
+    max-width: 340px;
+    margin: 0 0 1.35rem;
+    color: #475467;
+    font-size: 0.92rem;
+    line-height: 1.55;
+}
+
+.denuncia-type-btn {
+    min-height: 42px;
+    padding: 0.75rem 1.05rem;
+    justify-content: center;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+}
+
+.denuncia-type-btn svg {
+    flex: 0 0 auto;
+}
+
+.animal-btn {
+    background: #f2a900;
+    color: #fff;
+}
+
+.animal-btn:hover {
+    background: #d99700;
+    color: #fff;
+}
+
+.denuncia-info-note {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    max-width: 1120px;
+    margin-top: 1.4rem;
+    padding: 1.15rem 1.35rem;
+    border: 1px solid #d6e5dd;
+    border-radius: 8px;
+    background: #f6fbf8;
+    color: #315b46;
+    font-size: 0.94rem;
+    font-weight: 700;
+}
+
+.denuncia-info-note svg {
+    flex: 0 0 auto;
+    color: var(--brand-700);
+}
+
+.environmental-form {
+    gap: 1rem;
+}
+
+.environmental-form-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: -0.45rem 0 0.85rem;
+}
+
+.environmental-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: #667085;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.environmental-breadcrumb a {
+    display: inline-grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 6px;
+    color: var(--brand-900);
+    text-decoration: none;
+}
+
+.environmental-breadcrumb a:hover {
+    background: #eef5f1;
+}
+
+.environmental-form-header h2 {
+    margin: 0.12rem 0 0.2rem;
+    color: var(--brand-900);
+    font-size: 1.55rem;
+    line-height: 1.15;
+}
+
+.environmental-form-header p {
+    margin: 0;
+    color: #667085;
+    font-size: 0.9rem;
+}
+
+.help-btn {
+    flex: 0 0 auto;
+    min-height: 38px;
+    background: #fff;
+    font-size: 0.78rem;
+}
+
+.environmental-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+}
+
+.environmental-main {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.environmental-section {
+    padding: 1rem 1.15rem 1.15rem;
+    border: 1px solid #dfe6e2;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 8px 20px rgba(12, 40, 24, 0.035);
+}
+
+.environmental-section h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0 0 0.8rem;
+    color: var(--brand-900);
+    font-size: 0.95rem;
+    font-weight: 800;
+}
+
+.environmental-section h3 span {
+    color: var(--brand-700);
+}
+
+.environmental-fields {
+    display: grid;
+    gap: 0.8rem;
+}
+
+.environmental-fields.top-fields {
+    grid-template-columns: minmax(0, 1.25fr) minmax(190px, 0.8fr) minmax(160px, 0.7fr);
+}
+
+.environmental-fields .span-2 {
+    grid-column: span 2;
+}
+
+.providence-fields {
+    grid-template-columns: minmax(220px, 0.35fr) minmax(0, 1fr);
+}
+
+.admin-providence-section textarea {
+    min-height: 132px;
+}
+
+.environmental-form .form-group {
+    margin-bottom: 0;
+}
+
+.environmental-form .form-group label {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: #344054;
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.environmental-form .form-group label strong {
+    color: #d92d20;
+}
+
+.environmental-form input,
+.environmental-form select,
+.environmental-form textarea {
+    width: 100%;
+    min-height: 42px;
+    border: 1px solid #d7dedb;
+    border-radius: 6px;
+    background: #fff;
+    color: #1f2937;
+    font-size: 0.88rem;
+}
+
+.environmental-form textarea {
+    min-height: 128px;
+    padding-bottom: 1.7rem;
+    resize: vertical;
+}
+
+.environmental-hint {
+    margin: -0.25rem 0 0.75rem;
+    color: #667085;
+    font-size: 0.78rem;
+    line-height: 1.4;
+}
+
+.environmental-upload {
+    min-height: 78px;
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr);
+    align-items: center;
+    column-gap: 0.75rem;
+    padding: 0.8rem 1rem;
+    border: 1px dashed #cfd8d4;
+    border-radius: 7px;
+    background: #fbfdfc;
+    color: var(--brand-900);
+    cursor: pointer;
+}
+
+.environmental-upload:hover,
+.environmental-upload:focus-within {
+    border-color: var(--brand-700);
+    background: #f4faf6;
+}
+
+.environmental-upload svg {
+    grid-row: span 2;
+    justify-self: center;
+    color: var(--brand-700);
+}
+
+.environmental-upload span {
+    color: var(--brand-700);
+    font-size: 0.84rem;
+    font-weight: 800;
+}
+
+.environmental-upload small {
+    color: #667085;
+    font-size: 0.72rem;
+}
+
+.environmental-upload input {
+    display: none;
+}
+
+.environmental-upload.is-hidden {
+    display: none;
+}
+
+.environmental-user-section {
+    position: static;
+}
+
+.environmental-sidebar {
+    margin-top: 1rem;
+}
+
+.environmental-user-panel {
+    padding: 1rem;
+    border: 1px solid #dfe6e2;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.environmental-user-fields {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+    margin-top: 0.9rem;
+}
+
+.environmental-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 0.45rem;
+    color: #344054;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.environmental-checkbox input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--brand-700);
+}
+
+.environmental-user-section .form-group + .form-group {
+    margin-top: 0.85rem;
+}
+
+.environmental-sidebar .form-group + .form-group {
+    margin-top: 0;
+}
+
+.environmental-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 0.9rem 0 0;
+    background: linear-gradient(180deg, rgba(248, 250, 249, 0), #f8faf9 36%);
+}
+
+.environmental-actions .btn {
+    min-height: 42px;
+    justify-content: center;
+}
+
+.denuncia-view {
+    max-width: 1460px;
+    margin: 0 auto;
+}
+
+.denuncia-view .page-header {
+    justify-content: flex-start;
+    margin-bottom: 1.2rem;
+}
+
+.denuncia-view .btn-back {
+    width: 38px;
+    height: 38px;
+    justify-content: center;
+    border-radius: 6px;
+    color: var(--brand-900);
+}
+
+.denuncia-view .page-header h2 {
+    color: var(--brand-900);
+    font-size: 1.55rem;
+    font-weight: 800;
+}
+
+.denuncia-case-form {
+    gap: 1rem;
+}
+
+.denuncia-case-form .card {
+    border: 1px solid #dfe6e2;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 8px 20px rgba(12, 40, 24, 0.035);
+}
+
+.denuncia-case-form .card-header {
+    padding: 1rem 1.15rem 0.35rem;
+    border-bottom: 0;
+}
+
+.denuncia-case-form .card-header h3 {
+    margin: 0 0 0.35rem;
+    color: var(--brand-900);
+    font-size: 0.98rem;
+    font-weight: 800;
+}
+
+.denuncia-case-form .card-description {
+    color: #667085;
+    font-size: 0.82rem;
+}
+
+.denuncia-case-form .card-content {
+    padding: 0.75rem 1.15rem 1.15rem;
+}
+
+.denuncia-case-form .form-grid,
+.denuncia-case-form .form-grid-3 {
+    display: grid;
+    gap: 0.85rem;
+}
+
+.denuncia-case-form .form-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.denuncia-case-form .form-grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.denuncia-case-form .form-group {
+    margin-bottom: 0.9rem;
+}
+
+.denuncia-case-form .form-group:last-child {
+    margin-bottom: 0;
+}
+
+.denuncia-case-form .form-group label {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: #344054;
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.denuncia-case-form input,
+.denuncia-case-form select,
+.denuncia-case-form textarea {
+    width: 100%;
+    min-height: 42px;
+    border: 1px solid #d7dedb;
+    border-radius: 6px;
+    background: #fff;
+    color: #1f2937;
+    font-size: 0.88rem;
+}
+
+.denuncia-case-form input[readonly],
+.denuncia-case-form select:disabled,
+.denuncia-case-form textarea[readonly] {
+    background: #fafcfb;
+    color: #667085;
+    opacity: 1;
+}
+
+.denuncia-case-form textarea {
+    min-height: 116px;
+    resize: vertical;
+}
+
+.denuncia-case-form .form-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    gap: 0.75rem;
+    padding: 0.9rem 0 0;
+    background: linear-gradient(180deg, rgba(248, 250, 249, 0), #f8faf9 36%);
+}
+
+.denuncia-case-form .form-actions .btn {
+    min-height: 42px;
+    min-width: 132px;
+    justify-content: center;
+}
+
 .denuncia-card {
     border: 1px solid #dfe6e2;
     border-radius: 8px;
@@ -1673,15 +2159,21 @@ body {
 }
 
 .case-status-note {
-    display: -webkit-box;
+    display: block;
     max-width: 240px;
     margin-top: 0.35rem;
     overflow: hidden;
     color: #667085;
     font-size: 0.76rem;
     line-height: 1.3;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.case-status-stack {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .denuncia-create .form-actions {
@@ -1725,6 +2217,33 @@ body {
     .denuncia-create .form-grid-3,
     .denuncia-create .form-grid-4 {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .denuncia-case-form .form-grid,
+    .denuncia-case-form .form-grid-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .denuncia-type-selection {
+        grid-template-columns: 1fr;
+    }
+
+    .environmental-grid,
+    .environmental-fields.top-fields,
+    .providence-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .environmental-fields .span-2 {
+        grid-column: auto;
+    }
+
+    .environmental-user-section {
+        position: static;
+    }
+
+    .environmental-user-fields {
+        grid-template-columns: 1fr;
     }
 
     .occurrence-evidence-grid {
@@ -1825,12 +2344,62 @@ body {
         grid-template-columns: 1fr;
     }
 
+    .denuncia-case-form .form-grid,
+    .denuncia-case-form .form-grid-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .denuncia-type-card {
+        grid-template-columns: 1fr;
+        min-height: 0;
+        padding: 1.45rem;
+    }
+
+    .denuncia-type-icon {
+        width: 92px;
+        height: 92px;
+    }
+
+    .denuncia-type-btn {
+        width: 100%;
+    }
+
+    .environmental-form-header,
+    .environmental-actions {
+        flex-direction: column;
+    }
+
+    .help-btn,
+    .environmental-actions .btn {
+        width: 100%;
+    }
+
+    .environmental-upload {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+    }
+
+    .environmental-upload svg {
+        grid-row: auto;
+        margin-bottom: 0.35rem;
+    }
+
     .denuncia-create .form-actions {
         position: static;
         flex-direction: column-reverse;
     }
 
     .denuncia-create .form-actions .btn {
+        width: 100%;
+    }
+
+    .denuncia-case-form .form-actions {
+        position: static;
+        flex-direction: column-reverse;
+    }
+
+    .denuncia-case-form .form-actions .btn {
         width: 100%;
     }
 }

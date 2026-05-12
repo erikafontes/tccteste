@@ -13,7 +13,8 @@ export const home = async (req, res) => {
 
 export async function abreadddenuncia(req, res) {
     const isAdmin = req.originalUrl.startsWith('/admin');
-    res.render('admin/denuncia/add2', { isAdmin })
+    const tipoDenuncia = ['animais', 'ambiental'].includes(req.query.tipo) ? req.query.tipo : null;
+    res.render('admin/denuncia/add2', { isAdmin, tipoDenuncia })
 }
 
 async function gerarNumeroDenuncia() {
@@ -302,7 +303,7 @@ export async function edtdenuncia(req, res) {
 
     await Denuncia.findByIdAndUpdate(req.params.id, updateData, { new: true });
 
-    res.redirect(`/admin/denuncia/ver/${req.params.id}`);
+    res.redirect('/admin/denuncia/lst');
   } catch (error) {
     console.error('Erro ao atualizar denuncia:', error);
     res.status(500).send('Erro ao atualizar denuncia');
