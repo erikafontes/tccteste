@@ -66,6 +66,7 @@ import {
 
 } from '../controllers/controller.js';
 import { abreCadastroAdmin, cadastroAdmin, abreperfil, atualizarPerfil } from '../controllers/public.js';
+import { marcarNotificacaoLida, marcarTodasNotificacoesLidas } from '../controllers/notificacao.js';
 
 // ----------------------
 // ROTAS
@@ -100,6 +101,9 @@ router.get('/usuario/denuncia/ver/:id', abreverdenuncia);
 router.get('/usuario/denuncia/solicitar-inativacao/:id', solicitarInativacaoDenuncia);
 router.get('/usuario/perfil', abreperfil);
 router.post('/usuario/perfil', atualizarPerfil);
+
+router.get('/notificacoes/:id/ler', marcarNotificacaoLida);
+router.get('/notificacoes/marcar-todas-lidas', marcarTodasNotificacoesLidas);
 
 // ----- Relatorio -----
 router.get('/admin/relatorio/lst', listarrelatorio);

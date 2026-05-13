@@ -31,12 +31,13 @@ app.use(express.static(__dirname + '/public'));
 
 import routes from "./routes/route.js"
 import publicRoutes from "./routes/routP.js"
+import { carregarNotificacoesHeader } from "./controllers/notificacao.js"
 
 app.use((req, res, next) => {
     res.locals.currentUser = req.session.user;
     const path = req.path;
     const isPublic = path.startsWith('/login') || path.startsWith('/cadastro');
-    if (!req.session.user && (path.startsWith('/admin') || path.startsWith('/usuario')) && !isPublic) {
+    if (!req.session.user && (path.startsWith('/admin') || path.startsWith('/usuario') || path.startsWith('/notificacoes')) && !isPublic) {
         return res.redirect('/login');
     }
     if (path.startsWith('/admin/usuarios') && (!req.session.user || req.session.user.superadmin !== true)) {
@@ -51,6 +52,7 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use(carregarNotificacoesHeader);
 app.use(publicRoutes)
 app.use(routes)
 

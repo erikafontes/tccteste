@@ -824,6 +824,7 @@ body {
     display: flex;
     align-items: center;
     gap: 0.85rem;
+    position: relative;
 }
 
 .icon-btn {
@@ -840,6 +841,185 @@ body {
 
 .icon-btn:hover {
     background: #eef3ef;
+}
+
+.notification-menu {
+    position: relative;
+}
+
+.notification-trigger {
+    position: relative;
+    list-style: none;
+}
+
+.notification-trigger::-webkit-details-marker {
+    display: none;
+}
+
+.notification-menu[open] .notification-trigger {
+    background: #eef3ef;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 4px;
+    right: 2px;
+    min-width: 18px;
+    height: 18px;
+    display: grid;
+    place-items: center;
+    padding: 0 4px;
+    border: 2px solid #fff;
+    border-radius: 999px;
+    background: #16a34a;
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.notification-dropdown {
+    position: absolute;
+    top: calc(100% + 0.7rem);
+    right: 0;
+    width: min(390px, calc(100vw - 2rem));
+    border: 1px solid #dbe3df;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 18px 42px rgba(8, 36, 22, 0.16);
+    z-index: 125;
+}
+
+.notification-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 58px;
+    padding: 0 1rem;
+    border-bottom: 1px solid #edf1ef;
+}
+
+.notification-header strong {
+    color: var(--ink-900);
+    font-size: 1rem;
+}
+
+.notification-header a {
+    color: #166534;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.notification-header a:hover {
+    text-decoration: underline;
+}
+
+.notification-list {
+    max-height: 430px;
+    overflow-y: auto;
+    padding: 0 1rem;
+}
+
+.notification-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 42px 1fr 10px;
+    gap: 0.75rem;
+    align-items: flex-start;
+    padding: 1rem 0;
+    border-bottom: 1px solid #edf1ef;
+    color: var(--ink-900);
+    text-decoration: none;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-item:hover .notification-content strong {
+    color: var(--brand-700);
+}
+
+.notification-icon {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    background: #e8f4ec;
+    color: #16a34a;
+}
+
+.notification-providencia {
+    background: #fff1e8;
+    color: #f97316;
+}
+
+.notification-arquivo {
+    background: #f0ebff;
+    color: #7c3aed;
+}
+
+.notification-nova-denuncia,
+.notification-info {
+    background: #eaf2ff;
+    color: #2563eb;
+}
+
+.notification-content {
+    min-width: 0;
+    display: grid;
+    gap: 0.18rem;
+}
+
+.notification-content strong,
+.notification-content span,
+.notification-content small {
+    display: block;
+}
+
+.notification-content strong {
+    color: var(--ink-900);
+    font-size: 0.88rem;
+    font-weight: 900;
+}
+
+.notification-content span {
+    color: #344054;
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.notification-content small {
+    color: #475467;
+    font-size: 0.78rem;
+}
+
+.notification-dot {
+    width: 8px;
+    height: 8px;
+    align-self: center;
+    border-radius: 50%;
+    background: #16a34a;
+}
+
+.notification-item:not(.unread) {
+    opacity: 0.72;
+}
+
+.notification-empty {
+    display: grid;
+    gap: 0.2rem;
+    padding: 1.3rem 0;
+    color: var(--ink-500);
+    text-align: center;
+}
+
+.notification-empty strong {
+    color: var(--ink-900);
 }
 
 .user-badge {
@@ -872,6 +1052,154 @@ body {
 
 .chevron {
     color: #4b5563;
+    transition: transform 0.2s ease;
+}
+
+.profile-menu {
+    position: relative;
+}
+
+.profile-menu[open] .chevron {
+    transform: rotate(180deg);
+}
+
+.profile-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-height: 58px;
+    padding: 0.35rem 0.45rem;
+    border-radius: 8px;
+    cursor: pointer;
+    list-style: none;
+}
+
+.profile-trigger::-webkit-details-marker {
+    display: none;
+}
+
+.profile-trigger:hover,
+.profile-menu[open] .profile-trigger {
+    background: #eef3ef;
+}
+
+.profile-trigger:focus-visible {
+    outline: 3px solid rgba(31, 107, 67, 0.28);
+    outline-offset: 2px;
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: calc(100% + 0.65rem);
+    right: 0;
+    width: min(320px, calc(100vw - 2rem));
+    padding: 0.8rem;
+    border: 1px solid #dbe3df;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 18px 40px rgba(8, 36, 22, 0.16);
+    z-index: 120;
+}
+
+.profile-dropdown::before {
+    content: "";
+    position: absolute;
+    top: -7px;
+    right: 1.4rem;
+    width: 14px;
+    height: 14px;
+    border-top: 1px solid #dbe3df;
+    border-left: 1px solid #dbe3df;
+    background: #fff;
+    transform: rotate(45deg);
+}
+
+.profile-dropdown-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.45rem 0.45rem 0.8rem;
+    border-bottom: 1px solid #edf1ef;
+}
+
+.profile-dropdown-avatar {
+    width: 42px;
+    height: 42px;
+    box-shadow: none;
+}
+
+.profile-dropdown-header strong,
+.profile-dropdown-header span {
+    display: block;
+}
+
+.profile-dropdown-header strong {
+    color: var(--ink-900);
+    font-size: 0.96rem;
+}
+
+.profile-dropdown-header span {
+    color: var(--brand-700);
+    font-size: 0.86rem;
+    font-weight: 700;
+}
+
+.profile-details {
+    display: grid;
+    gap: 0.65rem;
+    padding: 0.85rem 0.45rem;
+}
+
+.profile-detail-item span,
+.profile-detail-item strong {
+    display: block;
+}
+
+.profile-detail-item span {
+    color: var(--ink-500);
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.profile-detail-item strong {
+    overflow-wrap: anywhere;
+    color: var(--ink-900);
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.profile-actions {
+    display: grid;
+    gap: 0.35rem;
+    padding-top: 0.55rem;
+    border-top: 1px solid #edf1ef;
+}
+
+.profile-action {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 42px;
+    padding: 0 0.65rem;
+    border-radius: 7px;
+    color: var(--ink-900);
+    text-decoration: none;
+    font-weight: 800;
+}
+
+.profile-action:hover {
+    background: #eef3ef;
+    color: var(--brand-900);
+}
+
+.profile-action.danger {
+    color: #9f1239;
+}
+
+.profile-action.danger:hover {
+    background: #fff1f2;
+    color: #881337;
 }
 
 .menu-btn {
@@ -2271,6 +2599,27 @@ body {
     .user-info,
     .chevron {
         display: none;
+    }
+
+    .profile-trigger {
+        min-height: 48px;
+        padding: 0.2rem;
+    }
+
+    .profile-dropdown {
+        right: -0.25rem;
+    }
+
+    .notification-dropdown {
+        right: -4.2rem;
+    }
+
+    .notification-header {
+        align-items: flex-start;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.2rem;
+        padding: 0.75rem 1rem;
     }
 
     .sidebar {

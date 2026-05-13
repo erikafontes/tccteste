@@ -2,6 +2,7 @@ import Denuncia from '../models/denuncia.js';
 import Alerta from '../models/alerta.js';
 import Relatorio from '../models/relatorio.js';
 import { sendAdminAlert } from '../services/wppconnect.js';
+import { notificarAdminsNovaDenuncia, notificarUsuarioAlteracoesDenuncia } from '../services/notificacoes.js';
 // import Jogador from '../models/jogador.js';
 // import Partida from '../models/partida.js';
 
@@ -76,6 +77,7 @@ export async function adddenuncia(req, res) {
         providencia: req.body.providencia
     });
     if (isUser) {
+        await notificarAdminsNovaDenuncia(denunciaCriada);
         return res.redirect('/usuario/denuncia/lst');
     }
 
@@ -176,6 +178,7 @@ export async function deletardenuncia(req, res) {
     }
 
     try {
+        const denunciaAntes = await Denuncia.findById(id);
         const denuncia = await Denuncia.findByIdAndUpdate(
             id,
             { situacao: 'Inativa' },
@@ -184,6 +187,10 @@ export async function deletardenuncia(req, res) {
 
         if (!denuncia) {
             return res.status(404).send('Denúncia não encontrada.');
+        }
+
+        if (denunciaAntes) {
+            await notificarUsuarioAlteracoesDenuncia(denunciaAntes, denuncia);
         }
 
         const back = req.get('referer');
@@ -201,6 +208,7 @@ export async function reativardenuncia(req, res) {
     }
 
     try {
+        const denunciaAntes = await Denuncia.findById(id);
         const denuncia = await Denuncia.findByIdAndUpdate(
             id,
             { situacao: 'Pendente' },
@@ -209,6 +217,10 @@ export async function reativardenuncia(req, res) {
 
         if (!denuncia) {
             return res.status(404).send('Denúncia não encontrada.');
+        }
+
+        if (denunciaAntes) {
+            await notificarUsuarioAlteracoesDenuncia(denunciaAntes, denuncia);
         }
 
         res.redirect('/admin/denuncia/lst');
@@ -301,7 +313,9 @@ export async function edtdenuncia(req, res) {
       foto: obterPrimeiraImagem(evidencias)
     };
 
-    await Denuncia.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    const denunciaAtualizada = await Denuncia.findByIdAndUpdate(req.params.id, updateData, { new: true });
+
+    await notificarUsuarioAlteracoesDenuncia(denunciaAtual, denunciaAtualizada);
 
     res.redirect('/admin/denuncia/lst');
   } catch (error) {
