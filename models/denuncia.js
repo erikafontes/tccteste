@@ -1,6 +1,7 @@
 import conexao from '../config/conexao.js'
 
 const Denuncia = conexao.Schema({
+    usuarioId: {type: conexao.Schema.Types.ObjectId, ref: 'Usuario', required: false},
     ndenuncia : {type:Number, required:true},
     nomedenunciante:{type:String, required:true},
     email:{type:String, required:true},

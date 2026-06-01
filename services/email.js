@@ -14,7 +14,7 @@ async function getMailer() {
     }
 }
 
-export async function enviarEmailNotificacao({ to, subject, text }) {
+export async function enviarEmailNotificacao({ to, subject, text, html }) {
     if (!to || process.env.EMAIL_ENABLED === 'false') {
         return;
     }
@@ -42,10 +42,19 @@ export async function enviarEmailNotificacao({ to, subject, text }) {
         auth: { user, pass }
     });
 
-    await transporter.sendMail({
-        from,
-        to,
-        subject,
-        text
-    });
+    try {
+        return await transporter.sendMail({
+            from,
+            to,
+            subject,
+            text,
+            html
+        });
+    } catch (error) {
+        if (error?.code === 'EAUTH') {
+            throw new Error('Falha na autenticacao SMTP. No Gmail, use uma senha de app em SMTP_PASS.');
+        }
+
+        throw error;
+    }
 }

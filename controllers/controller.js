@@ -2,7 +2,7 @@ import Denuncia from '../models/denuncia.js';
 import Alerta from '../models/alerta.js';
 import Relatorio from '../models/relatorio.js';
 import { sendAdminAlert } from '../services/wppconnect.js';
-import { notificarAdminsNovaDenuncia, notificarUsuarioAlteracoesDenuncia } from '../services/notificacoes.js';
+import { notificarAdminsNovaDenuncia, notificarUsuarioAlteracoesDenuncia, notificarUsuarioNovaDenuncia } from '../services/notificacoes.js';
 // import Jogador from '../models/jogador.js';
 // import Partida from '../models/partida.js';
 
@@ -55,6 +55,7 @@ export async function adddenuncia(req, res) {
     const ndenuncia = await gerarNumeroDenuncia();
 
     const denunciaCriada = await Denuncia.create({
+        usuarioId: isUser ? req.session.user?.id : undefined,
         ndenuncia,
         nomedenunciante: req.body.nomeDenunciante,
         email: emailDenunciante,
@@ -77,7 +78,10 @@ export async function adddenuncia(req, res) {
         providencia: req.body.providencia
     });
     if (isUser) {
-        await notificarAdminsNovaDenuncia(denunciaCriada);
+        await Promise.all([
+            notificarAdminsNovaDenuncia(denunciaCriada),
+            notificarUsuarioNovaDenuncia(denunciaCriada)
+        ]);
         return res.redirect('/usuario/denuncia/lst');
     }
 

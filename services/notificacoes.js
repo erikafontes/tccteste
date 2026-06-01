@@ -19,18 +19,110 @@ function arquivosDaDenuncia(denuncia) {
         : (denuncia?.foto ? [denuncia.foto] : []);
 }
 
+function escaparHtml(valor) {
+    return String(valor ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function criarHtmlEmailNotificacao(dados) {
+    const titulo = escaparHtml(dados.titulo);
+    const mensagem = escaparHtml(dados.mensagem);
+    const numeroDenuncia = dados.ndenuncia ? `#${escaparHtml(dados.ndenuncia)}` : 'Sem numero';
+
+    return `
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>${titulo}</title>
+  </head>
+  <body style="margin:0; padding:0; background:#f3f7f4; font-family:Arial, Helvetica, sans-serif; color:#1f2a24;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f3f7f4; padding:28px 12px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:620px; background:#ffffff; border:1px solid #dce8df; border-radius:8px; overflow:hidden;">
+            <tr>
+              <td style="background:#1f6f43; padding:22px 26px;">
+                <div style="font-size:13px; letter-spacing:.4px; text-transform:uppercase; color:#dff4e8; font-weight:bold;">RO Denuncias Ambientais</div>
+                <h1 style="margin:8px 0 0; color:#ffffff; font-size:24px; line-height:1.3;">${titulo}</h1>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:26px;">
+                <p style="margin:0 0 18px; font-size:16px; line-height:1.6;">${mensagem}</p>
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:22px 0; border-collapse:collapse;">
+                  <tr>
+                    <td style="padding:14px 16px; background:#eef7f1; border:1px solid #d7e8dc; border-radius:6px;">
+                      <div style="font-size:12px; color:#557062; text-transform:uppercase; font-weight:bold;">Denuncia</div>
+                      <div style="font-size:20px; color:#18452b; font-weight:bold; margin-top:4px;">${numeroDenuncia}</div>
+                    </td>
+                  </tr>
+                </table>
+                <p style="margin:0; font-size:14px; line-height:1.6; color:#536158;">
+                  Esta mensagem foi enviada automaticamente pelo sistema. Acompanhe a sua denuncia acessando o site.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:18px 26px; background:#f7faf8; border-top:1px solid #e2ece5; color:#6b7b70; font-size:12px; line-height:1.5;">
+                Nao responda este email. Caso precise atualizar informacoes, acesse o sistema.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`;
+}
+
+async function obterEmailCadastroUsuario(dados) {
+    if (dados.usuarioId) {
+        const usuario = await Usuario.findById(dados.usuarioId).select('email').lean();
+        if (usuario?.email) {
+            return usuario.email;
+        }
+    }
+
+    if (dados.usuarioEmail) {
+        const usuario = await Usuario.findOne({ email: dados.usuarioEmail }).select('email').lean();
+        return usuario?.email || dados.usuarioEmail;
+    }
+
+    return null;
+}
+
 async function criarNotificacao(dados, enviarEmail = false) {
     const notificacao = await Notificacao.create(dados);
 
-    if (enviarEmail && dados.usuarioEmail) {
+    if (enviarEmail) {
         try {
-            await enviarEmailNotificacao({
-                to: dados.usuarioEmail,
+            const emailDestino = await obterEmailCadastroUsuario(dados);
+            if (!emailDestino) {
+                return notificacao;
+            }
+
+            const info = await enviarEmailNotificacao({
+                to: emailDestino,
                 subject: dados.titulo,
-                text: dados.mensagem
+                text: [
+                    dados.titulo,
+                    '',
+                    dados.mensagem,
+                    '',
+                    dados.ndenuncia ? `Denuncia: #${dados.ndenuncia}` : '',
+                    'Esta mensagem foi enviada automaticamente pelo sistema.'
+                ].filter(Boolean).join('\n'),
+                html: criarHtmlEmailNotificacao(dados)
             });
+            console.log(`Email de notificacao enviado para ${emailDestino}${info?.messageId ? ` (${info.messageId})` : ''}`);
         } catch (error) {
-            console.warn('Falha ao enviar email de notificacao:', error);
+            console.warn('Falha ao enviar email de notificacao:', error.message || error);
         }
     }
 
@@ -38,6 +130,13 @@ async function criarNotificacao(dados, enviarEmail = false) {
 }
 
 async function buscarUsuarioDaDenuncia(denuncia) {
+    if (denuncia?.usuarioId) {
+        const usuario = await Usuario.findById(denuncia.usuarioId).select('_id email').lean();
+        if (usuario) {
+            return usuario;
+        }
+    }
+
     if (!denuncia?.email) {
         return null;
     }
@@ -57,12 +156,28 @@ export async function notificarAdminsNovaDenuncia(denuncia) {
     });
 }
 
+export async function notificarUsuarioNovaDenuncia(denuncia) {
+    const usuario = await buscarUsuarioDaDenuncia(denuncia);
+
+    return criarNotificacao({
+        targetRole: 'usuario',
+        usuarioId: usuario?._id,
+        usuarioEmail: usuario?.email || denuncia.email,
+        denunciaId: denuncia._id,
+        ndenuncia: denuncia.ndenuncia,
+        titulo: 'Denúncia registrada',
+        mensagem: `Sua denúncia nº ${denuncia.ndenuncia} foi recebida pelo sistema e está com situação ${denuncia.situacao || 'Pendente'}.`,
+        tipo: 'nova-denuncia',
+        link: `/usuario/denuncia/ver/${denuncia._id}`
+    }, true);
+}
+
 export async function notificarUsuarioAlteracoesDenuncia(denunciaAntes, denunciaDepois) {
     const usuario = await buscarUsuarioDaDenuncia(denunciaDepois);
     const dadosBase = {
         targetRole: 'usuario',
         usuarioId: usuario?._id,
-        usuarioEmail: denunciaDepois.email,
+        usuarioEmail: usuario?.email || denunciaDepois.email,
         denunciaId: denunciaDepois._id,
         ndenuncia: denunciaDepois.ndenuncia,
         link: `/usuario/denuncia/ver/${denunciaDepois._id}`
@@ -75,6 +190,15 @@ export async function notificarUsuarioAlteracoesDenuncia(denunciaAntes, denuncia
             titulo: 'Denúncia atualizada',
             mensagem: `Sua denúncia nº ${denunciaDepois.ndenuncia} teve a situação atualizada para ${denunciaDepois.situacao}.`,
             tipo: denunciaDepois.situacao === 'Resolvida' ? 'concluida' : 'situacao'
+        }, true));
+    }
+
+    if (normalizarTexto(denunciaAntes.descricaoSituacao) !== normalizarTexto(denunciaDepois.descricaoSituacao)) {
+        tarefas.push(criarNotificacao({
+            ...dadosBase,
+            titulo: 'Detalhes da denúncia atualizados',
+            mensagem: `A descrição da situação da denúncia nº ${denunciaDepois.ndenuncia} foi atualizada.`,
+            tipo: 'situacao'
         }, true));
     }
 
