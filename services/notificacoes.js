@@ -81,6 +81,123 @@ function criarHtmlEmailNotificacao(dados) {
 </html>`;
 }
 
+function formatarDataDenuncia(data) {
+    if (!data) {
+        return '';
+    }
+
+    const dataObj = data instanceof Date ? data : new Date(data);
+    if (Number.isNaN(dataObj.getTime())) {
+        return String(data);
+    }
+
+    return dataObj.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+}
+
+function linhaResumo(label, valor) {
+    const texto = normalizarTexto(valor);
+    return texto ? `${label}: ${texto}` : null;
+}
+
+function criarResumoNovaDenuncia(denuncia) {
+    return [
+        linhaResumo('Numero da denuncia', denuncia.ndenuncia ? `#${denuncia.ndenuncia}` : ''),
+        linhaResumo('Denunciante', denuncia.nomedenunciante),
+        linhaResumo('Email', denuncia.email),
+        linhaResumo('Fonte', denuncia.fonte),
+        linhaResumo('Data', formatarDataDenuncia(denuncia.data)),
+        linhaResumo('Hora', denuncia.hora),
+        linhaResumo('Endereco', denuncia.endereco),
+        linhaResumo('Especie', denuncia.especie),
+        linhaResumo('Quantidade', denuncia.quantidade),
+        linhaResumo('Situacao', denuncia.situacao),
+        linhaResumo('Descricao', denuncia.descricao),
+        linhaResumo('Descricao da situacao', denuncia.descricaoSituacao),
+        linhaResumo('Proprietario/responsavel', denuncia.nome),
+        linhaResumo('CPF', denuncia.cpf),
+        linhaResumo('Telefone', denuncia.telefone),
+        linhaResumo('Sigilo', denuncia.sigilo),
+        linhaResumo('Endereco do proprietario', denuncia.enderecoProprietario),
+        linhaResumo('Providencia', denuncia.providencia),
+        linhaResumo('Arquivos enviados', arquivosDaDenuncia(denuncia).join(', '))
+    ].filter(Boolean);
+}
+
+function criarHtmlEmailNovaDenunciaSite(denuncia) {
+    const linhas = criarResumoNovaDenuncia(denuncia)
+        .map((linha) => {
+            const [label, ...valor] = linha.split(': ');
+            return `
+                  <tr>
+                    <td style="padding:10px 12px; border-bottom:1px solid #e3ece6; color:#557062; font-weight:bold; width:190px;">${escaparHtml(label)}</td>
+                    <td style="padding:10px 12px; border-bottom:1px solid #e3ece6; color:#1f2a24;">${escaparHtml(valor.join(': '))}</td>
+                  </tr>`;
+        })
+        .join('');
+    const numeroDenuncia = denuncia.ndenuncia ? `#${escaparHtml(denuncia.ndenuncia)}` : 'Sem numero';
+
+    return `
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nova denuncia recebida</title>
+  </head>
+  <body style="margin:0; padding:0; background:#f3f7f4; font-family:Arial, Helvetica, sans-serif; color:#1f2a24;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f3f7f4; padding:28px 12px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:720px; background:#ffffff; border:1px solid #dce8df; border-radius:8px; overflow:hidden;">
+            <tr>
+              <td style="background:#1f6f43; padding:22px 26px;">
+                <div style="font-size:13px; letter-spacing:.4px; text-transform:uppercase; color:#dff4e8; font-weight:bold;">RO Denuncias Ambientais</div>
+                <h1 style="margin:8px 0 0; color:#ffffff; font-size:24px; line-height:1.3;">Nova denuncia recebida ${numeroDenuncia}</h1>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:26px;">
+                <p style="margin:0 0 18px; font-size:16px; line-height:1.6;">Uma nova denuncia foi registrada pelo site.</p>
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse; border:1px solid #dce8df;">
+${linhas}
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:18px 26px; background:#f7faf8; border-top:1px solid #e2ece5; color:#6b7b70; font-size:12px; line-height:1.5;">
+                Esta mensagem foi enviada automaticamente pelo sistema.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`;
+}
+
+async function enviarEmailNovaDenunciaSite(denuncia) {
+    try {
+        const emailSiteDenuncias = process.env.SITE_DENUNCIAS_EMAIL || 'ro.denunciasambientais@gmail.com';
+        const resumo = criarResumoNovaDenuncia(denuncia);
+        const info = await enviarEmailNotificacao({
+            to: emailSiteDenuncias,
+            subject: `Nova denúncia recebida${denuncia.ndenuncia ? ` #${denuncia.ndenuncia}` : ''}`,
+            text: [
+                'Nova denuncia recebida pelo site.',
+                '',
+                ...resumo,
+                '',
+                'Esta mensagem foi enviada automaticamente pelo sistema.'
+            ].join('\n'),
+            html: criarHtmlEmailNovaDenunciaSite(denuncia)
+        });
+        console.log(`Email de nova denuncia enviado para ${emailSiteDenuncias}${info?.messageId ? ` (${info.messageId})` : ''}`);
+    } catch (error) {
+        console.warn('Falha ao enviar email da nova denuncia para o site:', error.message || error);
+    }
+}
+
 async function obterEmailCadastroUsuario(dados) {
     if (dados.usuarioId) {
         const usuario = await Usuario.findById(dados.usuarioId).select('email').lean();
@@ -145,7 +262,7 @@ async function buscarUsuarioDaDenuncia(denuncia) {
 }
 
 export async function notificarAdminsNovaDenuncia(denuncia) {
-    return criarNotificacao({
+    const notificacao = await criarNotificacao({
         targetRole: 'admin',
         denunciaId: denuncia._id,
         ndenuncia: denuncia.ndenuncia,
@@ -154,6 +271,9 @@ export async function notificarAdminsNovaDenuncia(denuncia) {
         tipo: 'nova-denuncia',
         link: `/admin/denuncia/ver/${denuncia._id}`
     });
+
+    await enviarEmailNovaDenunciaSite(denuncia);
+    return notificacao;
 }
 
 export async function notificarUsuarioNovaDenuncia(denuncia) {

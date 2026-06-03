@@ -373,7 +373,30 @@
       border-radius: 8px;
       background: #fee2e2;
       color: #991b1b;
-      padding: 12px 14px;
+      padding: 12px 14px;import express from 'express';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+import routes from '../routes/route.js'; // rotas externas
+import { createServer } from 'http';
+
+const app = express();
+
+app.use(express.urlencoded({ extended: true }));
+app.set('view engine', 'ejs');
+
+// Caminho correto das views e public
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Servir arquivos estáticos
+app.use(express.static(join(__dirname, '../public')));
+app.set('views', join(__dirname, '../views'));
+
+// Rotas
+app.use(routes)
+app.listen(3001)
+// Exporta o handler compatível com Vercel
+export default app;
       font-size: 0.92rem;
     }
 

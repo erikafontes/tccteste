@@ -21,7 +21,6 @@ import { dirname } from 'path';
 
 import mongoose from 'mongoose'
 const url = 'mongodb+srv://aluno:aluno@cluster0.diho964.mongodb.net/?appName=Cluster0'
-import { startWppClient } from './services/wppconnect.js'
 
 
 //converte o camimnho do arquivo atual
@@ -58,5 +57,4 @@ app.use(routes)
 
 app.listen(3001, () => {
     console.log('Servidor rodando na porta 3001');
-    startWppClient();
 })

@@ -61,9 +61,6 @@ import {
     // abreedtpartida,
     // edtpartida
 
-//WPP_ADMIN_NUMBER=5553997120506 node index.js
-    //testando o wpp
-
 } from '../controllers/controller.js';
 import { abreCadastroAdmin, cadastroAdmin, abreperfil, atualizarPerfil } from '../controllers/public.js';
 import { marcarNotificacaoLida, marcarTodasNotificacoesLidas } from '../controllers/notificacao.js';

@@ -1,7 +1,6 @@
 import Denuncia from '../models/denuncia.js';
 import Alerta from '../models/alerta.js';
 import Relatorio from '../models/relatorio.js';
-import { sendAdminAlert } from '../services/wppconnect.js';
 import { notificarAdminsNovaDenuncia, notificarUsuarioAlteracoesDenuncia, notificarUsuarioNovaDenuncia } from '../services/notificacoes.js';
 // import Jogador from '../models/jogador.js';
 // import Partida from '../models/partida.js';
@@ -276,12 +275,6 @@ export async function solicitarInativacaoDenuncia(req, res) {
             denunciaId: String(denuncia._id),
             mensagem
         });
-
-        try {
-            await sendAdminAlert(mensagem);
-        } catch (error) {
-            console.warn('Falha ao enviar alerta pelo WhatsApp:', error);
-        }
 
         res.redirect('/usuario/denuncia/lst');
     } catch (error) {
