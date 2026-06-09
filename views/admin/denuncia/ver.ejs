@@ -36,7 +36,7 @@
                     <span>Denúncia <%= Denuncia.ndenuncia ? `#${Denuncia.ndenuncia}` : '' %> / <%= crumbTitle %></span>
                 </div>
                 <h2><%= pageTitle %></h2>
-                <p>Confira os dados registrados e atualize as providências do caso.</p>
+                <p><%= isAdminFlag ? 'Confira os dados registrados e atualize as providências do caso.' : 'Confira os dados registrados e acompanhe a situação do caso.' %></p>
             </div>
         </div>
 
