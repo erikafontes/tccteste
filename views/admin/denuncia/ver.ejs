@@ -65,6 +65,10 @@
                         </div>
                         <% if (isAnimalCase) { %>
                             <div class="form-group">
+                                <label for="tipoAnimal">Tipo de animal</label>
+                                <input type="text" id="tipoAnimal" value="<%= Denuncia.tipoAnimal || '' %>" readonly>
+                            </div>
+                            <div class="form-group">
                                 <label for="quantidade">Quantidade de animais</label>
                                 <input type="number" id="quantidade" value="<%= Denuncia.quantidade || 1 %>" readonly>
                             </div>
